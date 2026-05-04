@@ -79,3 +79,10 @@ nome-pasta-do-projeto/
         └── public/     ← Recursos da área pública (visitante)
 ```
 
+## Agents
+
+Consulte agents na pasta `.github/agents/`
+
+## Skills
+
+Consulte skills na pasta `.github/skills/`
