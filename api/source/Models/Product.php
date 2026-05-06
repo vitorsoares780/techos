@@ -44,9 +44,10 @@ class Product
     }
 
     public function listAll(): array{
-        $sql = "SELECT * FROM products as p
-                JOIN products_categories as pc ON p.category_id = pc.id";
-        $stmt = Connect::getInstance()->query($sql);
-        var_dump($stmt);
+        $query = "SELECT products.id, products.name, products.price, products_categories.name as 'category_name' 
+                  FROM products
+                  JOIN products_categories ON products.category_id = products_categories.id";
+        $stmt = Connect::getInstance()->query($query);
+        return $stmt->fetchAll();
     }
 }
