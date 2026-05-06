@@ -1,11 +1,17 @@
 {
-  "name": "sorfabiosantos/acme-manha",
+  "name": "vitorsoares780/techos",
   "description": "Ainda não tem descrição",
   "minimum-stability": "stable",
   "authors": [
     {
-      "name": "Fábio Santos",
-      "email": "fabiosantos@ifsul.edu.br",
+      "name": "Vitor Soares",
+      "email": "silveirasoaresvitor6@gamil.com",
+      "homepage": "https://www.ifsul.edu.br",
+      "role": "Developer"
+    },
+    {
+      "name": "Mateus Trainini",
+      "email": "mateustrainini2@gamil.com",
       "homepage": "https://www.ifsul.edu.br",
       "role": "Developer"
     }
