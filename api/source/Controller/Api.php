@@ -25,6 +25,7 @@ class Api
 
     protected function back(?array $data = null): Api
     {
+        header('Content-Type: application/json');
         if ($data) {
             $this->response["data"] = $data;
         }

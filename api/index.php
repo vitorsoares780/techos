@@ -24,6 +24,12 @@ use CoffeeCode\Router\Router;
 $route = new Router(url("api"),":");
 
 $route->namespace("Source\Controller");
+
+// Início - Exercícios e Desafios
+//ROTAS PARA ACESSAR UMA FUNÇÃO DA CLASSE "PRODUCTS" (USAR URL NO NAVEGADOR)
+$route->get("/products/list", "Products:productsList");
+$route->get("/products/list/{idProduct}", "Products:productById");
+
 // localhost/acme-3am/api/hello
 $route->get("/hello", "Api:hello");
 $route->get("/products/list", "Products:productsList");

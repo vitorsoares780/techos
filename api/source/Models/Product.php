@@ -2,7 +2,7 @@
 
 namespace source\Models;
 
-use Source\Core\Connect;
+use source\Core\Connect;
 
 class Product
 {
@@ -49,5 +49,12 @@ class Product
                   JOIN products_categories ON products.category_id = products_categories.id";
         $stmt = Connect::getInstance()->query($query);
         return $stmt->fetchAll();
+    }
+    public function findById(int $id): object {
+        $query = "SELECT * FROM products WHERE id = :id";
+        $stmt = Connect::getInstance()->prepare($query);
+        $stmt->bindValue(':id', $id);
+        $stmt->execute();
+        return $stmt->fetch();
     }
 }
