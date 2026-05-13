@@ -25,37 +25,37 @@ Use este documento para orientar o planejamento visual e estrutural do frontend 
 - Não planeje regra de negócio no frontend; a View apenas apresenta dados e interações da interface.
 
 ## Contexto geral da interface
-- Nome do sistema: `[nome do sistema]`
-- Objetivo principal: `[descreva o que o sistema resolve]`
-- Público principal: `[quem usará o sistema]`
-- Dispositivos prioritários: `[mobile, desktop, tablet ou combinação]`
-- Estilo desejado: `[moderno, institucional, minimalista, acadêmico, comercial...]`
+- Nome do sistema: `[TechOS]`
+- Objetivo principal: `[sistema de ordens de serviço para assistência técnica]`
+- Público principal: `[técnicos para assistência técnica, gestores da assistência técnica, clientes para acompanhar serviços]`
+- Dispositivos prioritários: `[mobile, tablet e desktop]`
+- Estilo desejado: `[moderno, limpo, profissional]`
 
 ## Área Pública (`public`)
 - Quem acessa: `[visitantes sem login]`
 - Objetivo da área: `[ex.: apresentar o sistema, captar interesse, permitir login/cadastro]`
-- Telas previstas: `[home]`, `[sobre]`, `[contato]`, `[login]`, `[cadastro]`
+- Telas previstas: `[home]`, `[sobre]`, `[contato]`, `[cadastro de empresa] [tela de cadastro de usuário com validação de empresa]`, `[login]`
 - Componentes principais: `[cabeçalho]`, `[menu]`, `[banner]`, `[seção de destaque]`, `[rodapé]`
-- Ação principal esperada do usuário: `[o que o visitante deve fazer nesta área]`
+- Ação principal esperada do usuário: `[conhecer o sistema, acessar as telas de sobre,entrar em contato e solicitar serviço, visualizar SUAS ordens de serviço, login, cadastro...]`
 
 ## Área de Aplicação (`app`)
 - Quem acessa: `[usuário autenticado]`
-- Objetivo da área: `[ex.: acompanhar dados, realizar operações, consultar informações]`
-- Telas previstas: `[dashboard]`, `[perfil]`, `[listagem]`, `[detalhes]`, `[configurações]`
+- Objetivo da área: `[visualização das suas ordens de serviço e solicitar serviços]`
+- Telas previstas: `[dashboard]`, `[perfil]`, `[listagem]`, `[detalhes]`
 - Componentes principais: `[menu lateral]`, `[barra superior]`, `[cards]`, `[formulários]`, `[listas]`
-- Ação principal esperada do usuário: `[o que o usuário logado faz com mais frequência]`
+- Ação principal esperada do usuário: `[visualizar suas ordens de serviço, solicitar serviços, editar perfil...]`
 
 ## Área Administrativa (`admin`)
-- Quem acessa: `[administrador, secretaria, gestor, professor...]`
-- Objetivo da área: `[ex.: gerenciar usuários, cadastros, permissões, relatórios]`
-- Telas previstas: `[painel]`, `[gestão de usuários]`, `[cadastros]`, `[relatórios]`
+- Quem acessa: `[administradores do sistema / técnicos e gestores da assistência técnica]`
+- Objetivo da área: `[ex.: gerenciar ordens de serviço, usuários, cadastros, permissões, relatórios]`
+- Telas previstas: `[painel]`, `[ordens de serviço]`, `[gestão de usuários]`,`[relatórios]`, `[gestor da assistência técnica cadastrar funcionarios e atribuir permissões]`
 - Componentes principais: `[tabelas semânticas apenas se forem dados tabulares reais]`, `[filtros]`, `[formulários]`, `[indicadores]`
-- Ação principal esperada do usuário: `[principal tarefa administrativa]`
+- Ação principal esperada do usuário: `[gerenciamento de usuários, cadastros, permissões, visualização de relatórios...]`
 
 ## Navegação e organização visual
 - Estrutura de navegação principal: `[menu superior, lateral, abas, breadcrumbs...]`
-- Fluxo entre telas: `[descreva o caminho mais comum do usuário]`
-- Hierarquia visual: `[o que deve chamar mais atenção em cada área]`
+- Fluxo entre telas: `[home > sobre > cadastro de empresa], [home > login > dashboard], [dashboard > detalhes da ordem de serviço]...`
+- Hierarquia visual: `[ex.: título > subtítulo > texto > botões]`]`
 - Estados importantes da interface: `[vazio]`, `[carregando]`, `[erro visual]`, `[sucesso]`
 
 ## Responsividade e acessibilidade
@@ -65,9 +65,9 @@ Use este documento para orientar o planejamento visual e estrutural do frontend 
 - Elementos semânticos esperados: `[header]`, `[nav]`, `[main]`, `[section]`, `[article]`, `[aside]`, `[footer]`
 
 ## Identidade visual
-- Paleta principal: `[cores principais]`
-- Tipografia: `[família tipográfica ou estilo desejado]`
-- Referências visuais: `[sites, sistemas ou estilos de inspiração]`
+- Paleta principal: `[tons de azul, cinza claro, branco]`
+- Tipografia: `[fontes sem serifa para títulos e texto, tamanhos variados para hierarquia]`
+- Referências visuais: `[sistema-os dentro de techos, outros sistemas de ordens de serviço, sites de assistência técnica...]`
 - Sensação que a interface deve transmitir: `[seriedade, confiança, rapidez, simplicidade...]`
 
 ## Organização de arquivos esperada
