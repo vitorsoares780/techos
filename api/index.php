@@ -25,14 +25,19 @@ $route = new Router(url("api"),":");
 
 $route->namespace("Source\Controller");
 
-// Início - Exercícios e Desafios
+// --------------- Início - Exercícios e Desafios ----------------------------------
+
+/* ============== $route->get("endereço", "ação"); ===============================*/
+
 //ROTAS PARA ACESSAR UMA FUNÇÃO DA CLASSE "PRODUCTS" (USAR URL NO NAVEGADOR)
 $route->get("/products/list", "Products:productsList");
-$route->get("/products/list/{idProduct}", "Products:productById");
+$route->get("/products/list/{productId}", "Products:productsListById");
+
+$route->get("/products-categories/list", "ProductsCategories:productsCategoryList");
+// Fim - Exercícios - Desafios
 
 // localhost/acme-3am/api/hello
 $route->get("/hello", "Api:hello");
-$route->get("/products/list", "Products:productsList");
 $route->get("/users/list", "Users:usersList");
 
 $route->dispatch();

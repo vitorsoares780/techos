@@ -2,21 +2,41 @@
 
 namespace source\Controller;
 
-use source\Controller\Api;
-use source\Models\Product;
+use Source\Controller\Api;
+use Source\Models\Product;
 
 class Products extends Api
 {
     public function productsList (): void
     {
         $product = new Product();
-        $product->findById(); // passar id?
-        $response = $product->listAll();
         $this->call("200", "success", "Lista de produtos", "success")->back($response);
     }
 
-    public function productById(array $data): void{
+    public function productsListById(array $data): void{
+       if(!filter_var($data['productId'], FILTER_VALIDADE_INT)){
+            $this->call(
+                400,
+                "bad_request",
+                "ID do produto obrigatório e dever ser um número inteiro",
+                "error"
+            )->back();
+            return;
+       }
+        
+        $product = new Product();
+        $product = $product->listById($data["productId"]);
 
+        if(!$product){
+            $this->call(
+                404,
+                "not_found",
+                "produto não encontrado",
+                "error"
+            )->back();
+            return;
+        }
+
+        $this->call(200,"success","Produto encontrado","success")->back($product);
     }
-
 }

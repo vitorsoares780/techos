@@ -50,11 +50,15 @@ class Product
         $stmt = Connect::getInstance()->query($query);
         return $stmt->fetchAll();
     }
-    public function findById(int $id): object {
+    public function listById(int $id): object | bool 
+    {
         $query = "SELECT * FROM products WHERE id = :id";
         $stmt = Connect::getInstance()->prepare($query);
         $stmt->bindValue(':id', $id);
         $stmt->execute();
-        return $stmt->fetch();
+        if($stmt->rowCount() > 0){
+            return $stmt->fetch();
+        }
+        return false;
     }
 }
