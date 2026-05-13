@@ -2,7 +2,7 @@
 
 namespace source\Models;
 
-use source\Core\Connect;
+use Source\Core\Connect;
 
 class Product
 {
@@ -11,7 +11,7 @@ class Product
     private ?string $name;
     private ?float $price;
 
-    public function __construct(?int $id = null, ?int $categoryId, ?string $name, ?float $price)
+    public function __construct(?int $id = null, ?int $categoryId = null, ?string $name = null, ?float $price = null)
     {
         $this->id = $id;
         $this->categoryId = $categoryId;

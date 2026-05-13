@@ -5,20 +5,26 @@ namespace source\Controller;
 use Source\Controller\Api;
 use Source\Models\Product;
 
+$product = '{
+  "name": "Headset HyperX Cloud II",
+  "price": 349.90,
+  "category_id": 2
+}';
+
 class Products extends Api
 {
     public function productsList (): void
     {
         $product = new Product();
-        $this->call("200", "success", "Lista de produtos", "success")->back($response);
+        $this->call("200", "success", "Lista de produtos", "success")->back($product->listAll());
     }
 
     public function productsListById(array $data): void{
-       if(!filter_var($data['productId'], FILTER_VALIDADE_INT)){
+       if(!filter_var($data['productId'], FILTER_VALIDATE_INT)){
             $this->call(
                 400,
                 "bad_request",
-                "ID do produto obrigatório e dever ser um número inteiro",
+                "ID do produto obrigatório e deve ser um número inteiro",
                 "error"
             )->back();
             return;
