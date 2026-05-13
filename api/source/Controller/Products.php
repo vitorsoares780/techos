@@ -38,8 +38,8 @@ class Products extends Api
             return;
         }
 
-        $this->call(200,"success","Produto encontrado","success")->back($product);
-
+        $this->call(200,"success","Produto encontrado","success")
+            ->back($product);
 
     }
 
