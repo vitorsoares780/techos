@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Empresa — TechOS Admin</title>
+  <meta name="description" content="Informações da empresa no painel administrativo do TechOS.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@600;700;800&display=swap">
+  <link rel="stylesheet" href="../_common/styles/base.css">
+  <link rel="stylesheet" href="styles/admin.css">
+</head>
+
+<body class="admin">
+
+  <header class="admin-topbar">
+    <section style="display:flex;align-items:center;gap:0.75rem">
+      <button class="sidebar-toggle" type="button" aria-label="Abrir menu lateral" data-sidebar-toggle>
+        <span></span><span></span><span></span>
+      </button>
+      <a class="brand" href="painel.html">
+        <img src="../_common/images/logo.png" class="logo">
+        TechOS <span style="font-size:0.7rem;font-weight:500;color:var(--color-text-muted);margin-left:0.25rem">Admin</span>
+      </a>
+    </section>
+    <label class="admin-search" aria-label="Buscar">
+      <input type="search" placeholder="Buscar OS, cliente ou empresa…" data-global-search>
+    </label>
+    <section class="admin-topbar-actions">
+      <button class="icon-btn" type="button" aria-label="Notificações" data-badge="5">🔔</button>
+      <button class="user-chip" type="button" aria-label="Conta" data-user-menu>
+        <span class="avatar" style="width:1.75rem;height:1.75rem;font-size:0.78rem" aria-hidden="true">VS</span>
+        <span>Admin</span>
+      </button>
+    </section>
+  </header>
+
+  <section class="admin-shell">
+
+    <aside class="admin-sidebar" data-sidebar>
+      <section class="sidebar-section">
+        <h4>Operação</h4>
+        <ul>
+          <li><a class="sidebar-link" href="painel.html"><span class="ico" aria-hidden="true">📊</span>Painel</a></li>
+          <li><a class="sidebar-link" href="ordens.html"><span class="ico" aria-hidden="true">🧾</span>Ordens de serviço</a></li>
+          <li><a class="sidebar-link" href="ordem-nova.html"><span class="ico" aria-hidden="true">➕</span>Nova OS</a></li>
+          <li><a class="sidebar-link" href="clientes.html"><span class="ico" aria-hidden="true">👥</span>Clientes</a></li>
+          <li><a class="sidebar-link" href="equipamentos.html"><span class="ico" aria-hidden="true">📱</span>Equipamentos</a></li>
+          <li><a class="sidebar-link" href="relatorios.html"><span class="ico" aria-hidden="true">📈</span>Relatórios</a></li>
+        </ul>
+      </section>
+      <section class="sidebar-section">
+        <h4>Administração</h4>
+        <ul>
+          <li><a class="sidebar-link" href="usuarios.html"><span class="ico" aria-hidden="true">👤</span>Usuários</a></li>
+          <li><a class="sidebar-link" href="permissoes.html"><span class="ico" aria-hidden="true">🔐</span>Permissões</a></li>
+          <li><a class="sidebar-link" aria-current="page" href="empresa.html"><span class="ico" aria-hidden="true">🏢</span>Empresa</a></li>
+          <li><a class="sidebar-link" href="configuracoes.html"><span class="ico" aria-hidden="true">⚙️</span>Configurações</a></li>
+        </ul>
+      </section>
+      <section class="sidebar-section">
+        <h4>Conta</h4>
+        <ul>
+          <li><a class="sidebar-link" href="../public/login.html"><span class="ico" aria-hidden="true">🚪</span>Sair</a></li>
+        </ul>
+      </section>
+    </aside>
+
+    <main class="admin-main">
+
+      <section class="page-head">
+        <section>
+          <h1>Empresa</h1>
+          <p>Dados da empresa e contato principal da assistência técnica.</p>
+        </section>
+        <section class="page-actions">
+          <button class="btn btn-primary" type="button" data-save-company>Salvar</button>
+        </section>
+      </section>
+
+      <article class="panel">
+        <header class="panel-head">
+          <h2>Dados da empresa</h2>
+        </header>
+        <section class="form-grid">
+          <section class="form-field"><label for="emp-name">Razão social</label><input id="emp-name" type="text" value="TechOS Assistência Técnica Ltda"></section>
+          <section class="form-field"><label for="emp-fantasia">Nome fantasia</label><input id="emp-fantasia" type="text" value="TechOS"></section>
+          <section class="form-field"><label for="emp-cnpj">CNPJ</label><input id="emp-cnpj" type="text" value="12.345.678/0001-90"></section>
+          <section class="form-field"><label for="emp-tel">Telefone</label><input id="emp-tel" type="tel" value="(11) 4002-8922"></section>
+          <section class="form-field full"><label for="emp-email">E-mail de contato</label><input id="emp-email" type="email" value="contato@techos.com.br"></section>
+          <section class="form-field full"><label for="emp-end">Endereço</label><input id="emp-end" type="text" value="Av. Paulista, 1000 — São Paulo/SP"></section>
+        </section>
+      </article>
+
+      <article class="panel">
+        <header class="panel-head">
+          <h2>Informações fiscais</h2>
+        </header>
+        <section class="form-grid">
+          <section class="form-field"><label for="emp-inscricao">Inscrição estadual</label><input id="emp-inscricao" type="text" value="123.456.789.000"></section>
+          <section class="form-field"><label for="emp-regime">Regime tributário</label><select id="emp-regime"><option>Simples Nacional</option><option>Lucro Presumido</option><option>Lucro Real</option></select></section>
+          <section class="form-field full"><label for="emp-site">Website</label><input id="emp-site" type="url" value="https://www.techos.com.br"></section>
+        </section>
+      </article>
+
+      <article class="panel">
+        <header class="panel-head">
+          <h2>Contato administrativo</h2>
+        </header>
+        <section class="form-grid">
+          <section class="form-field"><label for="emp-resp">Responsável</label><input id="emp-resp" type="text" value="Vanessa Souza"></section>
+          <section class="form-field"><label for="emp-resp-email">E-mail</label><input id="emp-resp-email" type="email" value="vanessa.souza@techos.com.br"></section>
+          <section class="form-field"><label for="emp-resp-tel">Telefone</label><input id="emp-resp-tel" type="tel" value="(11) 98888-0000"></section>
+        </section>
+      </article>
+
+    </main>
+  </section>
+
+  <script src="scripts/admin.js"></script>
+  <script src="scripts/empresa.js"></script>
+</body>
+
+</html>

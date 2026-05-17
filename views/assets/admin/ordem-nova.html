@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nova OS — TechOS Admin</title>
+  <meta name="description" content="Abertura de nova ordem de serviço no painel administrativo do TechOS.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@600;700;800&display=swap">
+  <link rel="stylesheet" href="../_common/styles/base.css">
+  <link rel="stylesheet" href="styles/admin.css">
+</head>
+
+<body class="admin">
+
+  <header class="admin-topbar">
+    <section style="display:flex;align-items:center;gap:0.75rem">
+      <button class="sidebar-toggle" type="button" aria-label="Abrir menu lateral" data-sidebar-toggle>
+        <span></span><span></span><span></span>
+      </button>
+      <a class="brand" href="painel.html">
+        <img src="../_common/images/logo.png" class="logo">
+        TechOS <span style="font-size:0.7rem;font-weight:500;color:var(--color-text-muted);margin-left:0.25rem">Admin</span>
+      </a>
+    </section>
+    <label class="admin-search" aria-label="Buscar">
+      <input type="search" placeholder="Buscar OS, usuário ou cliente…" data-global-search>
+    </label>
+    <section class="admin-topbar-actions">
+      <button class="icon-btn" type="button" aria-label="Notificações" data-badge="5">🔔</button>
+      <button class="user-chip" type="button" aria-label="Conta" data-user-menu>
+        <span class="avatar" style="width:1.75rem;height:1.75rem;font-size:0.78rem" aria-hidden="true">VS</span>
+        <span>Admin</span>
+      </button>
+    </section>
+  </header>
+
+  <section class="admin-shell">
+
+    <aside class="admin-sidebar" data-sidebar>
+      <section class="sidebar-section">
+        <h4>Operação</h4>
+        <ul>
+          <li><a class="sidebar-link" href="painel.html"><span class="ico" aria-hidden="true">📊</span>Painel</a></li>
+          <li><a class="sidebar-link" href="ordens.html"><span class="ico" aria-hidden="true">🧾</span>Ordens de serviço</a></li>
+          <li><a class="sidebar-link" aria-current="page" href="ordem-nova.html"><span class="ico" aria-hidden="true">➕</span>Nova OS</a></li>
+          <li><a class="sidebar-link" href="clientes.html"><span class="ico" aria-hidden="true">👥</span>Clientes</a></li>
+          <li><a class="sidebar-link" href="equipamentos.html"><span class="ico" aria-hidden="true">📱</span>Equipamentos</a></li>
+          <li><a class="sidebar-link" href="relatorios.html"><span class="ico" aria-hidden="true">📈</span>Relatórios</a></li>
+        </ul>
+      </section>
+      <section class="sidebar-section">
+        <h4>Administração</h4>
+        <ul>
+          <li><a class="sidebar-link" href="usuarios.html"><span class="ico" aria-hidden="true">👤</span>Usuários</a></li>
+          <li><a class="sidebar-link" href="permissoes.html"><span class="ico" aria-hidden="true">🔐</span>Permissões</a></li>
+          <li><a class="sidebar-link" href="empresa.html"><span class="ico" aria-hidden="true">🏢</span>Empresa</a></li>
+          <li><a class="sidebar-link" href="configuracoes.html"><span class="ico" aria-hidden="true">⚙️</span>Configurações</a></li>
+        </ul>
+      </section>
+      <section class="sidebar-section">
+        <h4>Conta</h4>
+        <ul>
+          <li><a class="sidebar-link" href="../public/login.html"><span class="ico" aria-hidden="true">🚪</span>Sair</a></li>
+        </ul>
+      </section>
+    </aside>
+
+    <main class="admin-main">
+
+      <section class="page-head">
+        <section>
+          <p style="font-size:0.85rem;color:var(--color-text-muted)"><a href="ordens.html">← Ordens</a></p>
+          <h1>Nova ordem de serviço</h1>
+          <p>Preencha os dados para abrir a OS.</p>
+        </section>
+      </section>
+
+      <!-- TODO: substituir por POST /api/admin/ordens -->
+      <section class="detail-grid">
+
+        <section style="display:flex;flex-direction:column;gap:1.25rem">
+
+          <article class="panel">
+            <header class="panel-head">
+              <h2>Cliente</h2>
+            </header>
+            <section class="toolbar" style="margin-bottom:0.75rem">
+              <input class="grow" type="search" placeholder="Buscar cliente por nome, CPF ou e-mail…" data-busca-cliente>
+              <button class="btn btn-ghost" type="button" data-novo-cliente>+ Novo cliente</button>
+            </section>
+            <!-- Estado vazio: cliente não selecionado -->
+            <section class="empty" data-cliente-selecionado style="display:none">
+              <p><strong>Carla Andrade</strong> — carla.andrade@email.com · (51) 99123-4567</p>
+              <button class="btn-link" type="button" style="margin-top:0.5rem" data-remover-cliente>Alterar</button>
+            </section>
+            <section class="empty" data-cliente-vazio>
+              <p class="ico">👥</p>
+              <p>Nenhum cliente selecionado.<br>Busque ou cadastre um novo.</p>
+            </section>
+          </article>
+
+          <article class="panel">
+            <header class="panel-head">
+              <h2>Equipamento</h2>
+            </header>
+            <section class="form-grid">
+              <fieldset class="form-field">
+                <label for="marca">Marca</label>
+                <input type="text" id="marca" placeholder="Ex.: Apple, Samsung…">
+              </fieldset>
+              <fieldset class="form-field">
+                <label for="modelo">Modelo</label>
+                <input type="text" id="modelo" placeholder="Ex.: iPhone 14 Pro">
+              </fieldset>
+              <fieldset class="form-field">
+                <label for="imei">IMEI / Número de série</label>
+                <input type="text" id="imei" placeholder="Ex.: 354687102938476">
+              </fieldset>
+              <fieldset class="form-field">
+                <label for="cor">Cor</label>
+                <input type="text" id="cor" placeholder="Ex.: Preto espacial">
+              </fieldset>
+              <fieldset class="form-field full">
+                <label for="acessorios">Acessórios entregues</label>
+                <input type="text" id="acessorios" placeholder="Ex.: carregador, capa, caixa original">
+              </fieldset>
+            </section>
+          </article>
+
+          <article class="panel">
+            <header class="panel-head">
+              <h2>Defeito e diagnóstico inicial</h2>
+            </header>
+            <section class="form-grid">
+              <fieldset class="form-field full">
+                <label for="defeito">Defeito relatado pelo cliente</label>
+                <textarea id="defeito" rows="3" placeholder="Descreva o problema relatado pelo cliente…"></textarea>
+              </fieldset>
+              <fieldset class="form-field full">
+                <label for="diagnostico">Diagnóstico inicial (opcional)</label>
+                <textarea id="diagnostico" rows="3" placeholder="Descreva o diagnóstico técnico inicial…"></textarea>
+              </fieldset>
+            </section>
+          </article>
+
+          <article class="panel">
+            <header class="panel-head">
+              <h2>Itens e serviços</h2>
+              <button class="btn btn-ghost" type="button" data-add-item>+ Adicionar item</button>
+            </header>
+            <section class="table-wrap">
+              <table class="data" data-itens-table>
+                <thead>
+                  <tr>
+                    <th>Descrição</th>
+                    <th>Qtd</th>
+                    <th>Valor unit.</th>
+                    <th>Subtotal</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- TODO: itens adicionados dinamicamente via JS -->
+                  <tr data-item-vazio>
+                    <td colspan="5" style="text-align:center;color:var(--color-text-muted);padding:1.5rem">
+                      Nenhum item adicionado ainda.
+                    </td>
+                  </tr>
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <th colspan="3" style="text-align:right">Total estimado</th>
+                    <th data-total>R$ 0,00</th>
+                    <th></th>
+                  </tr>
+                </tfoot>
+              </table>
+            </section>
+          </article>
+
+        </section>
+
+        <section style="display:flex;flex-direction:column;gap:1.25rem">
+
+          <article class="panel">
+            <header class="panel-head">
+              <h2>Configurações da OS</h2>
+            </header>
+            <section class="form-grid" style="grid-template-columns:1fr">
+              <fieldset class="form-field">
+                <label for="prazo">Prazo estimado de entrega</label>
+                <input type="date" id="prazo">
+              </fieldset>
+              <fieldset class="form-field">
+                <label for="prioridade">Prioridade</label>
+                <select id="prioridade">
+                  <option value="normal">Normal</option>
+                  <option value="alta">Alta</option>
+                  <option value="urgente">Urgente</option>
+                </select>
+              </fieldset>
+              <fieldset class="form-field">
+                <label for="obs-interna">Observação interna</label>
+                <textarea id="obs-interna" rows="3" placeholder="Nota interna, não visível ao cliente…"></textarea>
+              </fieldset>
+            </section>
+          </article>
+
+          <article class="panel">
+            <header class="panel-head">
+              <h2>Anexos</h2>
+            </header>
+            <!-- TODO: substituir por upload real via API POST /api/admin/ordens/{id}/anexos -->
+            <fieldset class="form-field">
+              <label for="fotos">Fotos do equipamento</label>
+              <input type="file" id="fotos" accept="image/*" multiple>
+            </fieldset>
+            <p style="font-size:0.82rem;color:var(--color-text-muted);margin-top:0.5rem">JPG, PNG ou WEBP. Máx. 10 MB por arquivo.</p>
+          </article>
+
+          <article class="panel">
+            <header class="panel-head">
+              <h2>Notificações ao cliente</h2>
+            </header>
+            <section class="permission-grid" style="grid-template-columns:1fr">
+              <article class="permission-item">
+                <label for="notif-abertura">Enviar e-mail de abertura ao cliente</label>
+                <label class="switch">
+                  <input type="checkbox" id="notif-abertura" checked>
+                  <span class="switch-track" aria-hidden="true"></span>
+                </label>
+              </article>
+              <article class="permission-item">
+                <label for="notif-orcamento">Enviar orçamento por e-mail</label>
+                <label class="switch">
+                  <input type="checkbox" id="notif-orcamento" checked>
+                  <span class="switch-track" aria-hidden="true"></span>
+                </label>
+              </article>
+            </section>
+          </article>
+
+          <section class="form-actions" style="justify-content:stretch;flex-direction:column">
+            <button class="btn btn-primary btn-block" type="button" data-salvar-os>Abrir ordem de serviço</button>
+            <a class="btn btn-ghost btn-block" href="ordens.html">Cancelar</a>
+          </section>
+
+        </section>
+
+      </section>
+
+    </main>
+  </section>
+
+  <!-- Modal: Novo cliente -->
+  <section class="modal-backdrop" data-modal-novo-cliente aria-modal="true" role="dialog" aria-label="Novo cliente">
+    <article class="modal">
+      <header class="modal-head">
+        <h2>Novo cliente</h2>
+        <button class="modal-close" type="button" data-fechar-modal aria-label="Fechar">✕</button>
+      </header>
+      <section class="form-grid" style="grid-template-columns:1fr">
+        <fieldset class="form-field">
+          <label for="nc-nome">Nome completo</label>
+          <input type="text" id="nc-nome" placeholder="Nome do cliente">
+        </fieldset>
+        <fieldset class="form-field">
+          <label for="nc-email">E-mail</label>
+          <input type="email" id="nc-email" placeholder="email@exemplo.com">
+        </fieldset>
+        <fieldset class="form-field">
+          <label for="nc-tel">Telefone / WhatsApp</label>
+          <input type="tel" id="nc-tel" placeholder="(51) 99000-0000">
+        </fieldset>
+        <fieldset class="form-field">
+          <label for="nc-doc">CPF / CNPJ</label>
+          <input type="text" id="nc-doc" placeholder="000.000.000-00">
+        </fieldset>
+      </section>
+      <section class="form-actions">
+        <button class="btn btn-ghost" type="button" data-fechar-modal>Cancelar</button>
+        <button class="btn btn-primary" type="button" data-salvar-cliente>Salvar cliente</button>
+      </section>
+    </article>
+  </section>
+
+  <!-- Modal: Adicionar item -->
+  <section class="modal-backdrop" data-modal-item aria-modal="true" role="dialog" aria-label="Adicionar item">
+    <article class="modal">
+      <header class="modal-head">
+        <h2>Adicionar item</h2>
+        <button class="modal-close" type="button" data-fechar-modal-item aria-label="Fechar">✕</button>
+      </header>
+      <section class="form-grid" style="grid-template-columns:1fr">
+        <fieldset class="form-field">
+          <label for="item-desc">Descrição</label>
+          <input type="text" id="item-desc" placeholder="Ex.: Mão de obra — troca de tela">
+        </fieldset>
+        <fieldset class="form-field">
+          <label for="item-qtd">Quantidade</label>
+          <input type="number" id="item-qtd" value="1" min="1">
+        </fieldset>
+        <fieldset class="form-field">
+          <label for="item-valor">Valor unitário (R$)</label>
+          <input type="text" id="item-valor" placeholder="0,00">
+        </fieldset>
+      </section>
+      <section class="form-actions">
+        <button class="btn btn-ghost" type="button" data-fechar-modal-item>Cancelar</button>
+        <button class="btn btn-primary" type="button" data-salvar-item>Adicionar</button>
+      </section>
+    </article>
+  </section>
+
+  <script src="scripts/admin.js"></script>
+  <script src="scripts/ordem-nova.js"></script>
+</body>
+
+</html>

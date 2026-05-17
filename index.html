@@ -1,10 +1,237 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TechOS — Ordens de serviço para assistências técnicas</title>
+    <meta name="description" content="TechOS — sistema de ordens de serviço para assistências técnicas.">
+
+    <!-- FONT -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@600;700;800&display=swap">
+
+    <!-- CSS BASE -->
+    <link rel="stylesheet" href="views/assets/_common/styles/base.css">
+
+    <!-- CSS HOME -->
+    <link rel="stylesheet" href="views/assets/public/styles/home.css">
 </head>
+
 <body>
+    <header class="site-header">
+        <section class="container">
+            <a class="brand" href="index.html">
+                <img src="views/assets/_common/images/logo.png" class="logo">
+                TechOS
+            </a>
+            <nav class="main-nav" aria-label="Navegação principal">
+                <ul>
+                    <li><a href="index.html" aria-current="page">Início</a></li>
+                    <li><a href="views/assets/public/recursos.html">Recursos</a></li>
+                    <li><a href="views/assets/public/precos.html">Preços</a></li>
+                    <li><a href="views/assets/public/sobre.html">Sobre</a></li>
+                    <li><a href="views/assets/public/contato.html">Contato</a></li>
+                </ul>
+            </nav>
+            <section class="header-actions">
+                <a class="btn-link" href="views/assets/public/login.html">Entrar</a>
+                <a class="btn btn-primary" href="views/assets/public/cadastro.html">Começar grátis</a>
+            </section>
+            <button class="menu-toggle" type="button" aria-label="Abrir menu" aria-expanded="false" data-menu-toggle>
+                <span></span><span></span><span></span>
+            </button>
+        </section>
+        <nav class="mobile-nav" aria-label="Navegação móvel" data-mobile-nav>
+            <ul>
+                <li><a href="views/assets/public/index.html">Início</a></li>
+                <li><a href="views/assets/public/recursos.html">Recursos</a></li>
+                <li><a href="views/assets/public/precos.html">Preços</a></li>
+                <li><a href="views/assets/public/sobre.html">Sobre</a></li>
+                <li><a href="views/assets/public/contato.html">Contato</a></li>
+                <li><a href="views/assets/public/login.html">Entrar</a></li>
+                <li><a href="views/assets/public/cadastro.html">Começar grátis</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section class="hero">
+            <section class="container">
+                <section>
+                    <p class="hero-badge">Novo · Versão 2026</p>
+                    <h1 class="hero-title">Sua assistência técnica <em>organizada</em> em um só lugar.</h1>
+                    <p class="hero-lead">O TechOS é o sistema de ordens de serviço feito para técnicos, gestores e
+                        clientes trabalharem juntos — do orçamento à entrega.</p>
+                    <section class="hero-actions">
+                        <a class="btn btn-primary" href="views/assets/public/cadastro.html">Começar grátis →</a>
+                        <a class="btn btn-ghost" href="views/assets/public/recursos.html">Ver recursos</a>
+                    </section>
+                    <ul class="hero-features">
+                        <li>Sem cartão de crédito</li>
+                        <li>Setup em 5 minutos</li>
+                        <li>Suporte em português</li>
+                    </ul>
+                </section>
+                <figure class="hero-image">
+                    <img src="views/assets/public/images/hero-dashboard.jpg" alt="Painel do TechOS exibindo ordens de serviço" width="1280"
+                        height="960">
+                </figure>
+            </section>
+        </section>
+
+        <section class="stats">
+            <section class="container">
+                <!-- INFORMAÇÕES SUCESSO DA EMPRESA (RETIRAR OU MUDAR) -->
+                <ul class="stats-grid">
+                    <li>
+                        <p class="stat-value">+2.500</p>
+                        <p class="stat-label">Assistências ativas</p>
+                    </li>
+                    <li>
+                        <p class="stat-value">+180 mil</p>
+                        <p class="stat-label">OS processadas/mês</p>
+                    </li>
+                    <li>
+                        <p class="stat-value">98%</p>
+                        <p class="stat-label">Satisfação dos clientes</p>
+                    </li>
+                    <li>
+                        <p class="stat-value">24/7</p>
+                        <p class="stat-label">Disponibilidade</p>
+                    </li>
+                </ul>
+            </section>
+        </section>
+
+        <section class="section">
+            <section class="container">
+                <header class="section-head">
+                    <p class="eyebrow">Recursos</p>
+                    <h2 class="section-title">Tudo que sua assistência precisa para escalar</h2>
+                    <p class="section-lead">Um conjunto de ferramentas pensado para o dia a dia de quem conserta,
+                        gerencia e atende.</p>
+                </header>
+                <ul class="features-grid">
+                    <li>
+                        <article class="card">
+                            <p class="card-icon" aria-hidden="true">📋</p>
+                            <h3>Ordens de serviço</h3>
+                            <p>Crie, acompanhe e finalize OS com histórico completo de cada atendimento.</p>
+                        </article>
+                    </li>
+                    <li>
+                        <article class="card">
+                            <p class="card-icon" aria-hidden="true">👥</p>
+                            <h3>Equipe e clientes</h3>
+                            <p>Cadastre técnicos, atribua serviços e mantenha o cliente informado.</p>
+                        </article>
+                    </li>
+                    <li>
+                        <article class="card">
+                            <p class="card-icon" aria-hidden="true">📱</p>
+                            <h3>Acesso mobile</h3>
+                            <p>Seu técnico em campo registra tudo direto pelo celular.</p>
+                        </article>
+                    </li>
+                    <li>
+                        <article class="card">
+                            <p class="card-icon" aria-hidden="true">🛡️</p>
+                            <h3>Seguro e confiável</h3>
+                            <p>Seus dados protegidos com criptografia e backups automáticos.</p>
+                        </article>
+                    </li>
+                </ul>
+            </section>
+        </section>
+
+        <section class="how-it-works section">
+            <section class="container">
+                <header class="section-head center">
+                    <p class="eyebrow">Como funciona</p>
+                    <h2 class="section-title">Comece em 3 passos simples</h2>
+                </header>
+                <ol class="steps-grid">
+                    <li>
+                        <article class="step">
+                            <p class="step-number">01</p>
+                            <h3>Cadastre sua empresa</h3>
+                            <p>Crie a conta da assistência em minutos e convide sua equipe.</p>
+                        </article>
+                    </li>
+                    <li>
+                        <article class="step">
+                            <p class="step-number">02</p>
+                            <h3>Abra a ordem de serviço</h3>
+                            <p>Registre o cliente, equipamento e defeito relatado.</p>
+                        </article>
+                    </li>
+                    <li>
+                        <article class="step">
+                            <p class="step-number">03</p>
+                            <h3>Acompanhe e entregue</h3>
+                            <p>Atualize o andamento e o cliente automaticamente.</p>
+                        </article>
+                    </li>
+                </ol>
+            </section>
+        </section>
+
+        <section class="section">
+            <section class="container testimonial">
+                <blockquote>
+                    "Antes do TechOS, a gente perdia OS em cadernos. Hoje atendemos o dobro de clientes com metade do
+                    estresse."
+                </blockquote>
+                <cite><strong>Vitor Silveira</strong> · Dono, VS Tech</cite>
+            </section>
+        </section>
+
+        <section class="container">
+            <aside class="cta">
+                <h2>Pronto para organizar sua assistência?</h2>
+                <p>Crie sua conta gratuita e comece a abrir ordens de serviço hoje mesmo.</p>
+                <section class="cta-actions">
+                    <a class="btn btn-primary" href="views/assets/public/cadastro.html">Criar conta grátis →</a>
+                    <a class="btn btn-ghost" href="views/assets/public/contato.html">Falar com especialista</a>
+                </section>
+            </aside>
+        </section>
+    </main>
+    <footer class="site-footer">
+        <section class="container footer-grid">
+            <section class="footer-about">
+                <a class="brand" href="index.html">
+                    <img src="views/assets/_common/images/logo.png" class="logo">
+                    TechOS
+                </a>
+                <p>A plataforma completa de ordens de serviço para assistências técnicas que querem crescer com
+                    organização.</p>
+            </section>
+            <nav aria-label="Navegação do rodapé">
+                <h3>Navegação</h3>
+                <ul>
+                    <li><a href="views/assets/public/recursos.html">Recursos</a></li>
+                    <li><a href="views/assets/public/precos.html">Preços</a></li>
+                    <li><a href="views/assets/public/sobre.html">Sobre</a></li>
+                    <li><a href="views/assets/public/contato.html">Contato</a></li>
+                </ul>
+            </nav>
+            <nav aria-label="Acesso à conta">
+                <h3>Conta</h3>
+                <ul>
+                    <li><a href="views/assets/public/login.html">Entrar</a></li>
+                    <li><a href="views/assets/public/cadastro.html">Cadastrar empresa</a></li>
+                </ul>
+            </nav>
+        </section>
+        <section class="footer-copy">
+            <section class="container">© 2026 TechOS. Todos os direitos reservados.</section>
+        </section>
+    </footer>
+    <script src="views/assets/_common/scripts/nav.js"></script>
 
 </body>
+
 </html>

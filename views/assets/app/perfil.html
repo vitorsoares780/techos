@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Perfil — TechOS</title>
+  <meta name="description" content="Painel da assistência técnica no TechOS.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@600;700;800&display=swap">
+  <link rel="stylesheet" href="../_common/styles/base.css">
+  <link rel="stylesheet" href="styles/app.css">
+</head>
+
+<body class="app">
+  <header class="app-topbar">
+    <section style="display:flex;align-items:center;gap:0.75rem">
+      <button class="sidebar-toggle" type="button" aria-label="Abrir menu lateral" data-sidebar-toggle>
+        <span></span><span></span><span></span>
+      </button>
+      <a class="brand" href="dashboard.html">
+        <img src="../_common/images/logo.png" class="logo">
+        TechOS
+      </a>
+    </section>
+    <label class="app-search" aria-label="Buscar">
+      <input type="search" placeholder="Buscar OS, cliente ou equipamento…" data-global-search>
+    </label>
+    <section class="app-topbar-actions">
+      <button class="icon-btn" type="button" aria-label="Notificações" data-badge="3">🔔</button>
+      <button class="user-chip" type="button" aria-label="Conta" data-user-menu>
+        <span class="avatar" aria-hidden="true">MC</span>
+        <span>Marina</span>
+      </button>
+    </section>
+  </header>
+  <section class="app-shell">
+    <aside class="app-sidebar" data-sidebar>
+      <section class="sidebar-section">
+        <h4>Operação</h4>
+        <ul>
+          <li><a class="sidebar-link" href="dashboard.html"><span class="ico" aria-hidden="true">📊</span>Visão
+              geral</a></li>
+          <li><a class="sidebar-link" href="ordens.html"><span class="ico" aria-hidden="true">🧾</span>Ordens de
+              serviço</a></li>
+          <li><a class="sidebar-link" href="ordem-nova.html"><span class="ico" aria-hidden="true">➕</span>Nova OS</a>
+          </li>
+          <li><a class="sidebar-link" href="clientes.html"><span class="ico" aria-hidden="true">👥</span>Clientes</a>
+          </li>
+          <li><a class="sidebar-link" href="equipamentos.html"><span class="ico"
+                aria-hidden="true">🛠️</span>Equipamentos</a></li>
+          <li><a class="sidebar-link" href="equipe.html"><span class="ico" aria-hidden="true">👷</span>Equipe</a></li>
+          <li><a class="sidebar-link" href="relatorios.html"><span class="ico"
+                aria-hidden="true">📈</span>Relatórios</a></li>
+        </ul>
+      </section>
+      <section class="sidebar-section">
+        <h4>Conta</h4>
+        <ul>
+          <li><a class="sidebar-link" aria-current="page" href="perfil.html"><span class="ico"
+                aria-hidden="true">👤</span>Perfil</a></li>
+          <li><a class="sidebar-link" href="configuracoes.html"><span class="ico"
+                aria-hidden="true">⚙️</span>Configurações</a></li>
+          <li><a class="sidebar-link" href="../../../index.html"><span class="ico" aria-hidden="true">🚪</span>Sair</a>
+          </li>
+        </ul>
+      </section>
+    </aside>
+    <main class="app-main">
+      <section class="page-head">
+        <section>
+          <h1>Meu perfil</h1>
+          <p>Atualize suas informações pessoais e senha.</p>
+        </section>
+      </section>
+
+      <section class="detail-grid">
+        <form class="panel" data-perfil-form novalidate>
+          <header class="panel-head">
+            <h2>Dados pessoais</h2>
+          </header>
+          <section class="form-grid">
+            <section class="form-field"><label for="p-nome">Nome completo</label><input id="p-nome" name="nome"
+                value="Marina Costa" required></section>
+            <section class="form-field"><label for="p-email">E-mail</label><input id="p-email" name="email" type="email"
+                value="marina@assisttech.com" required></section>
+            <section class="form-field"><label for="p-tel">Telefone</label><input id="p-tel" name="telefone"
+                value="(11) 99999-0000"></section>
+            <section class="form-field"><label for="p-cargo">Cargo</label><input id="p-cargo" name="cargo"
+                value="Gestora"></section>
+          </section>
+          <section class="form-actions"><button class="btn btn-primary" type="submit">Salvar alterações</button>
+          </section>
+        </form>
+
+        <form class="panel" data-senha-form novalidate>
+          <header class="panel-head">
+            <h2>Alterar senha</h2>
+          </header>
+          <section style="display:flex;flex-direction:column;gap:1rem">
+            <section class="form-field"><label for="p-atual">Senha atual</label><input id="p-atual" name="atual"
+                type="password" required></section>
+            <section class="form-field"><label for="p-nova">Nova senha</label><input id="p-nova" name="nova"
+                type="password" minlength="8" required></section>
+            <section class="form-field"><label for="p-conf">Confirmar nova senha</label><input id="p-conf"
+                name="confirmar" type="password" minlength="8" required></section>
+          </section>
+          <section class="form-actions"><button class="btn btn-primary" type="submit">Atualizar senha</button></section>
+        </form>
+      </section>
+    </main>
+  </section>
+  <script src="scripts/app.js"></script>
+  <script src="scripts/perfil.js"></script>
+</body>
+
+</html>

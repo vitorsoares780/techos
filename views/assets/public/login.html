@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Entrar — TechOS</title>
+  <meta name="description" content="TechOS — sistema de ordens de serviço para assistências técnicas.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@600;700;800&display=swap">
+  <link rel="stylesheet" href="../_common/styles/base.css">
+  <link rel="stylesheet" href="styles/auth.css">
+  
+</head>
+
+<body>
+  <header class="site-header">
+
+    <section class="container">
+
+      <a class="brand" href="../../../index.html">
+        <img src="../_common/images/logo.png" class="logo">
+        TechOS
+      </a>
+
+      <nav class="main-nav" aria-label="Navegação principal">
+
+        <ul>
+          <li><a href="../../../index.html">Início</a></li>
+          <li><a href="recursos.html">Recursos</a></li>
+          <li><a href="precos.html">Preços</a></li>
+          <li><a href="sobre.html">Sobre</a></li>
+          <li><a href="contato.html">Contato</a></li>
+        </ul>
+
+      </nav>
+
+      <section class="header-actions">
+        <a class="btn-link" href="login.html">Entrar</a>
+        <a class="btn btn-primary" href="cadastro.html">Começar grátis</a>
+      </section>
+
+      <button class="menu-toggle" type="button" aria-label="Abrir menu" aria-expanded="false" data-menu-toggle>
+        <span></span><span></span><span></span>
+
+      </button>
+
+    </section>
+
+    <nav class="mobile-nav" aria-label="Navegação móvel" data-mobile-nav>
+      <ul>
+        <li><a href="../../../index.html">Início</a></li>
+        <li><a href="recursos.html">Recursos</a></li>
+        <li><a href="precos.html">Preços</a></li>
+        <li><a href="sobre.html">Sobre</a></li>
+        <li><a href="contato.html">Contato</a></li>
+        <li><a href="login.html">Entrar</a></li>
+        <li><a href="cadastro.html">Começar grátis</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+
+    <section class="container">
+
+      <section class="auth">
+        <h1 class="auth-title">Entrar no TechOS</h1>
+        <p class="auth-subtitle">Acesse sua conta para gerenciar ordens de serviço.</p>
+
+        <form class="form" data-login-form novalidate>
+
+          <fieldset class="form-field">
+            <label for="login-email">E-mail</label>
+            <input id="login-email" name="email" type="email" required>
+          </fieldset>
+
+          <fieldset class="form-field">
+            <label for="login-password">Senha</label>
+            <input id="login-password" name="password" type="password" required>
+          </fieldset>
+
+          <button class="btn btn-primary btn-block" type="submit">Entrar</button>
+
+        </form>
+
+        <p class="auth-footnote">Ainda não tem conta? <a href="cadastro.html">Cadastre sua empresa</a></p>
+        <p class="auth-footnote">É administrador? <a href="../admin/login.html">Entrar no painel administrativo</a></p>
+
+      </section>
+
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+
+    <section class="container footer-grid">
+
+      <section class="footer-about">
+
+        <a class="brand" href="../../../index.html">
+          <img src="../_common/images/logo.png" class="logo">
+          TechOS
+        </a>
+        <p>A plataforma completa de ordens de serviço para assistências técnicas que querem crescer com organização.</p>
+
+      </section>
+
+      <nav aria-label="Navegação do rodapé">
+        <h3>Navegação</h3>
+        <ul>
+          <li><a href="recursos.html">Recursos</a></li>
+          <li><a href="precos.html">Preços</a></li>
+          <li><a href="sobre.html">Sobre</a></li>
+          <li><a href="contato.html">Contato</a></li>
+        </ul>
+      </nav>
+
+      <nav aria-label="Acesso à conta">
+        <h3>Conta</h3>
+        <ul>
+          <li><a href="login.html">Entrar</a></li>
+          <li><a href="cadastro.html">Cadastrar empresa</a></li>
+        </ul>
+      </nav>
+
+    </section>
+
+    <section class="footer-copy">
+      <section class="container">© 2026 TechOS. Todos os direitos reservados.</section>
+    </section>
+
+  </footer>
+
+  <script src="../_common/scripts/nav.js"></script>
+  <script src="scripts/login.js"></script>
+</body>
+</html>

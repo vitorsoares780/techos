@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Painel administrativo — TechOS</title>
+  <meta name="description" content="Painel administrativo da assistência técnica no TechOS.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@600;700;800&display=swap">
+  <link rel="stylesheet" href="../_common/styles/base.css">
+  <link rel="stylesheet" href="styles/admin.css">
+</head>
+
+<body class="admin">
+
+  <header class="admin-topbar">
+    <section style="display:flex;align-items:center;gap:0.75rem">
+      <button class="sidebar-toggle" type="button" aria-label="Abrir menu lateral" data-sidebar-toggle>
+        <span></span><span></span><span></span>
+      </button>
+      <a class="brand" href="painel.html">
+        <img src="../_common/images/logo.png" class="logo">
+        TechOS <span
+          style="font-size:0.7rem;font-weight:500;color:var(--color-text-muted);margin-left:0.25rem">Admin</span>
+      </a>
+    </section>
+    <label class="admin-search" aria-label="Buscar">
+      <input type="search" placeholder="Buscar OS, usuário ou cliente…" data-global-search>
+    </label>
+    <section class="admin-topbar-actions">
+      <button class="icon-btn" type="button" aria-label="Notificações" data-badge="5">🔔</button>
+      <button class="user-chip" type="button" aria-label="Conta" data-user-menu>
+        <span class="avatar" style="width:1.75rem;height:1.75rem;font-size:0.78rem" aria-hidden="true">VS</span>
+        <span>Admin</span>
+      </button>
+    </section>
+  </header>
+
+  <section class="admin-shell">
+
+    <aside class="admin-sidebar" data-sidebar>
+      <section class="sidebar-section">
+        <h4>Operação</h4>
+        <ul>
+          <li><a class="sidebar-link" aria-current="page" href="painel.html"><span class="ico"
+                aria-hidden="true">📊</span>Painel</a></li>
+          <li><a class="sidebar-link" href="ordens.html"><span class="ico" aria-hidden="true">🧾</span>Ordens de serviço
+              <span class="admin-badge">27</span></a></li>
+          <li><a class="sidebar-link" href="ordem-nova.html"><span class="ico" aria-hidden="true">➕</span>Nova OS</a>
+          </li>
+          <li><a class="sidebar-link" href="clientes.html"><span class="ico" aria-hidden="true">👥</span>Clientes</a>
+          </li>
+          <li><a class="sidebar-link" href="equipamentos.html"><span class="ico"
+                aria-hidden="true">📱</span>Equipamentos</a></li>
+          <li><a class="sidebar-link" href="relatorios.html"><span class="ico"
+                aria-hidden="true">📈</span>Relatórios</a></li>
+        </ul>
+      </section>
+      <section class="sidebar-section">
+        <h4>Administração</h4>
+        <ul>
+          <li><a class="sidebar-link" href="usuarios.html"><span class="ico" aria-hidden="true">👤</span>Usuários</a>
+          </li>
+          <li><a class="sidebar-link" href="permissoes.html"><span class="ico"
+                aria-hidden="true">🔐</span>Permissões</a></li>
+          <li><a class="sidebar-link" href="empresa.html"><span class="ico" aria-hidden="true">🏢</span>Empresa</a></li>
+          <li><a class="sidebar-link" href="configuracoes.html"><span class="ico"
+                aria-hidden="true">⚙️</span>Configurações</a></li>
+        </ul>
+      </section>
+      <section class="sidebar-section">
+        <h4>Conta</h4>
+        <ul>
+          <li><a class="sidebar-link" href="../public/login.html"><span class="ico" aria-hidden="true">🚪</span>Sair</a>
+          </li>
+        </ul>
+      </section>
+    </aside>
+
+    <main class="admin-main">
+
+      <section class="page-head">
+        <section>
+          <h1>Boa tarde, VS Tech 👋</h1>
+          <p>Resumo geral da assistência técnica — hoje, 17 de maio de 2026.</p>
+        </section>
+        <section class="page-actions">
+          <a class="btn btn-ghost" href="relatorios.html">Ver relatórios</a>
+          <a class="btn btn-primary" href="ordem-nova.html">+ Nova OS</a>
+        </section>
+      </section>
+
+      <!-- TODO: substituir por dados reais da API GET /api/admin/dashboard -->
+      <section class="kpi-grid">
+        <article class="kpi">
+          <p class="label">OS abertas</p>
+          <p class="value">27</p>
+          <p class="trend up">▲ 4 nos últimos 7 dias</p>
+        </article>
+        <article class="kpi">
+          <p class="label">Em andamento</p>
+          <p class="value">14</p>
+          <p class="trend">SLA médio 2,1 dias</p>
+        </article>
+        <article class="kpi">
+          <p class="label">Concluídas no mês</p>
+          <p class="value">182</p>
+          <p class="trend up">▲ 12% vs mês anterior</p>
+        </article>
+        <article class="kpi">
+          <p class="label">Faturamento</p>
+          <p class="value">R$ 48.320</p>
+          <p class="trend up">▲ 8,4%</p>
+        </article>
+        <article class="kpi">
+          <p class="label">Usuários ativos</p>
+          <p class="value">3</p>
+          <p class="trend">1 admin · 2 técnicos</p>
+        </article>
+        <article class="kpi">
+          <p class="label">Clientes cadastrados</p>
+          <p class="value">248</p>
+          <p class="trend up">▲ 7 este mês</p>
+        </article>
+      </section>
+
+      <section class="detail-grid">
+
+        <article class="panel">
+          <header class="panel-head">
+            <h2>OS recentes</h2>
+            <a class="btn-link" href="ordens.html">Ver todas →</a>
+          </header>
+          <!-- TODO: substituir por dados reais da API GET /api/admin/ordens?limit=5 -->
+          <section class="table-wrap">
+            <table class="data">
+              <thead>
+                <tr>
+                  <th>Nº</th>
+                  <th>Cliente</th>
+                  <th>Equipamento</th>
+                  <th>Status</th>
+                  <th>Atualizado</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>#1042</td>
+                  <td>Carla Andrade</td>
+                  <td>iPhone 14 Pro</td>
+                  <td><span class="pill andamento">Em andamento</span></td>
+                  <td>há 12 min</td>
+                </tr>
+                <tr>
+                  <td>#1041</td>
+                  <td>João Vieira</td>
+                  <td>Samsung Galaxy S23</td>
+                  <td><span class="pill aguardando">Aguardando peça</span></td>
+                  <td>há 1 h</td>
+                </tr>
+                <tr>
+                  <td>#1040</td>
+                  <td>Pedro Lemos</td>
+                  <td>Motorola Edge 30</td>
+                  <td><span class="pill aberta">Aberta</span></td>
+                  <td>há 3 h</td>
+                </tr>
+                <tr>
+                  <td>#1039</td>
+                  <td>Ana Beatriz</td>
+                  <td>iPhone 13</td>
+                  <td><span class="pill concluida">Concluída</span></td>
+                  <td>ontem</td>
+                </tr>
+                <tr>
+                  <td>#1038</td>
+                  <td>Lucas Martins</td>
+                  <td>Xiaomi Redmi Note 12</td>
+                  <td><span class="pill cancelada">Cancelada</span></td>
+                  <td>ontem</td>
+                </tr>
+              </tbody>
+            </table>
+          </section>
+        </article>
+
+        <article class="panel">
+          <header class="panel-head">
+            <h2>Atividade recente</h2>
+          </header>
+          <!-- TODO: substituir por dados reais da API GET /api/admin/atividades -->
+          <ol class="timeline">
+            <li class="timeline-item">
+              <time>09:42</time>
+              <h4>OS #1042 movida para em andamento</h4>
+              <p>Por VS Tech</p>
+            </li>
+            <li class="timeline-item">
+              <time>08:55</time>
+              <h4>Peça recebida — tela iPhone 14 Pro</h4>
+              <p>OS #1042</p>
+            </li>
+            <li class="timeline-item">
+              <time>08:10</time>
+              <h4>Nova OS aberta para Pedro Lemos</h4>
+              <p>Motorola Edge 30</p>
+            </li>
+            <li class="timeline-item">
+              <time>ontem</time>
+              <h4>OS #1039 concluída e entregue</h4>
+              <p>Pagamento: Pix R$ 320,00</p>
+            </li>
+            <li class="timeline-item">
+              <time>ontem</time>
+              <h4>Novo cliente cadastrado</h4>
+              <p>Lucas Martins</p>
+            </li>
+          </ol>
+        </article>
+
+      </section>
+
+      <section class="detail-grid" style="margin-top:1.5rem">
+
+        <article class="panel">
+          <header class="panel-head">
+            <h2>OS por semana</h2>
+            <select aria-label="Período">
+              <option>Últimas 6 semanas</option>
+              <option>Últimos 3 meses</option>
+            </select>
+          </header>
+          <!-- TODO: substituir por gráfico real da API GET /api/admin/relatorios/semana -->
+          <ul class="bars" aria-label="Gráfico de OS por semana">
+            <li><span class="bar" style="height:55%"></span>S1</li>
+            <li><span class="bar" style="height:70%"></span>S2</li>
+            <li><span class="bar" style="height:60%"></span>S3</li>
+            <li><span class="bar" style="height:85%"></span>S4</li>
+            <li><span class="bar" style="height:78%"></span>S5</li>
+            <li><span class="bar" style="height:95%"></span>S6</li>
+          </ul>
+        </article>
+
+        <article class="panel">
+          <header class="panel-head">
+            <h2>Distribuição por status</h2>
+          </header>
+          <!-- TODO: substituir por dados reais da API GET /api/admin/relatorios/status -->
+          <section class="donut-wrap">
+            <figure class="donut" aria-hidden="true"></figure>
+            <ul class="donut-legend">
+              <li><span class="dot" style="background:#1465BB"></span>Aberta — 42%</li>
+              <li><span class="dot" style="background:#f59e0b"></span>Em andamento — 20%</li>
+              <li><span class="dot" style="background:#6d28d9"></span>Aguardando — 13%</li>
+              <li><span class="dot" style="background:#22c55e"></span>Concluída — 20%</li>
+              <li><span class="dot" style="background:#ef4444"></span>Cancelada — 5%</li>
+            </ul>
+          </section>
+        </article>
+
+      </section>
+
+    </main>
+  </section>
+
+  <script src="scripts/admin.js"></script>
+  <script src="scripts/painel.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Configurações — TechOS Admin</title>
+  <meta name="description" content="Configurações do painel administrativo do TechOS.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@600;700;800&display=swap">
+  <link rel="stylesheet" href="../_common/styles/base.css">
+  <link rel="stylesheet" href="styles/admin.css">
+</head>
+
+<body class="admin">
+
+  <header class="admin-topbar">
+    <section style="display:flex;align-items:center;gap:0.75rem">
+      <button class="sidebar-toggle" type="button" aria-label="Abrir menu lateral" data-sidebar-toggle>
+        <span></span><span></span><span></span>
+      </button>
+      <a class="brand" href="painel.html">
+        <img src="../_common/images/logo.png" class="logo">
+        TechOS <span style="font-size:0.7rem;font-weight:500;color:var(--color-text-muted);margin-left:0.25rem">Admin</span>
+      </a>
+    </section>
+    <label class="admin-search" aria-label="Buscar">
+      <input type="search" placeholder="Buscar configurações…" data-global-search>
+    </label>
+    <section class="admin-topbar-actions">
+      <button class="icon-btn" type="button" aria-label="Notificações" data-badge="5">🔔</button>
+      <button class="user-chip" type="button" aria-label="Conta" data-user-menu>
+        <span class="avatar" style="width:1.75rem;height:1.75rem;font-size:0.78rem" aria-hidden="true">VS</span>
+        <span>Admin</span>
+      </button>
+    </section>
+  </header>
+
+  <section class="admin-shell">
+
+    <aside class="admin-sidebar" data-sidebar>
+      <section class="sidebar-section">
+        <h4>Operação</h4>
+        <ul>
+          <li><a class="sidebar-link" href="painel.html"><span class="ico" aria-hidden="true">📊</span>Painel</a></li>
+          <li><a class="sidebar-link" href="ordens.html"><span class="ico" aria-hidden="true">🧾</span>Ordens de serviço</a></li>
+          <li><a class="sidebar-link" href="ordem-nova.html"><span class="ico" aria-hidden="true">➕</span>Nova OS</a></li>
+          <li><a class="sidebar-link" href="clientes.html"><span class="ico" aria-hidden="true">👥</span>Clientes</a></li>
+          <li><a class="sidebar-link" href="equipamentos.html"><span class="ico" aria-hidden="true">📱</span>Equipamentos</a></li>
+          <li><a class="sidebar-link" href="relatorios.html"><span class="ico" aria-hidden="true">📈</span>Relatórios</a></li>
+        </ul>
+      </section>
+      <section class="sidebar-section">
+        <h4>Administração</h4>
+        <ul>
+          <li><a class="sidebar-link" href="usuarios.html"><span class="ico" aria-hidden="true">👤</span>Usuários</a></li>
+          <li><a class="sidebar-link" href="permissoes.html"><span class="ico" aria-hidden="true">🔐</span>Permissões</a></li>
+          <li><a class="sidebar-link" href="empresa.html"><span class="ico" aria-hidden="true">🏢</span>Empresa</a></li>
+          <li><a class="sidebar-link" aria-current="page" href="configuracoes.html"><span class="ico" aria-hidden="true">⚙️</span>Configurações</a></li>
+        </ul>
+      </section>
+      <section class="sidebar-section">
+        <h4>Conta</h4>
+        <ul>
+          <li><a class="sidebar-link" href="../public/login.html"><span class="ico" aria-hidden="true">🚪</span>Sair</a></li>
+        </ul>
+      </section>
+    </aside>
+
+    <main class="admin-main">
+
+      <section class="page-head">
+        <section>
+          <h1>Configurações</h1>
+          <p>Personalize as preferências e integrações do sistema.</p>
+        </section>
+        <section class="page-actions">
+          <button class="btn btn-primary" type="button" data-save-settings>Salvar</button>
+        </section>
+      </section>
+
+      <section class="detail-grid">
+
+        <article class="panel">
+          <header class="panel-head">
+            <h2>Empresa</h2>
+          </header>
+          <section class="form-grid">
+            <section class="form-field"><label for="cfg-raz">Razão social</label><input id="cfg-raz" type="text" value="TechOS Assistência Técnica Ltda"></section>
+            <section class="form-field"><label for="cfg-cnpj">CNPJ</label><input id="cfg-cnpj" type="text" value="12.345.678/0001-90"></section>
+            <section class="form-field"><label for="cfg-tel">Telefone comercial</label><input id="cfg-tel" type="tel" value="(11) 4002-8922"></section>
+            <section class="form-field full"><label for="cfg-end">Endereço</label><input id="cfg-end" type="text" value="Av. Paulista, 1000 — São Paulo/SP"></section>
+          </section>
+          <section class="form-actions"><button class="btn btn-primary" type="button">Salvar</button></section>
+        </article>
+
+        <article class="panel">
+          <header class="panel-head">
+            <h2>Preferências da OS</h2>
+          </header>
+          <ul style="display:flex;flex-direction:column;gap:0.9rem;font-size:0.92rem">
+            <li style="display:flex;justify-content:space-between;align-items:center"><label for="pref-aberto">Notificar cliente ao abrir OS</label><input id="pref-aberto" type="checkbox" checked></li>
+            <li style="display:flex;justify-content:space-between;align-items:center"><label for="pref-prazo">Prazo padrão de 3 dias</label><input id="pref-prazo" type="checkbox" checked></li>
+            <li style="display:flex;justify-content:space-between;align-items:center"><label for="pref-orca">Exigir aprovação de orçamento acima de R$ 200</label><input id="pref-orca" type="checkbox"></li>
+            <li style="display:flex;justify-content:space-between;align-items:center"><label for="pref-pdf">Anexar PDF ao e-mail de conclusão</label><input id="pref-pdf" type="checkbox" checked></li>
+          </ul>
+        </article>
+
+        <article class="panel">
+          <header class="panel-head">
+            <h2>Integrações</h2>
+          </header>
+          <ul style="display:flex;flex-direction:column;gap:0.6rem">
+            <li style="display:flex;justify-content:space-between;align-items:center;padding:0.6rem;border:1px solid var(--color-border);border-radius:var(--radius-md)"><span>💬 WhatsApp Business</span><button class="btn btn-ghost" type="button">Conectar</button></li>
+            <li style="display:flex;justify-content:space-between;align-items:center;padding:0.6rem;border:1px solid var(--color-border);border-radius:var(--radius-md)"><span>💳 Pagamentos (Pix/Cartão)</span><button class="btn btn-ghost" type="button">Conectado</button></li>
+            <li style="display:flex;justify-content:space-between;align-items:center;padding:0.6rem;border:1px solid var(--color-border);border-radius:var(--radius-md)"><span>📧 SMTP de e-mail</span><button class="btn btn-ghost" type="button">Configurar</button></li>
+          </ul>
+        </article>
+
+        <article class="panel">
+          <header class="panel-head">
+            <h2>Plano</h2>
+          </header>
+          <p style="font-size:0.92rem;color:var(--color-text-muted)">Você está no plano <strong style="color:var(--color-text)">Profissional</strong> · R$ 199/mês · próxima cobrança em 02/06/2026.</p>
+          <section class="form-actions"><a class="btn btn-ghost" href="../public/precos.html">Mudar plano</a></section>
+        </article>
+
+      </section>
+
+    </main>
+  </section>
+
+  <script src="scripts/admin.js"></script>
+  <script src="scripts/configuracoes.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Equipamentos — TechOS Admin</title>
+  <meta name="description" content="Gestão de equipamentos no painel administrativo do TechOS.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@600;700;800&display=swap">
+  <link rel="stylesheet" href="../_common/styles/base.css">
+  <link rel="stylesheet" href="styles/admin.css">
+</head>
+
+<body class="admin">
+
+  <header class="admin-topbar">
+    <section style="display:flex;align-items:center;gap:0.75rem">
+      <button class="sidebar-toggle" type="button" aria-label="Abrir menu lateral" data-sidebar-toggle>
+        <span></span><span></span><span></span>
+      </button>
+      <a class="brand" href="painel.html">
+        <img src="../_common/images/logo.png" class="logo">
+        TechOS <span style="font-size:0.7rem;font-weight:500;color:var(--color-text-muted);margin-left:0.25rem">Admin</span>
+      </a>
+    </section>
+    <label class="admin-search" aria-label="Buscar">
+      <input type="search" placeholder="Buscar OS, usuário ou cliente…" data-global-search>
+    </label>
+    <section class="admin-topbar-actions">
+      <button class="icon-btn" type="button" aria-label="Notificações" data-badge="5">🔔</button>
+      <button class="user-chip" type="button" aria-label="Conta" data-user-menu>
+        <span class="avatar" style="width:1.75rem;height:1.75rem;font-size:0.78rem" aria-hidden="true">VS</span>
+        <span>Admin</span>
+      </button>
+    </section>
+  </header>
+
+  <section class="admin-shell">
+
+    <aside class="admin-sidebar" data-sidebar>
+      <section class="sidebar-section">
+        <h4>Operação</h4>
+        <ul>
+          <li><a class="sidebar-link" href="painel.html"><span class="ico" aria-hidden="true">📊</span>Painel</a></li>
+          <li><a class="sidebar-link" href="ordens.html"><span class="ico" aria-hidden="true">🧾</span>Ordens de serviço</a></li>
+          <li><a class="sidebar-link" href="ordem-nova.html"><span class="ico" aria-hidden="true">➕</span>Nova OS</a></li>
+          <li><a class="sidebar-link" href="clientes.html"><span class="ico" aria-hidden="true">👥</span>Clientes</a></li>
+          <li><a class="sidebar-link" aria-current="page" href="equipamentos.html"><span class="ico" aria-hidden="true">📱</span>Equipamentos</a></li>
+          <li><a class="sidebar-link" href="relatorios.html"><span class="ico" aria-hidden="true">📈</span>Relatórios</a></li>
+        </ul>
+      </section>
+      <section class="sidebar-section">
+        <h4>Administração</h4>
+        <ul>
+          <li><a class="sidebar-link" href="usuarios.html"><span class="ico" aria-hidden="true">👤</span>Usuários</a></li>
+          <li><a class="sidebar-link" href="permissoes.html"><span class="ico" aria-hidden="true">🔐</span>Permissões</a></li>
+          <li><a class="sidebar-link" href="empresa.html"><span class="ico" aria-hidden="true">🏢</span>Empresa</a></li>
+          <li><a class="sidebar-link" href="configuracoes.html"><span class="ico" aria-hidden="true">⚙️</span>Configurações</a></li>
+        </ul>
+      </section>
+      <section class="sidebar-section">
+        <h4>Conta</h4>
+        <ul>
+          <li><a class="sidebar-link" href="../public/login.html"><span class="ico" aria-hidden="true">🚪</span>Sair</a></li>
+        </ul>
+      </section>
+    </aside>
+
+    <main class="admin-main">
+
+      <section class="page-head">
+        <section>
+          <h1>Equipamentos</h1>
+          <p>Todos os equipamentos registrados na VS Tech.</p>
+        </section>
+        <section class="page-actions">
+          <button class="btn btn-primary" type="button" data-novo-equipamento>+ Novo equipamento</button>
+        </section>
+      </section>
+
+      <article class="panel">
+        <!-- TODO: substituir por chamadas reais à API GET /api/admin/equipamentos -->
+        <form class="toolbar" data-filter-form>
+          <input class="grow" type="search" name="q" placeholder="Buscar por marca, modelo ou IMEI…">
+          <select name="marca" aria-label="Marca">
+            <option value="">Todas as marcas</option>
+            <option>Apple</option>
+            <option>Samsung</option>
+            <option>Motorola</option>
+            <option>Xiaomi</option>
+            <option>Outras</option>
+          </select>
+        </form>
+
+        <section class="table-wrap">
+          <!-- TODO: substituir por dados reais da API -->
+          <table class="data">
+            <thead>
+              <tr>
+                <th>Marca</th>
+                <th>Modelo</th>
+                <th>IMEI / SN</th>
+                <th>Cliente</th>
+                <th>OS vinculadas</th>
+                <th>Última OS</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Apple</td>
+                <td>iPhone 14 Pro</td>
+                <td>354687102938476</td>
+                <td>Carla Andrade</td>
+                <td>2</td>
+                <td>#1042</td>
+                <td><span class="row-actions"><a href="#">Ver OS</a><button type="button">Editar</button></span></td>
+              </tr>
+              <tr>
+                <td>Samsung</td>
+                <td>Galaxy S23</td>
+                <td>357429101827364</td>
+                <td>João Vieira</td>
+                <td>1</td>
+                <td>#1041</td>
+                <td><span class="row-actions"><a href="#">Ver OS</a><button type="button">Editar</button></span></td>
+              </tr>
+              <tr>
+                <td>Motorola</td>
+                <td>Edge 30</td>
+                <td>355918203746251</td>
+                <td>Pedro Lemos</td>
+                <td>1</td>
+                <td>#1040</td>
+                <td><span class="row-actions"><a href="#">Ver OS</a><button type="button">Editar</button></span></td>
+              </tr>
+              <tr>
+                <td>Apple</td>
+                <td>iPhone 13</td>
+                <td>352174905836472</td>
+                <td>Ana Beatriz</td>
+                <td>3</td>
+                <td>#1039</td>
+                <td><span class="row-actions"><a href="#">Ver OS</a><button type="button">Editar</button></span></td>
+              </tr>
+              <tr>
+                <td>Xiaomi</td>
+                <td>Redmi Note 12</td>
+                <td>861729304856213</td>
+                <td>Lucas Martins</td>
+                <td>1</td>
+                <td>#1038</td>
+                <td><span class="row-actions"><a href="#">Ver OS</a><button type="button">Editar</button></span></td>
+              </tr>
+              <tr>
+                <td>Apple</td>
+                <td>iPhone 12</td>
+                <td>359183746201958</td>
+                <td>Fernanda Costa</td>
+                <td>2</td>
+                <td>#1037</td>
+                <td><span class="row-actions"><a href="#">Ver OS</a><button type="button">Editar</button></span></td>
+              </tr>
+              <tr>
+                <td>Samsung</td>
+                <td>Galaxy A54</td>
+                <td>354918273645019</td>
+                <td>Rafael Souza</td>
+                <td>1</td>
+                <td>#1036</td>
+                <td><span class="row-actions"><a href="#">Ver OS</a><button type="button">Editar</button></span></td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <nav class="toolbar" style="justify-content:space-between;margin-top:1rem" aria-label="Paginação">
+          <p style="font-size:0.85rem;color:var(--color-text-muted)">Mostrando 7 de 311 equipamentos</p>
+          <section class="pagination">
+            <button type="button">‹</button>
+            <button type="button" aria-current="true">1</button>
+            <button type="button">2</button>
+            <button type="button">3</button>
+            <button type="button">›</button>
+          </section>
+        </nav>
+      </article>
+
+    </main>
+  </section>
+
+  <script src="scripts/admin.js"></script>
+  <script src="scripts/equipamentos.js"></script>
+</body>
+
+</html>
