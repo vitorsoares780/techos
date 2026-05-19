@@ -19,7 +19,7 @@ class Product
         $this->price = $price;
     }
 
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -77,6 +77,21 @@ class Product
         $stmt->execute();
         if($stmt->rowCount() > 0){
             return $stmt->fetch();
+        }
+        return false;
+    }
+
+    public function insert (): bool
+    {
+        $query = "INSERT INTO products VALUES (NULL, :categoryId, :name, :price)";
+        $stmt = Connect::getInstance()->prepare($query);
+        $stmt->bindParam(":categoryId", $this->categoryId);
+        $stmt->bindParam(":name", $this->name);
+        $stmt->bindParam(":price", $this->price);
+        $stmt->execute();
+        if($stmt->rowCount() == 1){
+            $this->id = Connect::getInstance()->lastInsertId();
+            return true;
         }
         return false;
     }
