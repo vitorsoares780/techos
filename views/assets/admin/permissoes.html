@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Permissões — TechOS Admin</title>
+  <meta name="description" content="Gestão de permissões de acesso no painel administrativo do TechOS.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@600;700;800&display=swap">
+  <link rel="stylesheet" href="../_common/styles/base.css">
+  <link rel="stylesheet" href="styles/admin.css">
+</head>
+
+<body class="admin">
+
+  <header class="admin-topbar">
+    <section style="display:flex;align-items:center;gap:0.75rem">
+      <button class="sidebar-toggle" type="button" aria-label="Abrir menu lateral" data-sidebar-toggle>
+        <span></span><span></span><span></span>
+      </button>
+      <a class="brand" href="painel.html">
+        <img src="../_common/images/logo.png" class="logo">
+        TechOS <span style="font-size:0.7rem;font-weight:500;color:var(--color-text-muted);margin-left:0.25rem">Admin</span>
+      </a>
+    </section>
+    <label class="admin-search" aria-label="Buscar">
+      <input type="search" placeholder="Buscar OS, usuário ou cliente…" data-global-search>
+    </label>
+    <section class="admin-topbar-actions">
+      <button class="icon-btn" type="button" aria-label="Notificações" data-badge="5">🔔</button>
+      <button class="user-chip" type="button" aria-label="Conta" data-user-menu>
+        <span class="avatar" style="width:1.75rem;height:1.75rem;font-size:0.78rem" aria-hidden="true">VS</span>
+        <span>Admin</span>
+      </button>
+    </section>
+  </header>
+
+  <section class="admin-shell">
+
+    <aside class="admin-sidebar" data-sidebar>
+      <section class="sidebar-section">
+        <h4>Operação</h4>
+        <ul>
+          <li><a class="sidebar-link" href="painel.html"><span class="ico" aria-hidden="true">📊</span>Painel</a></li>
+          <li><a class="sidebar-link" href="ordens.html"><span class="ico" aria-hidden="true">🧾</span>Ordens de serviço</a></li>
+          <li><a class="sidebar-link" href="ordem-nova.html"><span class="ico" aria-hidden="true">➕</span>Nova OS</a></li>
+          <li><a class="sidebar-link" href="clientes.html"><span class="ico" aria-hidden="true">👥</span>Clientes</a></li>
+          <li><a class="sidebar-link" href="equipamentos.html"><span class="ico" aria-hidden="true">📱</span>Equipamentos</a></li>
+          <li><a class="sidebar-link" href="relatorios.html"><span class="ico" aria-hidden="true">📈</span>Relatórios</a></li>
+        </ul>
+      </section>
+      <section class="sidebar-section">
+        <h4>Administração</h4>
+        <ul>
+          <li><a class="sidebar-link" href="usuarios.html"><span class="ico" aria-hidden="true">👤</span>Usuários</a></li>
+          <li><a class="sidebar-link" aria-current="page" href="permissoes.html"><span class="ico" aria-hidden="true">🔐</span>Permissões</a></li>
+          <li><a class="sidebar-link" href="empresa.html"><span class="ico" aria-hidden="true">🏢</span>Empresa</a></li>
+          <li><a class="sidebar-link" href="configuracoes.html"><span class="ico" aria-hidden="true">⚙️</span>Configurações</a></li>
+        </ul>
+      </section>
+      <section class="sidebar-section">
+        <h4>Conta</h4>
+        <ul>
+          <li><a class="sidebar-link" href="../public/login.html"><span class="ico" aria-hidden="true">🚪</span>Sair</a></li>
+        </ul>
+      </section>
+    </aside>
+
+    <main class="admin-main">
+
+      <section class="page-head">
+        <section>
+          <h1>Permissões</h1>
+          <p>Defina o que cada perfil pode acessar e fazer no sistema.</p>
+        </section>
+        <section class="page-actions">
+          <button class="btn btn-primary" type="button" data-salvar-permissoes>Salvar alterações</button>
+        </section>
+      </section>
+
+      <section style="display:flex;flex-direction:column;gap:1.5rem">
+
+        <!-- Perfil: Técnico -->
+        <article class="panel">
+          <header class="panel-head">
+            <section>
+              <h2>Técnico</h2>
+              <p style="font-size:0.85rem;color:var(--color-text-muted);margin-top:0.2rem">Acesso operacional — executa OS e registra andamento.</p>
+            </section>
+            <span class="pill tecnico">Técnico</span>
+          </header>
+          <!-- TODO: substituir por dados reais da API GET /api/admin/permissoes/tecnico -->
+          <section class="permission-grid">
+            <article class="permission-item">
+              <label for="tec-ver-os">Ver ordens de serviço</label>
+              <label class="switch">
+                <input type="checkbox" id="tec-ver-os" checked>
+                <span class="switch-track" aria-hidden="true"></span>
+              </label>
+            </article>
+            <article class="permission-item">
+              <label for="tec-editar-os">Editar status da OS</label>
+              <label class="switch">
+                <input type="checkbox" id="tec-editar-os" checked>
+                <span class="switch-track" aria-hidden="true"></span>
+              </label>
+            </article>
+            <article class="permission-item">
+              <label for="tec-criar-os">Criar nova OS</label>
+              <label class="switch">
+                <input type="checkbox" id="tec-criar-os" checked>
+                <span class="switch-track" aria-hidden="true"></span>
+              </label>
+            </article>
+            <article class="permission-item">
+              <label for="tec-excluir-os">Excluir OS</label>
+              <label class="switch">
+                <input type="checkbox" id="tec-excluir-os">
+                <span class="switch-track" aria-hidden="true"></span>
+              </label>
+            </article>
+            <article class="permission-item">
+              <label for="tec-ver-clientes">Ver clientes</label>
+              <label class="switch">
+                <input type="checkbox" id="tec-ver-clientes" checked>
+                <span class="switch-track" aria-hidden="true"></span>
+              </label>
+            </article>
+            <article class="permission-item">
+              <label for="tec-editar-clientes">Editar clientes</label>
+              <label class="switch">
+                <input type="checkbox" id="tec-editar-clientes">
+                <span class="switch-track" aria-hidden="true"></span>
+              </label>
+            </article>
+            <article class="permission-item">
+              <label for="tec-ver-relatorios">Ver relatórios</label>
+              <label class="switch">
+                <input type="checkbox" id="tec-ver-relatorios">
+                <span class="switch-track" aria-hidden="true"></span>
+              </label>
+            </article>
+            <article class="permission-item">
+              <label for="tec-ver-financeiro">Ver dados financeiros</label>
+              <label class="switch">
+                <input type="checkbox" id="tec-ver-financeiro">
+                <span class="switch-track" aria-hidden="true"></span>
+              </label>
+            </article>
+            <article class="permission-item">
+              <label for="tec-gerenciar-usuarios">Gerenciar usuários</label>
+              <label class="switch">
+                <input type="checkbox" id="tec-gerenciar-usuarios" disabled>
+                <span class="switch-track" aria-hidden="true"></span>
+              </label>
+            </article>
+            <article class="permission-item">
+              <label for="tec-configuracoes">Acessar configurações</label>
+              <label class="switch">
+                <input type="checkbox" id="tec-configuracoes" disabled>
+                <span class="switch-track" aria-hidden="true"></span>
+              </label>
+            </article>
+          </section>
+        </article>
+
+        <!-- Perfil: Gestor -->
+        <article class="panel">
+          <header class="panel-head">
+            <section>
+              <h2>Gestor</h2>
+              <p style="font-size:0.85rem;color:var(--color-text-muted);margin-top:0.2rem">Acesso gerencial — visualiza relatórios e gerencia equipe.</p>
+            </section>
+            <span class="pill gestor">Gestor</span>
+          </header>
+          <!-- TODO: substituir por dados reais da API GET /api/admin/permissoes/gestor -->
+          <section class="permission-grid">
+            <article class="permission-item">
+              <label for="ges-ver-os">Ver ordens de serviço</label>
+              <label class="switch">
+                <input type="checkbox" id="ges-ver-os" checked>
+                <span class="switch-track" aria-hidden="true"></span>
+              </label>
+            </article>
+            <article class="permission-item">
+              <label for="ges-editar-os">Editar status da OS</label>
+              <label class="switch">
+                <input type="checkbox" id="ges-editar-os" checked>
+                <span class="switch-track" aria-hidden="true"></span>
+              </label>
+            </article>
+            <article class="permission-item">
+              <label for="ges-criar-os">Criar nova OS</label>
+              <label class="switch">
+                <input type="checkbox" id="ges-criar-os" checked>
+                <span class="switch-track" aria-hidden="true"></span>
+              </label>
+            </article>
+            <article class="permission-item">
+              <label for="ges-excluir-os">Excluir OS</label>
+              <label class="switch">
+                <input type="checkbox" id="ges-excluir-os" checked>
+                <span class="switch-track" aria-hidden="true"></span>
+              </label>
+            </article>
+            <article class="permission-item">
+              <label for="ges-ver-clientes">Ver clientes</label>
+              <label class="switch">
+                <input type="checkbox" id="ges-ver-clientes" checked>
+                <span class="switch-track" aria-hidden="true"></span>
+              </label>
+            </article>
+            <article class="permission-item">
+              <label for="ges-editar-clientes">Editar clientes</label>
+              <label class="switch">
+                <input type="checkbox" id="ges-editar-clientes" checked>
+                <span class="switch-track" aria-hidden="true"></span>
+              </label>
+            </article>
+            <article class="permission-item">
+              <label for="ges-ver-relatorios">Ver relatórios</label>
+              <label class="switch">
+                <input type="checkbox" id="ges-ver-relatorios" checked>
+                <span class="switch-track" aria-hidden="true"></span>
+              </label>
+            </article>
+            <article class="permission-item">
+              <label for="ges-ver-financeiro">Ver dados financeiros</label>
+              <label class="switch">
+                <input type="checkbox" id="ges-ver-financeiro" checked>
+                <span class="switch-track" aria-hidden="true"></span>
+              </label>
+            </article>
+            <article class="permission-item">
+              <label for="ges-gerenciar-usuarios">Gerenciar usuários</label>
+              <label class="switch">
+                <input type="checkbox" id="ges-gerenciar-usuarios" checked>
+                <span class="switch-track" aria-hidden="true"></span>
+              </label>
+            </article>
+            <article class="permission-item">
+              <label for="ges-configuracoes">Acessar configurações</label>
+              <label class="switch">
+                <input type="checkbox" id="ges-configuracoes">
+                <span class="switch-track" aria-hidden="true"></span>
+              </label>
+            </article>
+          </section>
+        </article>
+
+        <!-- Perfil: Administrador (bloqueado) -->
+        <article class="panel">
+          <header class="panel-head">
+            <section>
+              <h2>Administrador</h2>
+              <p style="font-size:0.85rem;color:var(--color-text-muted);margin-top:0.2rem">Acesso total ao sistema. Permissões não podem ser alteradas.</p>
+            </section>
+            <span class="pill admin">Administrador</span>
+          </header>
+          <p style="font-size:0.9rem;color:var(--color-text-muted)">🔒 O perfil de administrador possui acesso irrestrito a todas as funcionalidades do sistema. Não é possível alterar suas permissões.</p>
+        </article>
+
+      </section>
+
+    </main>
+  </section>
+
+  <script src="scripts/admin.js"></script>
+  <script src="scripts/permissoes.js"></script>
+</body>
+
+</html>

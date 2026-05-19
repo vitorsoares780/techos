@@ -1,0 +1,25 @@
+/* ============================================================
+   TechOS — Página Sobre
+   ============================================================ */
+
+.about-content { max-width: 44rem; padding-block: 5rem; }
+.about-content h1 { font-size: clamp(2rem, 4vw, 3rem); margin-top: 0.75rem; }
+.about-content p {
+  margin-top: 1.25rem;
+  color: var(--color-text-muted);
+  font-size: 1.02rem;
+}
+.values-grid {
+  margin-top: 3rem;
+  display: grid;
+  gap: 1.25rem;
+  grid-template-columns: 1fr;
+}
+@media (min-width: 720px) { .values-grid { grid-template-columns: repeat(3, 1fr); } }
+
+
+@media (prefers-color-scheme: dark) {
+  .page-hero {
+    background: var(--color-bg-soft);
+  }
+}

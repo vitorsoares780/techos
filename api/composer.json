@@ -1,0 +1,36 @@
+{
+  "name": "vitorsoares780/techos",
+  "description": "Ainda não tem descrição",
+  "minimum-stability": "stable",
+  "authors": [
+    {
+      "name": "Vitor Soares",
+      "email": "silveirasoaresvitor6@gamil.com",
+      "homepage": "https://www.ifsul.edu.br",
+      "role": "Developer"
+    },
+    {
+      "name": "Mateus Trainini",
+      "email": "mateustrainini2@gamil.com",
+      "homepage": "https://www.ifsul.edu.br",
+      "role": "Developer"
+    }
+  ],
+  "config": {
+    "vendor-dir": "vendor"
+  },
+  "autoload": {
+    "psr-4": {
+      "Source\\": "source/"
+    },
+    "files": [
+      "source/Support/Helpers.php",
+      "source/Config/Config.php"
+    ]
+  },
+  "require": {
+    "php": "8.1.*",
+    "ext-pdo": "*",
+    "coffeecode/router" : "2.0.2"
+  }
+}

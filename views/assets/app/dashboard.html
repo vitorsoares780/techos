@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Visão geral — TechOS</title>
+  <meta name="description" content="Painel da assistência técnica no TechOS.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@600;700;800&display=swap">
+  <link rel="stylesheet" href="../_common/styles/base.css">
+  <link rel="stylesheet" href="styles/app.css">
+</head>
+
+<body class="app">
+  <header class="app-topbar">
+    <section style="display:flex;align-items:center;gap:0.75rem">
+      <button class="sidebar-toggle" type="button" aria-label="Abrir menu lateral" data-sidebar-toggle>
+        <span></span><span></span><span></span>
+      </button>
+      <a class="brand" href="dashboard.html">
+        <img src="../_common/images/logo.png" class="logo">
+        TechOS
+      </a>
+    </section>
+    <label class="app-search" aria-label="Buscar">
+      <input type="search" placeholder="Buscar OS, cliente ou equipamento…" data-global-search>
+    </label>
+    <section class="app-topbar-actions">
+      <button class="icon-btn" type="button" aria-label="Notificações" data-badge="3">🔔</button>
+      <button class="user-chip" type="button" aria-label="Conta" data-user-menu>
+        <span class="avatar" aria-hidden="true">MC</span>
+        <span>Marina</span>
+      </button>
+    </section>
+  </header>
+  <section class="app-shell">
+    <aside class="app-sidebar" data-sidebar>
+      <section class="sidebar-section">
+        <h4>Operação</h4>
+        <ul>
+          <li><a class="sidebar-link" aria-current="page" href="dashboard.html"><span class="ico"
+                aria-hidden="true">📊</span>Visão geral</a></li>
+          <li><a class="sidebar-link" href="ordens.html"><span class="ico" aria-hidden="true">🧾</span>Ordens de
+              serviço</a></li>
+          <li><a class="sidebar-link" href="ordem-nova.html"><span class="ico" aria-hidden="true">➕</span>Nova OS</a>
+          </li>
+          <li><a class="sidebar-link" href="clientes.html"><span class="ico" aria-hidden="true">👥</span>Clientes</a>
+          </li>
+          <li><a class="sidebar-link" href="equipamentos.html"><span class="ico"
+                aria-hidden="true">🛠️</span>Equipamentos</a></li>
+          <li><a class="sidebar-link" href="equipe.html"><span class="ico" aria-hidden="true">👷</span>Equipe</a></li>
+          <li><a class="sidebar-link" href="relatorios.html"><span class="ico"
+                aria-hidden="true">📈</span>Relatórios</a></li>
+        </ul>
+      </section>
+      <section class="sidebar-section">
+        <h4>Conta</h4>
+        <ul>
+          <li><a class="sidebar-link" href="perfil.html"><span class="ico" aria-hidden="true">👤</span>Perfil</a></li>
+          <li><a class="sidebar-link" href="configuracoes.html"><span class="ico"
+                aria-hidden="true">⚙️</span>Configurações</a></li>
+          <li><a class="sidebar-link" href="../../../index.html"><span class="ico" aria-hidden="true">🚪</span>Sair</a>
+          </li>
+        </ul>
+      </section>
+    </aside>
+    <main class="app-main">
+      <section class="page-head">
+        <section>
+          <h1>Boa tarde, Marina 👋</h1>
+          <p>Resumo das operações da AssistTech Reparos — hoje, 16 de maio.</p>
+        </section>
+        <section class="page-actions">
+          <a class="btn btn-ghost" href="relatorios.html">Ver relatórios</a>
+          <a class="btn btn-primary" href="ordem-nova.html">+ Nova OS</a>
+        </section>
+      </section>
+
+      <section class="kpi-grid">
+        <article class="kpi">
+          <p class="label">OS abertas</p>
+          <p class="value">27</p>
+          <p class="trend up">▲ 4 nos últimos 7 dias</p>
+        </article>
+        <article class="kpi">
+          <p class="label">Em andamento</p>
+          <p class="value">14</p>
+          <p class="trend">SLA médio 2,1 dias</p>
+        </article>
+        <article class="kpi">
+          <p class="label">Concluídas no mês</p>
+          <p class="value">182</p>
+          <p class="trend up">▲ 12% vs mês anterior</p>
+        </article>
+        <article class="kpi">
+          <p class="label">Faturamento</p>
+          <p class="value">R$ 48.320</p>
+          <p class="trend up">▲ 8,4%</p>
+        </article>
+      </section>
+
+      <section class="detail-grid">
+        <article class="panel">
+          <header class="panel-head">
+            <h2>OS recentes</h2>
+            <a class="btn-link" href="ordens.html">Ver todas →</a>
+          </header>
+          <section class="table-wrap">
+            <table class="data">
+              <thead>
+                <tr>
+                  <th>Nº</th>
+                  <th>Cliente</th>
+                  <th>Equipamento</th>
+                  <th>Status</th>
+                  <th>Atualizado</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>#1042</td>
+                  <td>Carla Andrade</td>
+                  <td>Notebook Dell G15</td>
+                  <td><span class="pill andamento">Em andamento</span></td>
+                  <td>há 12 min</td>
+                </tr>
+                <tr>
+                  <td>#1041</td>
+                  <td>João Vieira</td>
+                  <td>iPhone 13</td>
+                  <td><span class="pill aguardando">Aguardando peça</span></td>
+                  <td>há 1 h</td>
+                </tr>
+                <tr>
+                  <td>#1040</td>
+                  <td>Mercado União</td>
+                  <td>Impressora Epson L3250</td>
+                  <td><span class="pill aberta">Aberta</span></td>
+                  <td>há 3 h</td>
+                </tr>
+                <tr>
+                  <td>#1039</td>
+                  <td>Studio Foco</td>
+                  <td>iMac 2019</td>
+                  <td><span class="pill concluida">Concluída</span></td>
+                  <td>ontem</td>
+                </tr>
+                <tr>
+                  <td>#1038</td>
+                  <td>Pedro Lemos</td>
+                  <td>PS5</td>
+                  <td><span class="pill cancelada">Cancelada</span></td>
+                  <td>ontem</td>
+                </tr>
+              </tbody>
+            </table>
+          </section>
+        </article>
+        <article class="panel">
+          <header class="panel-head">
+            <h2>Atividade recente</h2>
+          </header>
+          <ol class="timeline">
+            <li class="timeline-item"><time>09:42</time>
+              <h4>OS #1042 movida para em andamento</h4>
+              <p>Por Ricardo Alves</p>
+            </li>
+            <li class="timeline-item"><time>08:55</time>
+              <h4>Peça recebida — bateria iPhone 13</h4>
+              <p>OS #1041</p>
+            </li>
+            <li class="timeline-item"><time>08:10</time>
+              <h4>Nova OS aberta para Mercado União</h4>
+              <p>Impressora Epson L3250</p>
+            </li>
+            <li class="timeline-item"><time>ontem</time>
+              <h4>OS #1039 concluída e entregue</h4>
+              <p>Pagamento: Pix R$ 380,00</p>
+            </li>
+          </ol>
+        </article>
+      </section>
+
+      <section class="detail-grid" style="margin-top:1.5rem">
+        <article class="panel">
+          <header class="panel-head">
+            <h2>OS por semana</h2>
+            <select aria-label="Período">
+              <option>Últimas 6 semanas</option>
+              <option>Últimos 3 meses</option>
+            </select>
+          </header>
+          <ul class="bars" aria-label="Gráfico de OS por semana">
+            <li><span class="bar" style="height:55%"></span>S1</li>
+            <li><span class="bar" style="height:70%"></span>S2</li>
+            <li><span class="bar" style="height:60%"></span>S3</li>
+            <li><span class="bar" style="height:85%"></span>S4</li>
+            <li><span class="bar" style="height:78%"></span>S5</li>
+            <li><span class="bar" style="height:95%"></span>S6</li>
+          </ul>
+        </article>
+        <article class="panel">
+          <header class="panel-head">
+            <h2>Equipe ativa</h2><a class="btn-link" href="equipe.html">Gerenciar →</a>
+          </header>
+          <ul style="display:flex;flex-direction:column;gap:0.75rem">
+            <li style="display:flex;align-items:center;gap:0.75rem"><span class="avatar"
+                style="width:2.2rem;height:2.2rem;border-radius:999px;background:var(--gradient-hero);color:#fff;display:grid;place-items:center;font-size:0.85rem;font-weight:600">RA</span>
+              <section><strong>Ricardo Alves</strong>
+                <p style="font-size:0.8rem;color:var(--color-text-muted)">5 OS em andamento</p>
+              </section>
+            </li>
+            <li style="display:flex;align-items:center;gap:0.75rem"><span class="avatar"
+                style="width:2.2rem;height:2.2rem;border-radius:999px;background:var(--gradient-hero);color:#fff;display:grid;place-items:center;font-size:0.85rem;font-weight:600">JP</span>
+              <section><strong>Júlia Pires</strong>
+                <p style="font-size:0.8rem;color:var(--color-text-muted)">3 OS em andamento</p>
+              </section>
+            </li>
+            <li style="display:flex;align-items:center;gap:0.75rem"><span class="avatar"
+                style="width:2.2rem;height:2.2rem;border-radius:999px;background:var(--gradient-hero);color:#fff;display:grid;place-items:center;font-size:0.85rem;font-weight:600">FT</span>
+              <section><strong>Felipe Torres</strong>
+                <p style="font-size:0.8rem;color:var(--color-text-muted)">2 OS em andamento</p>
+              </section>
+            </li>
+          </ul>
+        </article>
+      </section>
+    </main>
+  </section>
+  <script src="scripts/app.js"></script>
+  <script src="scripts/dashboard.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Usuários — TechOS Admin</title>
+  <meta name="description" content="Gestão de usuários no painel administrativo do TechOS.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@600;700;800&display=swap">
+  <link rel="stylesheet" href="../_common/styles/base.css">
+  <link rel="stylesheet" href="styles/admin.css">
+</head>
+
+<body class="admin">
+
+  <header class="admin-topbar">
+    <section style="display:flex;align-items:center;gap:0.75rem">
+      <button class="sidebar-toggle" type="button" aria-label="Abrir menu lateral" data-sidebar-toggle>
+        <span></span><span></span><span></span>
+      </button>
+      <a class="brand" href="painel.html">
+        <img src="../_common/images/logo.png" class="logo">
+        TechOS <span style="font-size:0.7rem;font-weight:500;color:var(--color-text-muted);margin-left:0.25rem">Admin</span>
+      </a>
+    </section>
+    <label class="admin-search" aria-label="Buscar">
+      <input type="search" placeholder="Buscar OS, usuário ou cliente…" data-global-search>
+    </label>
+    <section class="admin-topbar-actions">
+      <button class="icon-btn" type="button" aria-label="Notificações" data-badge="5">🔔</button>
+      <button class="user-chip" type="button" aria-label="Conta" data-user-menu>
+        <span class="avatar" style="width:1.75rem;height:1.75rem;font-size:0.78rem" aria-hidden="true">VS</span>
+        <span>Admin</span>
+      </button>
+    </section>
+  </header>
+
+  <section class="admin-shell">
+
+    <aside class="admin-sidebar" data-sidebar>
+      <section class="sidebar-section">
+        <h4>Operação</h4>
+        <ul>
+          <li><a class="sidebar-link" href="painel.html"><span class="ico" aria-hidden="true">📊</span>Painel</a></li>
+          <li><a class="sidebar-link" href="ordens.html"><span class="ico" aria-hidden="true">🧾</span>Ordens de serviço</a></li>
+          <li><a class="sidebar-link" href="ordem-nova.html"><span class="ico" aria-hidden="true">➕</span>Nova OS</a></li>
+          <li><a class="sidebar-link" href="clientes.html"><span class="ico" aria-hidden="true">👥</span>Clientes</a></li>
+          <li><a class="sidebar-link" href="equipamentos.html"><span class="ico" aria-hidden="true">📱</span>Equipamentos</a></li>
+          <li><a class="sidebar-link" href="relatorios.html"><span class="ico" aria-hidden="true">📈</span>Relatórios</a></li>
+        </ul>
+      </section>
+      <section class="sidebar-section">
+        <h4>Administração</h4>
+        <ul>
+          <li><a class="sidebar-link" aria-current="page" href="usuarios.html"><span class="ico" aria-hidden="true">👤</span>Usuários</a></li>
+          <li><a class="sidebar-link" href="permissoes.html"><span class="ico" aria-hidden="true">🔐</span>Permissões</a></li>
+          <li><a class="sidebar-link" href="empresa.html"><span class="ico" aria-hidden="true">🏢</span>Empresa</a></li>
+          <li><a class="sidebar-link" href="configuracoes.html"><span class="ico" aria-hidden="true">⚙️</span>Configurações</a></li>
+        </ul>
+      </section>
+      <section class="sidebar-section">
+        <h4>Conta</h4>
+        <ul>
+          <li><a class="sidebar-link" href="../public/login.html"><span class="ico" aria-hidden="true">🚪</span>Sair</a></li>
+        </ul>
+      </section>
+    </aside>
+
+    <main class="admin-main">
+
+      <section class="page-head">
+        <section>
+          <h1>Usuários</h1>
+          <p>Gerencie os funcionários e acessos da VS Tech.</p>
+        </section>
+        <section class="page-actions">
+          <button class="btn btn-primary" type="button" data-novo-usuario>+ Convidar usuário</button>
+        </section>
+      </section>
+
+      <article class="panel">
+        <!-- TODO: substituir por chamadas reais à API GET /api/admin/usuarios -->
+        <form class="toolbar" data-filter-form>
+          <input class="grow" type="search" name="q" placeholder="Buscar por nome ou e-mail…">
+          <select name="perfil" aria-label="Perfil">
+            <option value="">Todos os perfis</option>
+            <option value="admin">Administrador</option>
+            <option value="tecnico">Técnico</option>
+            <option value="gestor">Gestor</option>
+          </select>
+          <select name="status" aria-label="Status">
+            <option value="">Todos</option>
+            <option value="ativo">Ativos</option>
+            <option value="inativo">Inativos</option>
+          </select>
+        </form>
+
+        <section class="table-wrap">
+          <!-- TODO: substituir por dados reais da API -->
+          <table class="data">
+            <thead>
+              <tr>
+                <th>Usuário</th>
+                <th>E-mail</th>
+                <th>Perfil</th>
+                <th>Status</th>
+                <th>Último acesso</th>
+                <th>OS abertas</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <section style="display:flex;align-items:center;gap:0.6rem">
+                    <span class="avatar" style="width:2rem;height:2rem;font-size:0.8rem;flex-shrink:0">VS</span>
+                    VS Tech
+                  </section>
+                </td>
+                <td>admin@vstech.com.br</td>
+                <td><span class="pill admin">Administrador</span></td>
+                <td><span class="pill ativo">Ativo</span></td>
+                <td>agora</td>
+                <td>—</td>
+                <td><span class="row-actions"><button type="button">Editar</button></span></td>
+              </tr>
+              <tr>
+                <td>
+                  <section style="display:flex;align-items:center;gap:0.6rem">
+                    <span class="avatar" style="width:2rem;height:2rem;font-size:0.8rem;flex-shrink:0">JP</span>
+                    João Paulo
+                  </section>
+                </td>
+                <td>joao.paulo@vstech.com.br</td>
+                <td><span class="pill tecnico">Técnico</span></td>
+                <td><span class="pill ativo">Ativo</span></td>
+                <td>há 2 h</td>
+                <td>9</td>
+                <td><span class="row-actions"><button type="button">Editar</button><button type="button" class="danger">Desativar</button></span></td>
+              </tr>
+              <tr>
+                <td>
+                  <section style="display:flex;align-items:center;gap:0.6rem">
+                    <span class="avatar" style="width:2rem;height:2rem;font-size:0.8rem;flex-shrink:0">MF</span>
+                    Maria Fernanda
+                  </section>
+                </td>
+                <td>maria.f@vstech.com.br</td>
+                <td><span class="pill tecnico">Técnico</span></td>
+                <td><span class="pill inativo">Inativo</span></td>
+                <td>há 3 dias</td>
+                <td>0</td>
+                <td><span class="row-actions"><button type="button">Editar</button><button type="button">Reativar</button></span></td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+      </article>
+
+    </main>
+  </section>
+
+  <!-- Modal: Convidar / Editar usuário -->
+  <section class="modal-backdrop" data-modal-usuario aria-modal="true" role="dialog" aria-label="Usuário">
+    <article class="modal">
+      <header class="modal-head">
+        <h2 data-modal-titulo>Convidar usuário</h2>
+        <button class="modal-close" type="button" data-fechar-modal aria-label="Fechar">✕</button>
+      </header>
+      <section class="form-grid" style="grid-template-columns:1fr">
+        <fieldset class="form-field">
+          <label for="us-nome">Nome completo</label>
+          <input type="text" id="us-nome" placeholder="Nome do funcionário">
+        </fieldset>
+        <fieldset class="form-field">
+          <label for="us-email">E-mail de acesso</label>
+          <input type="email" id="us-email" placeholder="email@vstech.com.br">
+        </fieldset>
+        <fieldset class="form-field">
+          <label for="us-perfil">Perfil de acesso</label>
+          <select id="us-perfil">
+            <option value="tecnico">Técnico</option>
+            <option value="gestor">Gestor</option>
+            <option value="admin">Administrador</option>
+          </select>
+        </fieldset>
+        <fieldset class="form-field">
+          <label for="us-tel">Telefone (opcional)</label>
+          <input type="tel" id="us-tel" placeholder="(51) 99000-0000">
+        </fieldset>
+      </section>
+      <section class="form-actions">
+        <button class="btn btn-ghost" type="button" data-fechar-modal>Cancelar</button>
+        <button class="btn btn-primary" type="button" data-salvar-usuario>Enviar convite</button>
+      </section>
+    </article>
+  </section>
+
+  <script src="scripts/admin.js"></script>
+  <script src="scripts/usuarios.js"></script>
+</body>
+
+</html>

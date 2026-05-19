@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Equipamentos e estoque — TechOS</title>
+  <meta name="description" content="Painel da assistência técnica no TechOS.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@600;700;800&display=swap">
+  <link rel="stylesheet" href="../_common/styles/base.css">
+  <link rel="stylesheet" href="styles/app.css">
+</head>
+
+<body class="app">
+  <header class="app-topbar">
+    <section style="display:flex;align-items:center;gap:0.75rem">
+      <button class="sidebar-toggle" type="button" aria-label="Abrir menu lateral" data-sidebar-toggle>
+        <span></span><span></span><span></span>
+      </button>
+      <a class="brand" href="dashboard.html">
+        <img src="../_common/images/logo.png" class="logo">
+        TechOS
+      </a>
+    </section>
+    <label class="app-search" aria-label="Buscar">
+      <input type="search" placeholder="Buscar OS, cliente ou equipamento…" data-global-search>
+    </label>
+    <section class="app-topbar-actions">
+      <button class="icon-btn" type="button" aria-label="Notificações" data-badge="3">🔔</button>
+      <button class="user-chip" type="button" aria-label="Conta" data-user-menu>
+        <span class="avatar" aria-hidden="true">MC</span>
+        <span>Marina</span>
+      </button>
+    </section>
+  </header>
+  <section class="app-shell">
+    <aside class="app-sidebar" data-sidebar>
+      <section class="sidebar-section">
+        <h4>Operação</h4>
+        <ul>
+          <li><a class="sidebar-link" href="dashboard.html"><span class="ico" aria-hidden="true">📊</span>Visão
+              geral</a></li>
+          <li><a class="sidebar-link" href="ordens.html"><span class="ico" aria-hidden="true">🧾</span>Ordens de
+              serviço</a></li>
+          <li><a class="sidebar-link" href="ordem-nova.html"><span class="ico" aria-hidden="true">➕</span>Nova OS</a>
+          </li>
+          <li><a class="sidebar-link" href="clientes.html"><span class="ico" aria-hidden="true">👥</span>Clientes</a>
+          </li>
+          <li><a class="sidebar-link" aria-current="page" href="equipamentos.html"><span class="ico"
+                aria-hidden="true">🛠️</span>Equipamentos</a></li>
+          <li><a class="sidebar-link" href="equipe.html"><span class="ico" aria-hidden="true">👷</span>Equipe</a></li>
+          <li><a class="sidebar-link" href="relatorios.html"><span class="ico"
+                aria-hidden="true">📈</span>Relatórios</a></li>
+        </ul>
+      </section>
+      <section class="sidebar-section">
+        <h4>Conta</h4>
+        <ul>
+          <li><a class="sidebar-link" href="perfil.html"><span class="ico" aria-hidden="true">👤</span>Perfil</a></li>
+          <li><a class="sidebar-link" href="configuracoes.html"><span class="ico"
+                aria-hidden="true">⚙️</span>Configurações</a></li>
+          <li><a class="sidebar-link" href="../../../index.html"><span class="ico" aria-hidden="true">🚪</span>Sair</a>
+          </li>
+        </ul>
+      </section>
+    </aside>
+    <main class="app-main">
+      <section class="page-head">
+        <section>
+          <h1>Equipamentos &amp; estoque</h1>
+          <p>Controle de peças e equipamentos em atendimento.</p>
+        </section>
+        <section class="page-actions">
+          <button class="btn btn-ghost" type="button">Importar planilha</button>
+          <button class="btn btn-primary" type="button">+ Adicionar item</button>
+        </section>
+      </section>
+
+      <section class="kpi-grid">
+        <article class="kpi">
+          <p class="label">SKUs</p>
+          <p class="value">214</p>
+          <p class="trend">12 categorias</p>
+        </article>
+        <article class="kpi">
+          <p class="label">Em estoque baixo</p>
+          <p class="value">9</p>
+          <p class="trend down">▼ repor</p>
+        </article>
+        <article class="kpi">
+          <p class="label">Valor estimado</p>
+          <p class="value">R$ 86,2k</p>
+          <p class="trend up">▲ 3,1%</p>
+        </article>
+        <article class="kpi">
+          <p class="label">Movimentações 30d</p>
+          <p class="value">428</p>
+          <p class="trend">entradas + saídas</p>
+        </article>
+      </section>
+
+      <article class="panel">
+        <form class="toolbar" onsubmit="return false">
+          <input class="grow" type="search" placeholder="Buscar peça, SKU ou fornecedor…">
+          <select aria-label="Categoria">
+            <option value="">Todas categorias</option>
+            <option>Telas</option>
+            <option>Baterias</option>
+            <option>Placas</option>
+            <option>Cabos</option>
+          </select>
+          <select aria-label="Status">
+            <option value="">Todos</option>
+            <option>Em estoque</option>
+            <option>Baixo</option>
+            <option>Esgotado</option>
+          </select>
+        </form>
+        <section class="table-wrap">
+          <table class="data">
+            <thead>
+              <tr>
+                <th>SKU</th>
+                <th>Item</th>
+                <th>Categoria</th>
+                <th>Qtd</th>
+                <th>Mín.</th>
+                <th>Custo</th>
+                <th>Status</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>BAT-IP13</td>
+                <td>Bateria iPhone 13</td>
+                <td>Baterias</td>
+                <td>4</td>
+                <td>5</td>
+                <td>R$ 180,00</td>
+                <td><span class="pill aguardando">Baixo</span></td>
+                <td><span class="row-actions"><button type="button">Editar</button></span></td>
+              </tr>
+              <tr>
+                <td>TELA-S22</td>
+                <td>Tela Samsung S22</td>
+                <td>Telas</td>
+                <td>2</td>
+                <td>3</td>
+                <td>R$ 420,00</td>
+                <td><span class="pill aguardando">Baixo</span></td>
+                <td><span class="row-actions"><button type="button">Editar</button></span></td>
+              </tr>
+              <tr>
+                <td>CAP-470</td>
+                <td>Capacitor 470µF 25V</td>
+                <td>Placas</td>
+                <td>120</td>
+                <td>30</td>
+                <td>R$ 8,00</td>
+                <td><span class="pill concluida">Em estoque</span></td>
+                <td><span class="row-actions"><button type="button">Editar</button></span></td>
+              </tr>
+              <tr>
+                <td>PAST-MX4</td>
+                <td>Pasta térmica Arctic MX-4</td>
+                <td>Insumos</td>
+                <td>18</td>
+                <td>5</td>
+                <td>R$ 28,00</td>
+                <td><span class="pill concluida">Em estoque</span></td>
+                <td><span class="row-actions"><button type="button">Editar</button></span></td>
+              </tr>
+              <tr>
+                <td>FONT-DELL</td>
+                <td>Fonte Dell 240W</td>
+                <td>Carregadores</td>
+                <td>0</td>
+                <td>2</td>
+                <td>R$ 320,00</td>
+                <td><span class="pill cancelada">Esgotado</span></td>
+                <td><span class="row-actions"><button type="button">Editar</button></span></td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+      </article>
+    </main>
+  </section>
+  <script src="scripts/app.js"></script>
+</body>
+
+</html>

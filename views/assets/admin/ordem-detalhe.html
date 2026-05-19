@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OS #1042 — TechOS Admin</title>
+  <meta name="description" content="Detalhes da ordem de serviço no painel administrativo do TechOS.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@600;700;800&display=swap">
+  <link rel="stylesheet" href="../_common/styles/base.css">
+  <link rel="stylesheet" href="styles/admin.css">
+</head>
+
+<body class="admin">
+
+  <header class="admin-topbar">
+    <section style="display:flex;align-items:center;gap:0.75rem">
+      <button class="sidebar-toggle" type="button" aria-label="Abrir menu lateral" data-sidebar-toggle>
+        <span></span><span></span><span></span>
+      </button>
+      <a class="brand" href="painel.html">
+        <img src="../_common/images/logo.png" class="logo">
+        TechOS <span style="font-size:0.7rem;font-weight:500;color:var(--color-text-muted);margin-left:0.25rem">Admin</span>
+      </a>
+    </section>
+    <label class="admin-search" aria-label="Buscar">
+      <input type="search" placeholder="Buscar OS, usuário ou cliente…" data-global-search>
+    </label>
+    <section class="admin-topbar-actions">
+      <button class="icon-btn" type="button" aria-label="Notificações" data-badge="5">🔔</button>
+      <button class="user-chip" type="button" aria-label="Conta" data-user-menu>
+        <span class="avatar" style="width:1.75rem;height:1.75rem;font-size:0.78rem" aria-hidden="true">VS</span>
+        <span>Admin</span>
+      </button>
+    </section>
+  </header>
+
+  <section class="admin-shell">
+
+    <aside class="admin-sidebar" data-sidebar>
+      <section class="sidebar-section">
+        <h4>Operação</h4>
+        <ul>
+          <li><a class="sidebar-link" href="painel.html"><span class="ico" aria-hidden="true">📊</span>Painel</a></li>
+          <li><a class="sidebar-link" aria-current="page" href="ordens.html"><span class="ico" aria-hidden="true">🧾</span>Ordens de serviço</a></li>
+          <li><a class="sidebar-link" href="ordem-nova.html"><span class="ico" aria-hidden="true">➕</span>Nova OS</a></li>
+          <li><a class="sidebar-link" href="clientes.html"><span class="ico" aria-hidden="true">👥</span>Clientes</a></li>
+          <li><a class="sidebar-link" href="equipamentos.html"><span class="ico" aria-hidden="true">📱</span>Equipamentos</a></li>
+          <li><a class="sidebar-link" href="relatorios.html"><span class="ico" aria-hidden="true">📈</span>Relatórios</a></li>
+        </ul>
+      </section>
+      <section class="sidebar-section">
+        <h4>Administração</h4>
+        <ul>
+          <li><a class="sidebar-link" href="usuarios.html"><span class="ico" aria-hidden="true">👤</span>Usuários</a></li>
+          <li><a class="sidebar-link" href="permissoes.html"><span class="ico" aria-hidden="true">🔐</span>Permissões</a></li>
+          <li><a class="sidebar-link" href="empresa.html"><span class="ico" aria-hidden="true">🏢</span>Empresa</a></li>
+          <li><a class="sidebar-link" href="configuracoes.html"><span class="ico" aria-hidden="true">⚙️</span>Configurações</a></li>
+        </ul>
+      </section>
+      <section class="sidebar-section">
+        <h4>Conta</h4>
+        <ul>
+          <li><a class="sidebar-link" href="../public/login.html"><span class="ico" aria-hidden="true">🚪</span>Sair</a></li>
+        </ul>
+      </section>
+    </aside>
+
+    <main class="admin-main">
+
+      <section class="page-head">
+        <section>
+          <p style="font-size:0.85rem;color:var(--color-text-muted)"><a href="ordens.html">← Ordens</a></p>
+          <h1>OS #1042 · iPhone 14 Pro</h1>
+          <!-- TODO: substituir por dados reais da API GET /api/admin/ordens/1042 -->
+          <p>Aberta em 14/05/2026 · Cliente: <strong>Carla Andrade</strong></p>
+        </section>
+        <section class="page-actions">
+          <button class="btn btn-ghost" type="button" data-imprimir>Imprimir</button>
+          <button class="btn btn-ghost" type="button" data-enviar-cliente>Enviar ao cliente</button>
+          <button class="btn btn-primary" type="button" data-concluir>Concluir OS</button>
+        </section>
+      </section>
+
+      <section class="detail-grid">
+
+        <section style="display:flex;flex-direction:column;gap:1.25rem">
+
+          <article class="panel">
+            <header class="panel-head">
+              <h2>Status</h2>
+              <span class="pill andamento">Em andamento</span>
+            </header>
+            <!-- TODO: substituir por PUT /api/admin/ordens/1042/status -->
+            <section class="toolbar">
+              <select aria-label="Mudar status" data-status-select>
+                <option value="aberta">Aberta</option>
+                <option value="andamento" selected>Em andamento</option>
+                <option value="aguardando">Aguardando peça</option>
+                <option value="concluida">Concluída</option>
+                <option value="cancelada">Cancelada</option>
+              </select>
+              <input type="date" value="2026-05-20" aria-label="Prazo estimado">
+              <button class="btn btn-ghost" type="button" data-atualizar-status>Atualizar</button>
+            </section>
+          </article>
+
+          <article class="panel">
+            <header class="panel-head">
+              <h2>Defeito e diagnóstico</h2>
+              <button class="btn btn-ghost" type="button" data-editar-diagnostico>Editar</button>
+            </header>
+            <!-- TODO: substituir por dado real da API -->
+            <p><strong>Defeito relatado:</strong> Tela quebrada — vidro completamente estilhaçado, touch não funciona.</p>
+            <p style="margin-top:0.75rem"><strong>Diagnóstico:</strong> Display LCD e vidro danificados. Necessária troca do conjunto de tela original.</p>
+          </article>
+
+          <article class="panel">
+            <header class="panel-head">
+              <h2>Itens e serviços</h2>
+              <button class="btn btn-ghost" type="button" data-add-item>+ Adicionar item</button>
+            </header>
+            <!-- TODO: substituir por dados reais da API GET /api/admin/ordens/1042/itens -->
+            <section class="table-wrap">
+              <table class="data">
+                <thead>
+                  <tr>
+                    <th>Descrição</th>
+                    <th>Qtd</th>
+                    <th>Valor unit.</th>
+                    <th>Subtotal</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Conjunto de tela iPhone 14 Pro (original)</td>
+                    <td>1</td>
+                    <td>R$ 320,00</td>
+                    <td>R$ 320,00</td>
+                    <td><span class="row-actions"><button type="button" class="danger">✕</button></span></td>
+                  </tr>
+                  <tr>
+                    <td>Mão de obra — troca de tela</td>
+                    <td>1</td>
+                    <td>R$ 100,00</td>
+                    <td>R$ 100,00</td>
+                    <td><span class="row-actions"><button type="button" class="danger">✕</button></span></td>
+                  </tr>
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <th colspan="3" style="text-align:right">Total</th>
+                    <th>R$ 420,00</th>
+                    <th></th>
+                  </tr>
+                </tfoot>
+              </table>
+            </section>
+          </article>
+
+          <article class="panel">
+            <header class="panel-head">
+              <h2>Observações internas</h2>
+            </header>
+            <!-- TODO: substituir por PUT /api/admin/ordens/1042/observacoes -->
+            <fieldset class="form-field" style="gap:0.5rem">
+              <label for="obs-interna">Nota interna (não visível ao cliente)</label>
+              <textarea id="obs-interna" rows="3" placeholder="Digite observações internas…">Cliente aprovado orçamento via WhatsApp às 15h20 do dia 14/05.</textarea>
+            </fieldset>
+            <section class="form-actions">
+              <button class="btn btn-ghost" type="button">Salvar observação</button>
+            </section>
+          </article>
+
+          <article class="panel">
+            <header class="panel-head">
+              <h2>Linha do tempo</h2>
+            </header>
+            <!-- TODO: substituir por dados reais da API GET /api/admin/ordens/1042/historico -->
+            <ol class="timeline">
+              <li class="timeline-item">
+                <time>14/05 08:10</time>
+                <h4>OS aberta</h4>
+                <p>Por VS Tech</p>
+              </li>
+              <li class="timeline-item">
+                <time>14/05 10:32</time>
+                <h4>Diagnóstico registrado</h4>
+                <p>Tela danificada — troca necessária</p>
+              </li>
+              <li class="timeline-item">
+                <time>14/05 15:20</time>
+                <h4>Orçamento aprovado pelo cliente via WhatsApp</h4>
+                <p>R$ 420,00</p>
+              </li>
+              <li class="timeline-item">
+                <time>15/05 09:42</time>
+                <h4>Status alterado para Em andamento</h4>
+                <p>Por VS Tech</p>
+              </li>
+            </ol>
+          </article>
+
+        </section>
+
+        <section style="display:flex;flex-direction:column;gap:1.25rem">
+
+          <article class="panel">
+            <header class="panel-head">
+              <h2>Cliente</h2>
+              <a class="btn-link" href="clientes.html">Ver perfil →</a>
+            </header>
+            <!-- TODO: substituir por dados reais da API GET /api/admin/clientes/{id} -->
+            <p><strong>Carla Andrade</strong></p>
+            <p style="font-size:0.9rem;color:var(--color-text-muted)">carla.andrade@email.com</p>
+            <p style="font-size:0.9rem;color:var(--color-text-muted)">(51) 99123-4567</p>
+            <p style="font-size:0.9rem;color:var(--color-text-muted);margin-top:0.5rem">8 OS no histórico</p>
+          </article>
+
+          <article class="panel">
+            <header class="panel-head">
+              <h2>Equipamento</h2>
+            </header>
+            <!-- TODO: substituir por dados reais da API GET /api/admin/equipamentos/{id} -->
+            <p><strong>iPhone 14 Pro — 256GB Roxo</strong></p>
+            <p style="font-size:0.9rem;color:var(--color-text-muted)">IMEI: 354687102938476</p>
+            <p style="font-size:0.9rem;color:var(--color-text-muted)">Acessórios: carregador, case preta</p>
+          </article>
+
+          <article class="panel">
+            <header class="panel-head">
+              <h2>Orçamento</h2>
+            </header>
+            <p style="font-size:0.9rem;color:var(--color-text-muted)">Enviado em: 14/05/2026</p>
+            <p style="font-size:0.9rem;margin-top:0.35rem"><strong>Status:</strong> <span class="pill ativo">Aprovado</span></p>
+            <section class="form-actions" style="margin-top:1rem;justify-content:flex-start;gap:0.5rem">
+              <button class="btn btn-ghost" type="button">Reenviar ao cliente</button>
+            </section>
+          </article>
+
+          <article class="panel">
+            <header class="panel-head">
+              <h2>Anexos</h2>
+              <button class="btn-link" type="button" data-upload>+ Enviar</button>
+            </header>
+            <!-- TODO: substituir por dados reais da API GET /api/admin/ordens/1042/anexos -->
+            <ul style="display:flex;flex-direction:column;gap:0.5rem;font-size:0.9rem">
+              <li>📎 foto-tela-quebrada.jpg</li>
+              <li>📎 orcamento-1042.pdf</li>
+            </ul>
+          </article>
+
+          <article class="panel">
+            <header class="panel-head">
+              <h2>Pagamento</h2>
+            </header>
+            <!-- TODO: substituir por dados reais da API GET /api/admin/ordens/1042/pagamento -->
+            <section class="form-grid" style="grid-template-columns:1fr">
+              <fieldset class="form-field">
+                <label for="forma-pag">Forma de pagamento</label>
+                <select id="forma-pag">
+                  <option>Pix</option>
+                  <option>Cartão de débito</option>
+                  <option>Cartão de crédito</option>
+                  <option>Dinheiro</option>
+                </select>
+              </fieldset>
+              <fieldset class="form-field">
+                <label for="valor-pago">Valor recebido</label>
+                <input type="text" id="valor-pago" placeholder="R$ 0,00">
+              </fieldset>
+            </section>
+            <section class="form-actions">
+              <button class="btn btn-primary" type="button">Registrar pagamento</button>
+            </section>
+          </article>
+
+        </section>
+
+      </section>
+
+    </main>
+  </section>
+
+  <script src="scripts/admin.js"></script>
+  <script src="scripts/ordem-detalhe.js"></script>
+</body>
+
+</html>

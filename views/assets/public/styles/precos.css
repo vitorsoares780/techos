@@ -1,0 +1,76 @@
+/* ============================================================
+   TechOS — Página de Preços
+   ============================================================ */
+
+.pricing-grid {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: 1fr;
+  padding-bottom: 5rem;
+}
+@media (min-width: 880px) { .pricing-grid { grid-template-columns: repeat(3, 1fr); } }
+
+.plan {
+  position: relative;
+  padding: 2rem;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  display: flex;
+  flex-direction: column;
+}
+.plan.is-featured {
+  border-color: var(--color-primary);
+  background: var(--gradient-card);
+  box-shadow: var(--shadow-elegant);
+}
+.plan-tag {
+  position: absolute;
+  top: -0.75rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--gradient-hero);
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 0.3rem 0.85rem;
+  border-radius: 999px;
+}
+.plan h3 { font-family: var(--font-display); font-size: 1.25rem; font-weight: 700; }
+.plan-desc { color: var(--color-text-muted); font-size: 0.9rem; margin-top: 0.35rem; }
+.plan-price { margin-top: 1.5rem; }
+.plan-price strong { font-size: 2.25rem; font-weight: 700; }
+.plan-price span { color: var(--color-text-muted); margin-left: 0.25rem; }
+.plan .btn { margin-top: 1.5rem; }
+.plan-features { margin-top: 2rem; display: flex; flex-direction: column; gap: 0.65rem; font-size: 0.9rem; }
+.plan-features li { display: flex; gap: 0.5rem; align-items: flex-start; }
+.plan-features li::before {
+  content: "✓";
+  color: var(--color-success);
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.page-hero > .container {
+  width: 100%;
+  max-width: var(--container);
+  margin-inline: auto;
+  padding-inline: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  .plan {
+    background: linear-gradient(135deg, #111827 0%, #1e293b 100%);
+    border-color: #334155;
+  }
+  
+  .plan.is-featured {
+    border-color: #4a9eff;
+    background: linear-gradient(135deg, #0f2a5e 0%, #1e3a5f 100%);
+  }
+  
+  .plan-tag {
+    background: linear-gradient(135deg, #0f172a 0%, #1e40af 55%, #2563eb 100%);
+  }
+}

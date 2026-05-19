@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OS #1042 — TechOS</title>
+  <meta name="description" content="Painel da assistência técnica no TechOS.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@600;700;800&display=swap">
+  <link rel="stylesheet" href="../_common/styles/base.css">
+  <link rel="stylesheet" href="styles/app.css">
+</head>
+
+<body class="app">
+  <header class="app-topbar">
+    <section style="display:flex;align-items:center;gap:0.75rem">
+      <button class="sidebar-toggle" type="button" aria-label="Abrir menu lateral" data-sidebar-toggle>
+        <span></span><span></span><span></span>
+      </button>
+      <a class="brand" href="dashboard.html">
+        <img src="../_common/images/logo.png" class="logo">
+        TechOS
+      </a>
+    </section>
+    <label class="app-search" aria-label="Buscar">
+      <input type="search" placeholder="Buscar OS, cliente ou equipamento…" data-global-search>
+    </label>
+    <section class="app-topbar-actions">
+      <button class="icon-btn" type="button" aria-label="Notificações" data-badge="3">🔔</button>
+      <button class="user-chip" type="button" aria-label="Conta" data-user-menu>
+        <span class="avatar" aria-hidden="true">MC</span>
+        <span>Marina</span>
+      </button>
+    </section>
+  </header>
+  <section class="app-shell">
+    <aside class="app-sidebar" data-sidebar>
+      <section class="sidebar-section">
+        <h4>Operação</h4>
+        <ul>
+          <li><a class="sidebar-link" href="dashboard.html"><span class="ico" aria-hidden="true">📊</span>Visão
+              geral</a></li>
+          <li><a class="sidebar-link" aria-current="page" href="ordens.html"><span class="ico"
+                aria-hidden="true">🧾</span>Ordens de serviço</a></li>
+          <li><a class="sidebar-link" href="ordem-nova.html"><span class="ico" aria-hidden="true">➕</span>Nova OS</a>
+          </li>
+          <li><a class="sidebar-link" href="clientes.html"><span class="ico" aria-hidden="true">👥</span>Clientes</a>
+          </li>
+          <li><a class="sidebar-link" href="equipamentos.html"><span class="ico"
+                aria-hidden="true">🛠️</span>Equipamentos</a></li>
+          <li><a class="sidebar-link" href="equipe.html"><span class="ico" aria-hidden="true">👷</span>Equipe</a></li>
+          <li><a class="sidebar-link" href="relatorios.html"><span class="ico"
+                aria-hidden="true">📈</span>Relatórios</a></li>
+        </ul>
+      </section>
+      <section class="sidebar-section">
+        <h4>Conta</h4>
+        <ul>
+          <li><a class="sidebar-link" href="perfil.html"><span class="ico" aria-hidden="true">👤</span>Perfil</a></li>
+          <li><a class="sidebar-link" href="configuracoes.html"><span class="ico"
+                aria-hidden="true">⚙️</span>Configurações</a></li>
+          <li><a class="sidebar-link" href="../../../index.html"><span class="ico" aria-hidden="true">🚪</span>Sair</a>
+          </li>
+        </ul>
+      </section>
+    </aside>
+    <main class="app-main">
+      <section class="page-head">
+        <section>
+          <p style="font-size:0.85rem;color:var(--color-text-muted)"><a href="ordens.html">← Ordens</a></p>
+          <h1>OS #1042 · Notebook Dell G15</h1>
+          <p>Aberta em 14/05/2026 · Cliente: <strong>Carla Andrade</strong></p>
+        </section>
+        <section class="page-actions">
+          <button class="btn btn-ghost" type="button">Imprimir</button>
+          <button class="btn btn-ghost" type="button">Enviar ao cliente</button>
+          <button class="btn btn-primary" type="button" data-finalizar>Concluir OS</button>
+        </section>
+      </section>
+
+      <section class="detail-grid">
+        <section style="display:flex;flex-direction:column;gap:1.25rem">
+          <article class="panel">
+            <header class="panel-head">
+              <h2>Status</h2>
+              <span class="pill andamento">Em andamento</span>
+            </header>
+            <section class="toolbar">
+              <select aria-label="Mudar status" data-status-select>
+                <option value="aberta">Aberta</option>
+                <option value="andamento" selected>Em andamento</option>
+                <option value="aguardando">Aguardando peça</option>
+                <option value="concluida">Concluída</option>
+                <option value="cancelada">Cancelada</option>
+              </select>
+              <select aria-label="Técnico">
+                <option>Ricardo Alves</option>
+                <option>Júlia Pires</option>
+                <option>Felipe Torres</option>
+              </select>
+              <input type="date" value="2026-05-18" aria-label="Prazo">
+              <button class="btn btn-ghost" type="button">Atualizar</button>
+            </section>
+          </article>
+
+          <article class="panel">
+            <header class="panel-head">
+              <h2>Defeito e diagnóstico</h2>
+            </header>
+            <p><strong>Defeito relatado:</strong> Notebook não liga, faz barulho de ventoinha apenas.</p>
+            <p style="margin-top:0.75rem"><strong>Diagnóstico:</strong> Falha na placa de alimentação, capacitor C12
+              estourado. Necessária troca.</p>
+          </article>
+
+          <article class="panel">
+            <header class="panel-head">
+              <h2>Itens e serviços</h2>
+              <button class="btn btn-ghost" type="button">+ Adicionar item</button>
+            </header>
+            <section class="table-wrap">
+              <table class="data">
+                <thead>
+                  <tr>
+                    <th>Descrição</th>
+                    <th>Qtd</th>
+                    <th>Valor unit.</th>
+                    <th>Subtotal</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Mão de obra — placa de alimentação</td>
+                    <td>1</td>
+                    <td>R$ 250,00</td>
+                    <td>R$ 250,00</td>
+                  </tr>
+                  <tr>
+                    <td>Capacitor 470µF 25V</td>
+                    <td>2</td>
+                    <td>R$ 15,00</td>
+                    <td>R$ 30,00</td>
+                  </tr>
+                  <tr>
+                    <td>Pasta térmica Arctic MX-4</td>
+                    <td>1</td>
+                    <td>R$ 40,00</td>
+                    <td>R$ 40,00</td>
+                  </tr>
+                  <tr>
+                    <td>Limpeza interna</td>
+                    <td>1</td>
+                    <td>R$ 100,00</td>
+                    <td>R$ 100,00</td>
+                  </tr>
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <th colspan="3" style="text-align:right">Total</th>
+                    <th>R$ 420,00</th>
+                  </tr>
+                </tfoot>
+              </table>
+            </section>
+          </article>
+
+          <article class="panel">
+            <header class="panel-head">
+              <h2>Linha do tempo</h2>
+            </header>
+            <ol class="timeline">
+              <li class="timeline-item"><time>14/05 08:10</time>
+                <h4>OS aberta</h4>
+                <p>Por Marina Costa</p>
+              </li>
+              <li class="timeline-item"><time>14/05 10:32</time>
+                <h4>Diagnóstico registrado</h4>
+                <p>Ricardo Alves — falha na placa de alimentação</p>
+              </li>
+              <li class="timeline-item"><time>14/05 15:20</time>
+                <h4>Orçamento aprovado pelo cliente via WhatsApp</h4>
+                <p>R$ 420,00</p>
+              </li>
+              <li class="timeline-item"><time>15/05 09:42</time>
+                <h4>Em andamento</h4>
+                <p>Substituição de capacitores</p>
+              </li>
+            </ol>
+          </article>
+        </section>
+
+        <section style="display:flex;flex-direction:column;gap:1.25rem">
+          <article class="panel">
+            <header class="panel-head">
+              <h2>Cliente</h2>
+            </header>
+            <p><strong>Carla Andrade</strong></p>
+            <p style="font-size:0.9rem;color:var(--color-text-muted)">carla.andrade@email.com</p>
+            <p style="font-size:0.9rem;color:var(--color-text-muted)">(11) 98765-4321</p>
+            <a class="btn btn-ghost" style="margin-top:0.75rem" href="clientes.html">Ver histórico</a>
+          </article>
+          <article class="panel">
+            <header class="panel-head">
+              <h2>Equipamento</h2>
+            </header>
+            <p><strong>Notebook Dell G15 5530</strong></p>
+            <p style="font-size:0.9rem;color:var(--color-text-muted)">SN: DLG15-7782-29A</p>
+            <p style="font-size:0.9rem;color:var(--color-text-muted)">Acessórios: carregador 240W, mochila</p>
+          </article>
+          <article class="panel">
+            <header class="panel-head">
+              <h2>Anexos</h2><button class="btn-link" type="button">+ Enviar</button>
+            </header>
+            <ul style="display:flex;flex-direction:column;gap:0.5rem;font-size:0.9rem">
+              <li>📎 diagnostico-foto.jpg</li>
+              <li>📎 orcamento.pdf</li>
+            </ul>
+          </article>
+        </section>
+      </section>
+    </main>
+  </section>
+  <script src="scripts/app.js"></script>
+  <script src="scripts/ordem-detalhe.js"></script>
+</body>
+
+</html>

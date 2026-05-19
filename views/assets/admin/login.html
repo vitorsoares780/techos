@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login administrativo — TechOS</title>
+  <meta name="description" content="Acesso administrativo ao painel TechOS.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@600;700;800&display=swap">
+  <link rel="stylesheet" href="../_common/styles/base.css">
+  <link rel="stylesheet" href="styles/admin.css">
+</head>
+
+<body class="admin">
+
+  <main>
+    <section class="container">
+      <section class="auth auth-admin" aria-label="Login administrativo">
+        <article class="auth-card">
+          <header>
+            <a class="brand" href="../public/login.html">
+              <img src="../_common/images/logo.png" class="logo" alt="TechOS logo">
+              TechOS Admin
+            </a>
+            <p>Use suas credenciais administrativas para acessar toda a área de gestão.</p>
+          </header>
+
+          <section>
+            <h1 class="auth-title">Entrar como administrador</h1>
+            <p class="auth-subtitle">Login exclusivo para administradores e gestores.</p>
+          </section>
+
+          <form class="form" data-admin-login-form novalidate>
+            <fieldset class="form-field">
+              <label for="admin-email">E-mail</label>
+              <input id="admin-email" name="email" type="email" required>
+            </fieldset>
+
+            <fieldset class="form-field">
+              <label for="admin-password">Senha</label>
+              <input id="admin-password" name="password" type="password" required>
+            </fieldset>
+
+            <button class="btn btn-primary btn-block" type="submit">Entrar</button>
+          </form>
+
+        <footer>
+          <p class="auth-footnote">Voltar para <a href="../public/login.html">login padrão</a></p>
+        </footer>
+      </article>
+    </section>
+  </section>
+  </main>
+
+  <script src="scripts/admin-login.js"></script>
+</body>
+
+</html>

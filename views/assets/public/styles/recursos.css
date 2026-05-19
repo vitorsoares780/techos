@@ -1,0 +1,36 @@
+/* ============================================================
+   TechOS — Página de Recursos
+   ============================================================ */
+
+.page-hero {
+  text-align: center;
+  background: var(--color-bg-soft);
+  padding-block: 5rem 4rem;
+}
+.page-hero h1 {
+  margin-top: 0.75rem;
+  font-size: clamp(2rem, 4vw, 3rem);
+}
+.page-hero p {
+  max-width: 38rem;
+  margin: 1.25rem auto 0;
+  color: var(--color-text-muted);
+  font-size: 1.05rem;
+}
+
+.feature-group { padding-block: 3rem; }
+.feature-group h2 {
+  font-family: var(--font-sans);
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 1.75rem;
+}
+.feature-group .features-grid {
+  display: grid;
+  gap: 1.25rem;
+  grid-template-columns: 1fr;
+}
+@media (min-width: 640px) { .feature-group .features-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 960px) { .feature-group .features-grid { grid-template-columns: repeat(3, 1fr); } }
+
+.page-cta { text-align: center; padding-block: 4rem; }

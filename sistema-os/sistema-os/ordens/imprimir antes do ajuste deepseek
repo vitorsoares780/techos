@@ -1,0 +1,467 @@
+<?php
+session_start();
+require_once '../config/database.php';
+require_once '../config/config.php';
+require_once '../includes/helpers.php';
+
+$database = new Database();
+$db = $database->getConnection();
+
+$id = $_GET['id'] ?? 0;
+
+$query = "SELECT os.*, c.* 
+          FROM ordens_servico os 
+          JOIN clientes c ON os.cliente_id = c.id 
+          WHERE os.id = :id";
+$stmt = $db->prepare($query);
+$stmt->bindParam(':id', $id);
+$stmt->execute();
+$ordem = $stmt->fetch(PDO::FETCH_ASSOC);
+
+if (!$ordem) {
+    die('Ordem não encontrada.');
+}
+
+// Buscar configurações do prestador
+$query_config = "SELECT * FROM configuracao LIMIT 1";
+$stmt_config = $db->prepare($query_config);
+$stmt_config->execute();
+$config = $stmt_config->fetch(PDO::FETCH_ASSOC);
+
+// Configurar padrões se não existir configuração
+$nome_prestador = $config['nome_prestador'] ?? 'Técnico de Celulares';
+$telefone_prestador = $config['telefone_prestador'] ?? '(11) 99999-9999';
+?>
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Imprimir Ordem de Serviço #<?php echo $ordem['numero_ordem']; ?></title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/print.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container print-container">
+        <!-- Cabeçalho para impressão -->
+        <div class="print-header">
+            <div class="print-logo">
+                <h2>ORDEM DE SERVIÇO</h2>
+                <p>Manutenção de Celulares</p>
+                <p class="print-subtitle"><?php echo SISTEMA_NOME; ?> - v<?php echo SISTEMA_VERSAO; ?></p>
+            </div>
+            <div class="print-info">
+                <p><strong>Número:</strong> <?php echo $ordem['numero_ordem']; ?></p>
+                <p><strong>Data Entrada:</strong> <?php echo exibirData($ordem['data_entrada']); ?></p>
+                <p><strong>Status:</strong> <?php echo $ordem['status']; ?></p>
+                <?php if ($ordem['data_conclusao']): ?>
+                    <p><strong><?php echo $ordem['status'] === STATUS_ENTREGUE ? 'Data Entrega' : 'Data Conclusão'; ?>:</strong> <?php echo exibirData($ordem['data_conclusao']); ?></p>
+                <?php endif; ?>
+            </div>
+        </div>
+        
+        <!-- Identificação do Prestador -->
+        <div class="print-section no-break">
+            <h3><i class="fas fa-user-tie"></i> IDENTIFICAÇÃO DO PRESTADOR</h3>
+            <div class="form-row">
+                <div class="form-group">
+                    <p><strong>Nome:</strong> <?php echo htmlspecialchars($nome_prestador); ?></p>
+                </div>
+                <div class="form-group">
+                    <p><strong>Telefone:</strong> <?php echo $telefone_prestador; ?></p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Dados do Cliente -->
+        <div class="print-section no-break">
+            <h3><i class="fas fa-user"></i> DADOS DO CLIENTE</h3>
+            <div class="form-row">
+                <div class="form-group">
+                    <p><strong>Nome:</strong> <?php echo htmlspecialchars($ordem['nome_completo']); ?></p>
+                </div>
+                <div class="form-group">
+                    <p><strong>CPF/RG:</strong> <?php echo formatarDocumento($ordem['cpf_rg']); ?></p>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <p><strong>Telefone:</strong> <?php echo formatarTelefone($ordem['telefone']); ?></p>
+                </div>
+                <div class="form-group">
+                    <p><strong>E-mail:</strong> <?php echo $ordem['email'] ?: 'Não informado'; ?></p>
+                </div>
+            </div>
+            <div class="form-group">
+                <p><strong>Endereço:</strong> <?php echo $ordem['endereco'] ? nl2br(htmlspecialchars($ordem['endereco'])) : 'Não informado'; ?></p>
+            </div>
+        </div>
+        
+        <!-- Dados do Aparelho -->
+        <div class="print-section no-break">
+            <h3><i class="fas fa-mobile-alt"></i> DADOS DO APARELHO</h3>
+            <div class="form-row">
+                <div class="form-group">
+                    <p><strong>Marca:</strong> <?php echo htmlspecialchars($ordem['marca_aparelho']); ?></p>
+                </div>
+                <div class="form-group">
+                    <p><strong>Modelo:</strong> <?php echo htmlspecialchars($ordem['modelo_aparelho']); ?></p>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <p><strong>IMEI:</strong> <?php echo $ordem['imei'] ?: 'Não informado'; ?></p>
+                </div>
+            </div>
+            <div class="form-group">
+                <p><strong>Estado Físico:</strong></p>
+                <div class="print-content-box">
+                    <?php echo nl2br(htmlspecialchars($ordem['estado_fisico'] ?: 'Não especificado')); ?>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Descrição do Serviço -->
+        <div class="print-section no-break">
+            <h3><i class="fas fa-tools"></i> DESCRIÇÃO DO SERVIÇO</h3>
+            <div class="form-group">
+                <p><strong>Defeito Relatado:</strong></p>
+                <div class="print-content-box">
+                    <?php echo nl2br(htmlspecialchars($ordem['defeito_relatado'])); ?>
+                </div>
+            </div>
+            <div class="form-group">
+                <p><strong>Serviço a Ser Realizado:</strong></p>
+                <div class="print-content-box">
+                    <?php echo nl2br(htmlspecialchars($ordem['servico_realizar'])); ?>
+                </div>
+            </div>
+            <?php if ($ordem['pecas_utilizadas']): ?>
+            <div class="form-group">
+                <p><strong>Peças Utilizadas:</strong></p>
+                <div class="print-content-box">
+                    <?php echo nl2br(htmlspecialchars($ordem['pecas_utilizadas'])); ?>
+                </div>
+            </div>
+            <?php endif; ?>
+            <?php if ($ordem['observacoes_tecnicas']): ?>
+            <div class="form-group">
+                <p><strong>Observações Técnicas:</strong></p>
+                <div class="print-content-box">
+                    <?php echo nl2br(htmlspecialchars($ordem['observacoes_tecnicas'])); ?>
+                </div>
+            </div>
+            <?php endif; ?>
+        </div>
+        
+        <!-- Valores -->
+        <div class="print-section no-break">
+            <h3><i class="fas fa-dollar-sign"></i> VALORES</h3>
+            <table class="print-table values-table">
+                <tr>
+                    <td>Valor do Serviço:</td>
+                    <td><?php echo exibirValor($ordem['valor_servico']); ?></td>
+                </tr>
+                <?php if ($ordem['valor_pecas'] > 0): ?>
+                <tr>
+                    <td>Valor das Peças:</td>
+                    <td><?php echo exibirValor($ordem['valor_pecas']); ?></td>
+                </tr>
+                <?php endif; ?>
+                <tr class="total-row">
+                    <td><strong>VALOR TOTAL:</strong></td>
+                    <td><strong><?php echo exibirValor($ordem['valor_total']); ?></strong></td>
+                </tr>
+            </table>
+            <?php if ($ordem['forma_pagamento']): ?>
+            <p><strong>Forma de Pagamento:</strong> <?php echo $ordem['forma_pagamento']; ?></p>
+            <?php endif; ?>
+            <?php if ($ordem['prazo_entrega']): ?>
+            <p><strong>Prazo de Entrega:</strong> <?php echo exibirDataSimples($ordem['prazo_entrega']); ?></p>
+            <?php endif; ?>
+        </div>
+        
+        <!-- Termo Jurídico -->
+        <div class="print-section legal-term no-break">
+            <h3>TERMO DE RESPONSABILIDADE</h3>
+            <p>
+                Declaro estar ciente das condições do serviço. Não me responsabilizo por perda de dados, 
+                informações ou aplicativos não previamente salvos. O serviço somente será executado após 
+                aprovação do orçamento. A garantia refere-se exclusivamente ao serviço realizado ou peças 
+                substituídas, não cobrindo mau uso, quedas, contato com líquidos ou intervenções de terceiros. 
+                Aparelhos não retirados após 90 dias da conclusão poderão ser descartados.
+            </p>
+        </div>
+        
+        <!-- Assinaturas -->
+        <div class="print-section signature-section no-break">
+            <div class="signature-block">
+                <h3>ENTREGA DO APARELHO</h3>
+                <div class="signature-line">
+                    <p>Assinatura do Cliente</p>
+                </div>
+                <div class="signature-info">
+                    <p>Data: ____/____/________</p>
+                    <p>Hora: _______:_______</p>
+                </div>
+            </div>
+            
+            <div class="signature-block">
+                <h3>RETIRADA DO APARELHO</h3>
+                <div class="signature-line">
+                    <p>Assinatura do Cliente</p>
+                </div>
+                <div class="signature-info">
+                    <p>Data: ____/____/________</p>
+                    <p>Hora: _______:_______</p>
+                </div>
+            </div>
+            
+            <div class="signature-block">
+                <h3>TÉCNICO RESPONSÁVEL</h3>
+                <div class="signature-line">
+                    <p>Assinatura do Técnico</p>
+                </div>
+                <div class="signature-info">
+                    <p>Data: ____/____/________</p>
+                    <p>Nome: _________________________</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Rodapé -->
+        <div class="print-footer">
+            <p>Documento gerado em: <?php echo dataAtual(FORMATO_DATA_HORA_COMPLETO); ?></p>
+            <p class="print-small">Sistema desenvolvido para controle de ordens de serviço - <?php echo SISTEMA_ANO; ?></p>
+        </div>
+        
+        <!-- Botão de impressão (visível apenas na tela) -->
+        <div class="no-print" style="text-align: center; margin-top: 30px; padding: 20px; border-top: 1px solid #e2e8f0;">
+            <button onclick="window.print()" class="btn btn-primary">
+                <i class="fas fa-print"></i> Imprimir Ordem
+            </button>
+            <a href="visualizar.php?id=<?php echo $id; ?>" class="btn">
+                <i class="fas fa-arrow-left"></i> Voltar para Visualização
+            </a>
+            <button onclick="window.close()" class="btn">
+                <i class="fas fa-times"></i> Fechar Janela
+            </button>
+        </div>
+    </div>
+    
+    <script>
+        // Impressão automática ao carregar a página
+        window.onload = function() {
+            // Descomente a linha abaixo para impressão automática
+            // window.print();
+        }
+        
+        // Configurar antes de imprimir
+        window.onbeforeprint = function() {
+            // Remover botões antes de imprimir
+            document.querySelector('.no-print').style.display = 'none';
+        }
+        
+        // Restaurar após imprimir
+        window.onafterprint = function() {
+            document.querySelector('.no-print').style.display = 'block';
+        }
+    </script>
+    
+    <style>
+        /* Estilos específicos para impressão */
+        .print-container {
+            max-width: 210mm !important;
+            margin: 0 auto !important;
+            padding: 20px !important;
+            background: white !important;
+        }
+        
+        .print-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #000;
+        }
+        
+        .print-logo h2 {
+            font-size: 24pt;
+            margin: 0 0 5px 0;
+            color: #000;
+        }
+        
+        .print-logo p {
+            margin: 0;
+            color: #666;
+        }
+        
+        .print-subtitle {
+            font-size: 9pt !important;
+            color: #999 !important;
+            margin-top: 5px !important;
+        }
+        
+        .print-info {
+            text-align: right;
+            font-size: 10pt;
+        }
+        
+        .print-info p {
+            margin: 2px 0;
+        }
+        
+        .print-section {
+            margin-bottom: 20px;
+            page-break-inside: avoid;
+        }
+        
+        .print-section h3 {
+            background-color: #f0f0f0;
+            padding: 8px 10px;
+            margin: 0 0 10px 0;
+            font-size: 12pt;
+            border-left: 3px solid #000;
+        }
+        
+        .form-row {
+            display: flex;
+            margin-bottom: 8px;
+        }
+        
+        .form-group {
+            flex: 1;
+            margin-right: 15px;
+        }
+        
+        .form-group:last-child {
+            margin-right: 0;
+        }
+        
+        .print-content-box {
+            background-color: #f9f9f9;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            margin: 5px 0 15px 0;
+            font-size: 10pt;
+            line-height: 1.4;
+        }
+        
+        .print-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 10px 0;
+        }
+        
+        .print-table td {
+            padding: 8px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .values-table {
+            width: 60%;
+            margin-left: auto;
+        }
+        
+        .total-row td {
+            font-weight: bold;
+            font-size: 11pt;
+            border-top: 2px solid #000;
+            border-bottom: none;
+        }
+        
+        .legal-term {
+            font-size: 9pt;
+            line-height: 1.3;
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #000;
+            background-color: #f9f9f9;
+            text-align: justify;
+        }
+        
+        .signature-section {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            page-break-inside: avoid;
+        }
+        
+        .signature-block {
+            width: 30%;
+            text-align: center;
+        }
+        
+        .signature-block h3 {
+            font-size: 10pt;
+            margin-bottom: 20px;
+            background: none;
+            border: none;
+            padding: 0;
+        }
+        
+        .signature-line {
+            width: 100%;
+            height: 1px;
+            border-top: 1px solid #000;
+            margin: 40px auto 10px;
+            position: relative;
+        }
+        
+        .signature-line p {
+            position: absolute;
+            top: -12px;
+            left: 0;
+            right: 0;
+            font-size: 9pt;
+            background: white;
+            display: inline-block;
+            padding: 0 10px;
+        }
+        
+        .signature-info {
+            font-size: 9pt;
+            margin-top: 10px;
+        }
+        
+        .print-footer {
+            margin-top: 40px;
+            padding-top: 10px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            font-size: 8pt;
+            color: #666;
+        }
+        
+        .print-small {
+            font-size: 7pt !important;
+            color: #999 !important;
+        }
+        
+        .no-break {
+            page-break-inside: avoid;
+        }
+        
+        /* Esconder elementos não essenciais na impressão */
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+            
+            body {
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+            
+            .print-container {
+                box-shadow: none !important;
+                border: none !important;
+            }
+        }
+    </style>
+</body>
+</html>

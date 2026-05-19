@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Relatórios — TechOS</title>
+  <meta name="description" content="Painel da assistência técnica no TechOS.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@600;700;800&display=swap">
+  <link rel="stylesheet" href="../_common/styles/base.css">
+  <link rel="stylesheet" href="styles/app.css">
+</head>
+
+<body class="app">
+  <header class="app-topbar">
+    <section style="display:flex;align-items:center;gap:0.75rem">
+      <button class="sidebar-toggle" type="button" aria-label="Abrir menu lateral" data-sidebar-toggle>
+        <span></span><span></span><span></span>
+      </button>
+      <a class="brand" href="dashboard.html">
+        <img src="../_common/images/logo.png" class="logo">
+        TechOS
+      </a>
+    </section>
+    <label class="app-search" aria-label="Buscar">
+      <input type="search" placeholder="Buscar OS, cliente ou equipamento…" data-global-search>
+    </label>
+    <section class="app-topbar-actions">
+      <button class="icon-btn" type="button" aria-label="Notificações" data-badge="3">🔔</button>
+      <button class="user-chip" type="button" aria-label="Conta" data-user-menu>
+        <span class="avatar" aria-hidden="true">MC</span>
+        <span>Marina</span>
+      </button>
+    </section>
+  </header>
+  <section class="app-shell">
+    <aside class="app-sidebar" data-sidebar>
+      <section class="sidebar-section">
+        <h4>Operação</h4>
+        <ul>
+          <li><a class="sidebar-link" href="dashboard.html"><span class="ico" aria-hidden="true">📊</span>Visão
+              geral</a></li>
+          <li><a class="sidebar-link" href="ordens.html"><span class="ico" aria-hidden="true">🧾</span>Ordens de
+              serviço</a></li>
+          <li><a class="sidebar-link" href="ordem-nova.html"><span class="ico" aria-hidden="true">➕</span>Nova OS</a>
+          </li>
+          <li><a class="sidebar-link" href="clientes.html"><span class="ico" aria-hidden="true">👥</span>Clientes</a>
+          </li>
+          <li><a class="sidebar-link" href="equipamentos.html"><span class="ico"
+                aria-hidden="true">🛠️</span>Equipamentos</a></li>
+          <li><a class="sidebar-link" href="equipe.html"><span class="ico" aria-hidden="true">👷</span>Equipe</a></li>
+          <li><a class="sidebar-link" aria-current="page" href="relatorios.html"><span class="ico"
+                aria-hidden="true">📈</span>Relatórios</a></li>
+        </ul>
+      </section>
+      <section class="sidebar-section">
+        <h4>Conta</h4>
+        <ul>
+          <li><a class="sidebar-link" href="perfil.html"><span class="ico" aria-hidden="true">👤</span>Perfil</a></li>
+          <li><a class="sidebar-link" href="configuracoes.html"><span class="ico"
+                aria-hidden="true">⚙️</span>Configurações</a></li>
+          <li><a class="sidebar-link" href="../../../index.html"><span class="ico" aria-hidden="true">🚪</span>Sair</a>
+          </li>
+        </ul>
+      </section>
+    </aside>
+    <main class="app-main">
+      <section class="page-head">
+        <section>
+          <h1>Relatórios</h1>
+          <p>Indicadores de produtividade, faturamento e SLA.</p>
+        </section>
+        <section class="page-actions">
+          <select aria-label="Período">
+            <option>Últimos 30 dias</option>
+            <option>Últimos 90 dias</option>
+            <option>Ano atual</option>
+          </select>
+          <button class="btn btn-primary" type="button">Exportar PDF</button>
+        </section>
+      </section>
+
+      <section class="kpi-grid">
+        <article class="kpi">
+          <p class="label">Faturamento</p>
+          <p class="value">R$ 48.320</p>
+          <p class="trend up">▲ 8,4%</p>
+        </article>
+        <article class="kpi">
+          <p class="label">Ticket médio</p>
+          <p class="value">R$ 266</p>
+          <p class="trend up">▲ 4%</p>
+        </article>
+        <article class="kpi">
+          <p class="label">SLA cumprido</p>
+          <p class="value">92%</p>
+          <p class="trend up">▲ 3pp</p>
+        </article>
+        <article class="kpi">
+          <p class="label">NPS</p>
+          <p class="value">71</p>
+          <p class="trend">Excelente</p>
+        </article>
+      </section>
+
+      <section class="detail-grid">
+        <article class="panel">
+          <header class="panel-head">
+            <h2>Faturamento mensal</h2>
+          </header>
+          <ul class="bars" aria-label="Faturamento por mês">
+            <li><span class="bar" style="height:45%"></span>Dez</li>
+            <li><span class="bar" style="height:55%"></span>Jan</li>
+            <li><span class="bar" style="height:62%"></span>Fev</li>
+            <li><span class="bar" style="height:70%"></span>Mar</li>
+            <li><span class="bar" style="height:80%"></span>Abr</li>
+            <li><span class="bar" style="height:95%"></span>Mai</li>
+          </ul>
+        </article>
+
+        <article class="panel">
+
+          <header class="panel-head">
+            <h2>Distribuição por status</h2>
+          </header>
+
+          <ul style="display:flex;flex-direction:column;gap:0.6rem;font-size:0.9rem">
+            <li style="display:flex;justify-content:space-between"><span><span
+                  class="pill aberta">Aberta</span></span><strong>18%</strong></li>
+            <li style="display:flex;justify-content:space-between"><span><span class="pill andamento">Em
+                  andamento</span></span><strong>32%</strong></li>
+            <li style="display:flex;justify-content:space-between"><span><span class="pill aguardando">Aguardando
+                  peça</span></span><strong>11%</strong></li>
+            <li style="display:flex;justify-content:space-between"><span><span
+                  class="pill concluida">Concluída</span></span><strong>35%</strong></li>
+            <li style="display:flex;justify-content:space-between"><span><span
+                  class="pill cancelada">Cancelada</span></span><strong>4%</strong></li>
+          </ul>
+        </article>
+
+      </section>
+
+      <article class="panel" style="margin-top:1.25rem">
+
+        <header class="panel-head">
+          <h2>Ranking por técnico</h2>
+        </header>
+
+        <section class="table-wrap">
+          <table class="data">
+            <thead>
+              <tr>
+                <th>Técnico</th>
+                <th>OS concluídas</th>
+                <th>Tempo médio</th>
+                <th>Faturamento gerado</th>
+                <th>NPS</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr>
+                <td>Ricardo Alves</td>
+                <td>62</td>
+                <td>2,1d</td>
+                <td>R$ 18.420</td>
+                <td>78</td>
+              </tr>
+              <tr>
+                <td>Júlia Pires</td>
+                <td>48</td>
+                <td>2,4d</td>
+                <td>R$ 14.180</td>
+                <td>74</td>
+              </tr>
+              <tr>
+                <td>Felipe Torres</td>
+                <td>41</td>
+                <td>2,8d</td>
+                <td>R$ 11.220</td>
+                <td>69</td>
+              </tr>
+            </tbody>
+          </table>
+
+        </section>
+
+      </article>
+
+    </main>
+
+  </section>
+  
+  <script src="scripts/app.js"></script>
+</body>
+
+</html>
