@@ -4,15 +4,15 @@
 
 Todos os endpoints deste sistema devem seguir o padrão de resposta JSON abaixo:
 
-| Código | `status`               | Significado                                                    |
-|--------|------------------------|----------------------------------------------------------------|
-| 200    | `success`              | Requisição bem-sucedida, com ou sem dados de retorno.          |
-| 201    | `created`              | Recurso criado com sucesso (usado em POST).                    |
-| 400    | `bad_request`          | Dados enviados pelo cliente são inválidos ou incompletos.      |
-| 401    | `unauthorized`         | Usuário não está autenticado (sem token ou token inválido).    |
-| 403    | `forbidden`            | Usuário autenticado, mas sem permissão para este recurso.      |
-| 404    | `not_found`            | O recurso solicitado não existe.                               |
-| 500    | `internal_server_error`| Erro inesperado no servidor.                                   |
+| Código | `type`    | `status`               | Significado                                                    |
+|--------|-----------|------------------------|----------------------------------------------------------------|
+| 200    | `success` | `success`              | Requisição bem-sucedida, com ou sem dados de retorno.          |
+| 201    | `success` | `created`              | Recurso criado com sucesso (usado em POST).                    |
+| 400    | `error`   | `bad_request`          | Dados enviados pelo cliente são inválidos ou incompletos.      |
+| 401    | `error`   | `unauthorized`         | Usuário não está autenticado (sem token ou token inválido).    |
+| 403    | `error`   | `forbidden`            | Usuário autenticado, mas sem permissão para este recurso.      |
+| 404    | `error`   | `not_found`            | O recurso solicitado não existe.                               |
+| 500    | `error`   | `internal_server_error`| Erro inesperado no servidor.                                   |
 
 ---
 
