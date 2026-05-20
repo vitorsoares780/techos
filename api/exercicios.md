@@ -430,6 +430,8 @@ Trate os seguintes cenários:
 
 ## Exercício 07 — Listando todas as categorias de FAQ
 
+Para essa atividade crie as seguintes namespaces: `App\Controller\Faqs` e `App\Models\Faqs`.
+
 ### Contextualizando
 
 Você vai iniciar o desenvolvimento do módulo de **Perguntas Frequentes (FAQ)** do sistema. Antes de trabalhar com as perguntas em si, é necessário listar as categorias disponíveis — pois toda pergunta pertence a uma categoria. O frontend usará essa listagem para exibir um menu de filtros ou popular um `<select>` no formulário de cadastro.
