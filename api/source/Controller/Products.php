@@ -45,4 +45,17 @@ class Products extends Api
 
         $this->call(200,"success","Produto encontrado","success")->back($product);
     }
+
+    public function create(array $data):void{
+        echo "Criar produto";
+        var_dump($data);
+    }
+    public function update(array $data):void{
+        echo "Atualizar produto";
+        var_dump($data);
+    }
+    public function delete(array $data):void{
+        echo "Deletar produto";
+        var_dump($data);
+    }
 }

@@ -37,9 +37,11 @@ $route->get("/products/list/{productId}", "Products:productsListById");
 
 $route->get("/products-categories/list", "ProductsCategories:productsCategoryList");
 $route->get("/products-categories/list/{categoryId}", "ProductsCategories:productsCategoryListById");
+$route->post("/products", "Products:create");
+$route->put("/products/{productID}","Products:update");
+$route->delete("/products/{productID}","Products:delete");
+
 // Fim - Exercícios - Desafios
-
-
 
 // localhost/acme-3am/api/hello
 $route->get("/hello", "Api:hello");
