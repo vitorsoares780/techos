@@ -77,8 +77,8 @@ body {
     --danger: #f87171;
     --info: #0ea5e9;
     --color-bg-soft: #15203a;
-    --gradient-hero: linear-gradient(135deg, #0f172a 0%, #1e40af 55%, #2563eb 100%);
-    --gradient-card: linear-gradient(135deg, #111827 0%, #1e293b 100%);
+    --gradient-hero: linear-gradient(135deg, #12295e 0%, #1e40af 55%, #2563eb 100%);
+    --gradient-card: linear-gradient(135deg, #0d1c3c 0%, #1e293b 100%);
     --shadow-soft: 0 8px 30px -18px rgba(0,0,0,0.55);
     --shadow-elegant: 0 20px 60px -20px rgba(0,0,0,0.6);
   }
