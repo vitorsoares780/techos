@@ -55,6 +55,7 @@ class Faq
     {
         $query = "SELECT * FROM faqs as f
                   JOIN faqs_categories as c ON f.faqs_category_id = c.id
+                  WHERE f.active = 1
                   GROUP BY c.name";
         $stmt = Connect::getInstance()->query($query);
         return $stmt->fetchAll();
@@ -64,7 +65,8 @@ class Faq
     {
         $query = "SELECT * FROM faqs as f
                   JOIN faqs_categories as c ON f.faqs_category_id = c.id
-                  WHERE f.id = :id";
+                  WHERE f.active = 1
+                  AND f.id = :id";
         $stmt = Connect::getInstance()->prepare($query);
         $stmt->bindValue(':id', $id);
         $stmt->execute();
@@ -122,6 +124,18 @@ class Faq
             if ($stmt->rowCount() > 0) {
                 return $stmt->fetchAll();
             }
+        }
+        return false;
+    }
+
+    public function delete(int $id): bool{
+        $query = "UPDATE faqs SET active = 0 WHERE id = :id AND active = 1";
+        $stmt = Connect::getInstance()->prepare($query);
+        $stmt->bindValue(':id', $id);
+        $stmt->execute();
+        if($stmt->rowCount() > 0){
+            $stmt->fetch();
+            return true;
         }
         return false;
     }

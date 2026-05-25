@@ -53,6 +53,9 @@ $route->post("/faqs/insert", "Faqs\Faqs:faqInsert");
 
 $route->put("/faqs/update/{faqId}", "Faqs\Faqs:faqUpdate");
 $route->put("/faqs-categories/update/{categoryId}", "Faqs\FaqsCategories:faqCategoryUpdate");
+
+$route->delete("/faqs/{faqId}", "Faqs\Faqs:faqDelete");
+$route->delete("/faqs-categories/{categoryId}", "Faqs\FaqsCategories:faqCategoryDelete");
 // --------------- Fim - Exercícios - Desafios ---------------
 
 // localhost/acme-3am/api/hello

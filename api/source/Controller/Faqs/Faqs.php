@@ -73,7 +73,7 @@ class Faqs extends Api
 
         $faq = new Faq(null, $faqs_cat_id, $question, $answer);
 
-        if($faq->insert() == false){
+        if ($faq->insert() == false) {
             $this->call(
                 500,
                 "internal_server_error",
@@ -93,9 +93,10 @@ class Faqs extends Api
         )->back($response);
     }
 
-    public function faqUpdate (array $data): void{
+    public function faqUpdate(array $data): void
+    {
         var_dump($data);  // DEBUG
-        if(!filter_var($data['faqId'], FILTER_VALIDATE_INT)){
+        if (!filter_var($data['faqId'], FILTER_VALIDATE_INT)) {
             $this->call(
                 400,
                 "bad_request",
@@ -107,7 +108,7 @@ class Faqs extends Api
 
         $faq = new Faq();
 
-        if($faq->update($data) === false){
+        if ($faq->update($data) === false) {
             $this->call(
                 404,
                 "not_found",
@@ -130,5 +131,37 @@ class Faqs extends Api
             "FAQ atualizado com sucesso",
             "success"
         )->back($response);
+    }
+
+    public function faqDelete(array $data): void
+    {
+        if(!filter_var($data['faqId'], FILTER_VALIDATE_INT)){
+            $this->call(
+                400,
+                "bad_request",
+                "ID do FAQ é obrigatório e deve ser um número inteiro",
+                "error"
+            )->back();
+            return;
+        }
+
+        $faq = new Faq();
+
+        if($faq->delete($data['faqId']) === false){
+            $this->call(
+                404,
+                "not_found",
+                "FAQ não encontrado",
+                "error"
+            )->back();
+            return;
+        }
+
+        $this->call(
+            200,
+            "success",
+            "FAQ removido com sucesso",
+            "success"
+        )->back();
     }
 }

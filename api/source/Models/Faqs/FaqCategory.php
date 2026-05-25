@@ -83,6 +83,25 @@ class FaqCategory
             return true;
         }
         return false;
+    }
 
+    public function delete(int $id): int|bool{
+        $query = "SELECT * FROM faqs WHERE faqs_category_id = :id AND active = 1";
+        $stmt = Connect::getInstance()->prepare($query);
+        $stmt->bindValue(':id', $id);
+        $stmt->execute();
+        if($stmt->rowCount() > 0){
+            return 400;
+        }
+
+        $query = "UPDATE faqs_categories SET active = 0 WHERE id = :id AND active = 1";
+        $stmt = Connect::getInstance()->prepare($query);
+        $stmt->bindValue(':id', $id);
+        $stmt->execute();
+        if($stmt->rowCount() > 0){
+            $stmt->fetch();
+            return true;
+        }
+        return false;
     }
 }

@@ -125,4 +125,45 @@ class FaqsCategories extends Api
             "success"
         )->back($response);
     }
+
+    public function faqCategoryDelete(array $data): void
+    {
+        if(!filter_var($data['categoryId'], FILTER_VALIDATE_INT)){
+            $this->call(
+                400,
+                "bad_request",
+                "ID da categoria é obrigatório e deve ser um número inteiro",
+                "error"
+            )->back();
+            return;
+        }
+
+        $faqCategory = new FaqCategory();
+        $faqCategory = $faqCategory->delete($data['categoryId']);
+
+        if($faqCategory === 400){
+            $this->call(
+                400,
+                "bad_request",
+                "Não é possível remover uma categoria que possui FAQs ativos",
+                "error"
+            )->back();
+            return;
+        }else if($faqCategory === false){
+            $this->call(
+                404,
+                "not_found",
+                "FAQ não encontrado",
+                "error"
+            )->back();
+            return;
+        }
+
+        $this->call(
+            200,
+            "success",
+            "FAQ removido com sucesso",
+            "success"
+        )->back();
+    }
 }
