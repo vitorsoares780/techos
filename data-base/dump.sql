@@ -154,14 +154,14 @@ DROP TABLE IF EXISTS `users`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `users` (
                          `id` int NOT NULL AUTO_INCREMENT,
-                         `typeId` int NOT NULL,
+                         `type_id` int NOT NULL,
                          `name` varchar(255) NOT NULL,
                          `email` varchar(255) NOT NULL,
                          `password` varchar(255) NOT NULL,
                          `photo` varchar(255) DEFAULT NULL,
                          PRIMARY KEY (`id`),
-                         KEY `fk_users_user_types_idx` (`typeId`),
-                         CONSTRAINT `fk_users_user_types` FOREIGN KEY (`typeId`) REFERENCES `user_types` (`id`)
+                         KEY `fk_users_user_types_idx` (`type_id`),
+                         CONSTRAINT `fk_users_user_types` FOREIGN KEY (`type_id`) REFERENCES `user_types` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -184,4 +184,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2026-05-20  8:40:09
+-- Dump completed on 2026-05-25  8:59:48
