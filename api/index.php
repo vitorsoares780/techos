@@ -26,6 +26,7 @@ $route = new Router(url("api"),":");
 $route->namespace("Source\Controller");
 
 // Início - Exercícios - Desafios
+// Produtos
 $route->group("/products");
 $route->get("/list/{product_id}","Products:listById"); // select by id
 $route->get("/list","Products:listAll"); // select all
@@ -34,11 +35,19 @@ $route->post("/","Products:insert"); // insert
 $route->put("/{product_id}","Products:update"); // update
 $route->delete("/{product_id}","Products:delete"); // update
 $route->group(null);
-// Fim - Exercícios - Desafios
+// Categorias de FAQs
+$route->group("/faqs-categories");
 
+$route->group(null);
+// FAQs
 $route->group("/faqs");
 
 $route->group(null);
+// Categorias de FAQs
+$route->group("/faqs-categories");
+
+$route->group(null);
+// Fim - Exercícios - Desafios
 
 $route->dispatch();
 
