@@ -4,6 +4,7 @@ namespace source\Controller;
 
 class Api
 {
+    protected $response = [];
 
     public function hello()
     {
