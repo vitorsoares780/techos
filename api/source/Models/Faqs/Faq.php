@@ -10,13 +10,15 @@ class Faq
     private ?int $categoryId;
     private ?string $question;
     private ?string $answer;
+    private ?int $active;
 
-    public function __construct(?int $id = null, ?int $categoryId = null, ?string $question = null, ?string $answer = null)
+    public function __construct(?int $id = null, ?int $categoryId = null, ?string $question = null, ?string $answer = null, ?int $active = null)
     {
         $this->id = $id;
         $this->categoryId = $categoryId;
         $this->question = $question;
         $this->answer = $answer;
+        $this->active = $active;
     }
     public function getId(): int
     {
@@ -53,7 +55,8 @@ class Faq
 
     public function listAll(): array
     {
-        $query = "SELECT * FROM faqs as f
+        $query = "SELECT f.id, f.question, f.answer, c.name as 'category_name'
+                  FROM faqs as f
                   JOIN faqs_categories as c ON f.faqs_category_id = c.id
                   WHERE f.active = 1
                   GROUP BY c.name";

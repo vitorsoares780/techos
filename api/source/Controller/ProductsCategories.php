@@ -3,7 +3,7 @@
 namespace source\Controller;
 
 use Source\Controller\Api;
-use Source\Models\ProductCategory;
+use Source\Models\Store\ProductCategory;
 
 class ProductsCategories extends Api
 {

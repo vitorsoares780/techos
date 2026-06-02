@@ -3,7 +3,7 @@
 namespace source\Controller;
 
 use Source\Controller\Api;
-use Source\Models\Product;
+use Source\Models\Store\Product;
 
 $product = '{
   "name": "Headset HyperX Cloud II",
