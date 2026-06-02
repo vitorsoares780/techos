@@ -31,17 +31,30 @@ $route->namespace("Source\Controller");
 
 /* ============== $route->get("endereço", "ação"); ===============================*/
 
-//ROTAS PARA ACESSAR UMA FUNÇÃO DA CLASSE "PRODUCTS" (USAR URL NO NAVEGADOR)
+
+// ----------- USERS ------------------
+$route->group("/users");
+$route->post("/register","Users:register"); // Registrar usuário comum
+$route->post("/login","Users:auth"); // login de usuário comum
+$route->put("/update","Users:update"); // update de usuário comum
+$route->post("/register-admin","Users:registerAdmin"); // Registrar usuário admin NÃO IMPLEMENTADO
+$route->post("/login-admin","Users:authAdmin"); // login de usuário admin
+$route->put("/update-admin","Users:updateAdmin"); // update de usuário admin
+$route->group(null);
+
+
+//----------- PRODUCTS -----------------------
 $route->get("/products/list", "Products:productsList");
 $route->get("/products/list/{productId}", "Products:productsListById");
-
-$route->get("/products-categories/list", "ProductsCategories:productsCategoryList");
-$route->get("/products-categories/list/{categoryId}", "ProductsCategories:productsCategoryListById");
 $route->post("/products", "Products:create");
 $route->put("/products/{productID}","Products:update");
 $route->delete("/products/{productID}","Products:delete");
 
-/* ============== FAQS ================*/
+$route->get("/products-categories/list", "ProductsCategories:productsCategoryList");
+$route->get("/products-categories/list/{categoryId}", "ProductsCategories:productsCategoryListById");
+
+
+/* ------------------ FAQS ------------------*/
 $route->get("/faqs-categories/list", "Faqs\FaqsCategories:faqsCategoryList");
 $route->get("/faqs-categories/list/{categoryId}", "Faqs\FaqsCategories:faqsCategoryListById");
 
@@ -56,7 +69,10 @@ $route->put("/faqs-categories/update/{categoryId}", "Faqs\FaqsCategories:faqCate
 
 $route->delete("/faqs/{faqId}", "Faqs\Faqs:faqDelete");
 $route->delete("/faqs-categories/{categoryId}", "Faqs\FaqsCategories:faqCategoryDelete");
+
+
 // --------------- Fim - Exercícios - Desafios ---------------
+
 
 // localhost/acme-3am/api/hello
 $route->get("/hello", "Api:hello");
