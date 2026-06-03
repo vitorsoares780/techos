@@ -1,6 +1,6 @@
 <?php
 
-namespace source\Controller\Faqs;
+namespace Source\Controller\Faqs;
 
 use Source\Controller\Api;
 use Source\Models\Faqs\FaqCategory;

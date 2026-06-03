@@ -23,7 +23,7 @@ use CoffeeCode\Router\Router;
 // localhost/acme-3am/api
 $route = new Router(url("api"),":");
 
-$route->namespace("Source\Controller");
+$route->namespace("source\Controller");
 
 
 
@@ -48,14 +48,14 @@ $route->get("/faqs-categories/list/{categoryId}", "Faqs\FaqsCategories:faqsCateg
 $route->get("/faqs/list", "Faqs\Faqs:faqsListAll");
 $route->get("/faqs/list/{faqId}", "Faqs\Faqs:faqsListById");
 
-$route->post("/faqs-categories/create", "Faqs\FaqsCategories:faqsCategoriesCreate");
-$route->post("/faqs/insert", "Faqs\Faqs:faqInsert");
+$route->post("/faqs-categories", "FaqsCategories:faqsCategoriesCreate");
+$route->post("/faqs/insert", "Faqs:faqInsert");
 
-$route->put("/faqs/update/{faqId}", "Faqs\Faqs:faqUpdate");
-$route->put("/faqs-categories/update/{categoryId}", "Faqs\FaqsCategories:faqCategoryUpdate");
+$route->put("/faqs/update/{faqId}", "Faqs:faqUpdate");
+$route->put("/faqs-categories/update/{categoryId}", "FaqsCategories:faqCategoryUpdate");
 
-$route->delete("/faqs/{faqId}", "Faqs\Faqs:faqDelete");
-$route->delete("/faqs-categories/{categoryId}", "Faqs\FaqsCategories:faqCategoryDelete");
+$route->delete("/faqs/{faqId}", "Faqs:faqDelete");
+$route->delete("/faqs-categories/{categoryId}", "FaqsCategories:faqCategoryDelete");
 // --------------- Fim - Exercícios - Desafios ---------------
 
 // localhost/acme-3am/api/hello

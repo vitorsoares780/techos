@@ -58,7 +58,6 @@ class Faq
         $query = "SELECT f.id, f.question, f.answer, c.name as 'category_name'
                   FROM faqs as f
                   JOIN faqs_categories as c ON f.faqs_category_id = c.id
-                  WHERE f.active = 1
                   GROUP BY c.name";
         $stmt = Connect::getInstance()->query($query);
         return $stmt->fetchAll();
@@ -68,8 +67,7 @@ class Faq
     {
         $query = "SELECT * FROM faqs as f
                   JOIN faqs_categories as c ON f.faqs_category_id = c.id
-                  WHERE f.active = 1
-                  AND f.id = :id";
+                  WHERE f.id = :id";
         $stmt = Connect::getInstance()->prepare($query);
         $stmt->bindValue(':id', $id);
         $stmt->execute();
