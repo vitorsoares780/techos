@@ -13,7 +13,7 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,N
 -- -----------------------------------------------------
 CREATE SCHEMA IF NOT EXISTS `db-techos` DEFAULT CHARACTER SET utf8mb3 ;
 USE `db-techos` ;
-
+-- drop database `db-techos`;
 -- -----------------------------------------------------
 -- Table `db-techos`.`faqs_categories`
 -- -----------------------------------------------------
@@ -46,34 +46,98 @@ AUTO_INCREMENT = 16
 DEFAULT CHARACTER SET = utf8mb3;
 
 
+
 -- -----------------------------------------------------
--- Table `db-techos`.`products_categories`
+-- Table `db-techos`.`plans`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `db-techos`.`products_categories` (
+CREATE TABLE IF NOT EXISTS `db-techos`.`plans` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(255) NOT NULL,
+  `price` VARCHAR(255) NOT NULL,
+  `active` TINYINT(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`))
+ENGINE = InnoDB
+AUTO_INCREMENT = 6
+DEFAULT CHARACTER SET = utf8mb3;
+
+
+-- -----------------------------------------------------
+-- Table `db-techos`.`companies`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `db-techos`.`companies` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `cnpj` VARCHAR(30) NOT NULL,
+  `name` VARCHAR(255) NOT NULL,
+  `email` VARCHAR(255) NOT NULL,
+  `owner_id` INT NOT NULL,
+  `plan_id` INT NOT NULL,
+  `creation_time` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+  `active` TINYINT(1) NOT NULL DEFAULT '1',
+  PRIMARY KEY (`id`),
+  CONSTRAINT `fk_companies_owner`
+    FOREIGN KEY (`owner_id`)
+    REFERENCES `db-techos`.`users` (`id`),
+  CONSTRAINT `fk_companies_plan`
+    FOREIGN KEY (`plan_id`)
+    REFERENCES `db-techos`.`plans` (`id`))
 ENGINE = InnoDB
 AUTO_INCREMENT = 9
 DEFAULT CHARACTER SET = utf8mb3;
 
 
 -- -----------------------------------------------------
--- Table `db-techos`.`products`
+-- Table `db-techos`.`employees`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `db-techos`.`products` (
+CREATE TABLE IF NOT EXISTS `db-techos`.`employees` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `category_id` INT NOT NULL,
-  `name` VARCHAR(255) NOT NULL,
-  `price` DECIMAL(10,2) NOT NULL,
+  `user_id` INT NOT NULL,
+  `company_id` INT NOT NULL,
+  `active` TINYINT(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`),
-  INDEX `fk_products_products_categories1_idx` (`category_id` ASC) VISIBLE,
-  CONSTRAINT `fk_products_products_categories1`
-    FOREIGN KEY (`category_id`)
-    REFERENCES `db-techos`.`products_categories` (`id`))
+  CONSTRAINT `fk_employees_user`
+    FOREIGN KEY (`user_id`)
+    REFERENCES `db-techos`.`users` (`id`),
+  CONSTRAINT `fk_employees_company`
+    FOREIGN KEY (`company_id`)
+    REFERENCES `db-techos`.`companies` (`id`))
 ENGINE = InnoDB
 AUTO_INCREMENT = 51
 DEFAULT CHARACTER SET = utf8mb3;
+
+
+-- -----------------------------------------------------
+-- Table `db-techos`.`service_orders`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `db-techos`.`service_orders` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `user_id` INT NOT NULL,
+  `device_id` INT NOT NULL,
+  `company_id` INT NOT NULL,
+  `defect` VARCHAR(150) BINARY NOT NULL,
+  `diagnosis` VARCHAR(150) NULL DEFAULT NULL,
+  `status` ENUM('aberta', 'aguardando_peca', 'em_andamento', 'cancelada', 'concluida') NOT NULL DEFAULT 'aberta',
+  `price` DOUBLE NOT NULL,
+  `photo` VARCHAR(255) NULL DEFAULT NULL,
+  `creation_time` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+  `active` TINYINT(1) NOT NULL DEFAULT '1',
+  PRIMARY KEY (`id`),
+  INDEX `fk_users_service_order_user` (`user_id` ASC) VISIBLE,
+  INDEX `fk_devices_service_order_device` (`device_id` ASC) VISIBLE,
+  CONSTRAINT `service_orders_user_id`
+    FOREIGN KEY (`user_id`)
+    REFERENCES `db-techos`.`users` (`id`),
+  CONSTRAINT `service_orders_device_id`
+    FOREIGN KEY (`device_id`)
+    REFERENCES `db-techos`.`devices` (`id`),
+  CONSTRAINT `service_orders_company_id`
+    FOREIGN KEY (`company_id`)
+    REFERENCES `db-techos`.`companies` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_unicode_ci;
+
 
 
 -- -----------------------------------------------------
@@ -88,6 +152,7 @@ AUTO_INCREMENT = 3
 DEFAULT CHARACTER SET = utf8mb3;
 
 
+
 -- -----------------------------------------------------
 -- Table `db-techos`.`users`
 -- -----------------------------------------------------
@@ -98,6 +163,7 @@ CREATE TABLE IF NOT EXISTS `db-techos`.`users` (
   `email` VARCHAR(255) NOT NULL,
   `password` VARCHAR(255) NOT NULL,
   `photo` VARCHAR(255) NULL DEFAULT NULL,
+  `active` TINYINT(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`),
   INDEX `fk_users_user_types_idx` (`typeId` ASC) VISIBLE,
   CONSTRAINT `fk_users_user_types`
@@ -107,31 +173,6 @@ ENGINE = InnoDB
 AUTO_INCREMENT = 3
 DEFAULT CHARACTER SET = utf8mb3;
 
-
--- -----------------------------------------------------
--- Table `db-techos`.`service_orders`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `db-techos`.`service_orders` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `user_id` INT NOT NULL,
-  `device_id` INT NOT NULL,
-  `defect` VARCHAR(150) BINARY NOT NULL,
-  `diagnosis` VARCHAR(150) NULL DEFAULT NULL,
-  `status` ENUM('aberta', 'aguardando_peca', 'em_andamento', 'cancelada', 'concluida') NOT NULL DEFAULT 'aberta',
-  `price` DOUBLE NOT NULL,
-  `photo` VARCHAR(255) NULL DEFAULT NULL,
-  `creation_time` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`),
-  INDEX `fk_users_service_order_user` (`user_id` ASC) VISIBLE,
-  INDEX `fk_devices_service_order_device` (`device_id` ASC) VISIBLE,
-  CONSTRAINT `service_orders_user_id`
-    FOREIGN KEY (`user_id`)
-    REFERENCES `db-techos`.`users` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8mb4
-COLLATE = utf8mb4_unicode_ci;
 
 
 -- -----------------------------------------------------
@@ -144,25 +185,6 @@ CREATE TABLE IF NOT EXISTS `db-techos`.`devices_categories` (
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;
 
-
--- -----------------------------------------------------
--- Table `db-techos`.`users`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `db-techos`.`users` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `typeId` INT NOT NULL,
-  `name` VARCHAR(255) NOT NULL,
-  `email` VARCHAR(255) NOT NULL,
-  `password` VARCHAR(255) NOT NULL,
-  `photo` VARCHAR(255) NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  INDEX `fk_users_user_types_idx` (`typeId` ASC) VISIBLE,
-  CONSTRAINT `fk_users_user_types`
-    FOREIGN KEY (`typeId`)
-    REFERENCES `db-techos`.`user_types` (`id`))
-ENGINE = InnoDB
-AUTO_INCREMENT = 3
-DEFAULT CHARACTER SET = utf8mb3;
 
 
 -- -----------------------------------------------------
