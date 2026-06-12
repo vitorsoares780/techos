@@ -114,7 +114,6 @@ CREATE TABLE IF NOT EXISTS `db-techos`.`service_orders` (
   `device_id` INT NOT NULL,
   `company_id` INT NOT NULL,
   `defect` VARCHAR(150) BINARY NOT NULL,
-  `diagnosis` VARCHAR(150) NULL DEFAULT NULL,
   `status` ENUM('aberta', 'aguardando_peca', 'em_andamento', 'cancelada', 'concluida') NOT NULL DEFAULT 'aberta',
   `price` DOUBLE NOT NULL,
   `photo` VARCHAR(255) NULL DEFAULT NULL,
