@@ -1,41 +1,36 @@
 <?php
 
-namespace source\statuss;
+namespace source\Models\Devices;
 
 use Source\Core\Connect;
 
-class ServiceOrder
+class Device
 {
     private ?int $id;
     private ?int $userId;
-    private ?int $deviceId;
-    private ?int $companyId;
-    private ?string $defect;
-    private ?string $status;
-    private ?float $price;
-    private ?string $photo;
+    private ?int $categoryId;
+    private ?string $serialNumber;
+    private ?string $model;
+    private ?string $brand;
     private ?string $creationTime;
     private ?int $active;
 
     public function __construct(
         ?int $id = null,
         ?int $userId = null,
-        ?int $deviceId = null,
-        ?int $companyId = null,
-        ?string $defect = null,
-        ?string $status = null,
-        ?float $price = null,
-        ?string $photo = null,
+        ?int $categoryId = null,
+        ?string $serialNumber = null,
+        ?string $model = null,
+        ?string $brand = null,
         ?string $creationTime = null,
         ?int $active = null
     ) {
         $this->id = $id;
         $this->userId = $userId;
-        $this->deviceId = $deviceId;
-        $this->deviceId = $deviceId;
-        $this->defect = $defect;
-        $this->status = $status;
-        $this->price = $price;
+        $this->categoryId = $categoryId;
+        $this->serialNumber = $serialNumber;
+        $this->model = $model;
+        $this->brand = $brand;
         $this->creationTime = date('d/m/Y H:i:s', $creationTime);
         $this->active = $active;
     }
@@ -47,21 +42,21 @@ class ServiceOrder
     {
         return $this->userId;
     }
-    public function getDeviceId(): int
+    public function getCategoryId(): int
     {
-        return $this->deviceId;
+        return $this->categoryId;
     }
-    public function getDefect(): string
+    public function getSerialNumber(): string
     {
-        return $this->defect;
+        return $this->serialNumber;
     }
-    public function getStatus(): string
+    public function getModel(): string
     {
-        return $this->status;
+        return $this->model;
     }
-    public function getPrice(): float
+    public function getBrand(): string
     {
-        return $this->price;
+        return $this->brand;
     }
     public function getCreationTime(): string
     {
@@ -79,21 +74,21 @@ class ServiceOrder
     {
         $this->userId = $userId;
     }
-    public function setDeviceId(int $deviceId)
+    public function setCategoryId(int $categoryId)
     {
-        $this->deviceId = $deviceId;
+        $this->categoryId = $categoryId;
     }
-    public function setDefect(string $defect)
+    public function setSerialNumber(string $serialNumber)
     {
-        $this->defect = $defect;
+        $this->serialNumber = $serialNumber;
     }
-    public function setStatus(string $status)
+    public function setModel(string $model)
     {
-        $this->status = $status;
+        $this->model = $model;
     }
-    public function setPrice(float $price)
+    public function setBrand(string $brand)
     {
-        $this->price = $price;
+        $this->brand = $brand;
     }
     public function setCreationTime(string $creationTime)
     {
@@ -106,7 +101,7 @@ class ServiceOrder
 
     public function listAll(): array
     {
-        $query = "SELECT d.id, d.serial_number, d.status, d.price, c.name as 'category_name', u.name as 'user_name'
+        $query = "SELECT d.id, d.serial_number, d.model, d.brand, c.name as 'category_name', u.name as 'user_name'
                   FROM devices as d
                   JOIN users as u ON d.user_id = u.id
                   JOIN devices_categories as c ON d.category_id = c.id
@@ -135,7 +130,7 @@ class ServiceOrder
 
     public function insert(): array|bool
     {
-        $query = "INSERT INTO devices (user_id, category_id, serial_number, status, price) VALUES ($this->userId, $this->categoryId, $this->defect, $this->status, $this->price)";
+        $query = "INSERT INTO devices (user_id, category_id, serial_number, model, brand) VALUES ($this->userId, $this->categoryId, $this->serialNumber, $this->model, $this->brand)";
         $stmt = Connect::getInstance()->query($query);
         if ($stmt->rowCount() > 0) {
             $this->id = Connect::getInstance()->lastInsertId();
@@ -164,14 +159,14 @@ class ServiceOrder
         }
         $stmt->fetch();
 
-        $query = "UPDATE devices SET user_id = :user_id, category_id = :cat_id, serial_number = :serial_number, status = :status, price = :price WHERE id = :id";
+        $query = "UPDATE devices SET user_id = :user_id, category_id = :cat_id, serial_number = :serial_number, model = :model, brand = :brand WHERE id = :id";
         $stmt = Connect::getInstance()->prepare($query);
         $stmt->execute([
             ":user_id" => $data['user_id'],
             ":cat_id" => $data['category_id'],
             ":serial_number" => $data['serial_number'],
-            ":status" => $data['status'],
-            ":price" => $data['price'],
+            ":model" => $data['model'],
+            ":brand" => $data['brand'],
             ":id" => $data['deviceId']
         ]);
         if ($stmt->rowCount() > 0) {
