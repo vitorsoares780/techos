@@ -30,10 +30,10 @@
     </label>
     <section class="app-topbar-actions">
       <button class="icon-btn" type="button" aria-label="Notificações" data-badge="3">🔔</button>
-      <button class="user-chip" type="button" aria-label="Conta" data-user-menu>
+      <a class="user-chip" href="perfil.html" aria-label="Conta">
         <span class="avatar" aria-hidden="true">MC</span>
         <span>Marina</span>
-      </button>
+      </a>
     </section>
   </header>
   <section class="app-shell">
@@ -49,20 +49,14 @@
           </li>
           <li><a class="sidebar-link" href="clientes.html"><span class="ico" aria-hidden="true">👥</span>Clientes</a>
           </li>
-          <li><a class="sidebar-link" href="equipamentos.html"><span class="ico"
-                aria-hidden="true">🛠️</span>Equipamentos</a></li>
           <li><a class="sidebar-link" href="equipe.html"><span class="ico" aria-hidden="true">👷</span>Equipe</a></li>
-          <li><a class="sidebar-link" href="relatorios.html"><span class="ico"
-                aria-hidden="true">📈</span>Relatórios</a></li>
         </ul>
       </section>
       <section class="sidebar-section">
         <h4>Conta</h4>
         <ul>
           <li><a class="sidebar-link" aria-current="page" href="perfil.html"><span class="ico"
-                aria-hidden="true">👤</span>Perfil</a></li>
-          <li><a class="sidebar-link" href="configuracoes.html"><span class="ico"
-                aria-hidden="true">⚙️</span>Configurações</a></li>
+                aria-hidden="true">👤</span>Perfil e Configurações</a></li>
           <li><a class="sidebar-link" href="../../../index.html"><span class="ico" aria-hidden="true">🚪</span>Sair</a>
           </li>
         </ul>
@@ -71,8 +65,8 @@
     <main class="app-main">
       <section class="page-head">
         <section>
-          <h1>Meu perfil</h1>
-          <p>Atualize suas informações pessoais e senha.</p>
+          <h1>Perfil e Configurações</h1>
+          <p>Gerencie seus dados pessoais, senha e preferências da assistência.</p>
         </section>
       </section>
 
@@ -109,11 +103,71 @@
           </section>
           <section class="form-actions"><button class="btn btn-primary" type="submit">Atualizar senha</button></section>
         </form>
+
+        <form class="panel">
+          <header class="panel-head">
+            <h2>Empresa</h2>
+          </header>
+          <section class="form-grid">
+            <section class="form-field"><label for="c-nome">Razão social</label><input id="c-nome"
+                value="AssistTech Reparos Ltda"></section>
+            <section class="form-field"><label for="c-cnpj">CNPJ</label><input id="c-cnpj" value="12.345.678/0001-90">
+            </section>
+            <section class="form-field"><label for="c-tel">Telefone comercial</label><input id="c-tel"
+                value="(11) 4002-8922"></section>
+            <section class="form-field full"><label for="c-end">Endereço</label><input id="c-end"
+                value="Av. Paulista, 1000 — São Paulo/SP"></section>
+          </section>
+          <section class="form-actions"><button class="btn btn-primary" type="submit">Salvar</button></section>
+        </form>
+
+        <article class="panel">
+          <header class="panel-head">
+            <h2>Preferências da OS</h2>
+          </header>
+          <ul style="display:flex;flex-direction:column;gap:0.9rem;font-size:0.92rem">
+            <li style="display:flex;justify-content:space-between;align-items:center"><label for="pref-aviso">Notificar
+                cliente por WhatsApp ao mudar status</label><input id="pref-aviso" type="checkbox" checked></li>
+            <li style="display:flex;justify-content:space-between;align-items:center"><label for="pref-prazo">Definir
+                prazo padrão de 3 dias</label><input id="pref-prazo" type="checkbox" checked></li>
+            <li style="display:flex;justify-content:space-between;align-items:center"><label for="pref-orca">Exigir
+                aprovação de orçamento &gt; R$ 200</label><input id="pref-orca" type="checkbox"></li>
+            <li style="display:flex;justify-content:space-between;align-items:center"><label for="pref-pdf">Anexar PDF
+                da OS no e-mail de conclusão</label><input id="pref-pdf" type="checkbox" checked></li>
+          </ul>
+        </article>
+
+        <article class="panel">
+          <header class="panel-head">
+            <h2>Integrações</h2>
+          </header>
+          <ul style="display:flex;flex-direction:column;gap:0.6rem">
+            <li
+              style="display:flex;justify-content:space-between;align-items:center;padding:0.6rem;border:1px solid var(--color-border);border-radius:var(--radius-md)">
+              <span>💬 WhatsApp Business</span><button class="btn btn-ghost" type="button">Conectar</button></li>
+            <li
+              style="display:flex;justify-content:space-between;align-items:center;padding:0.6rem;border:1px solid var(--color-border);border-radius:var(--radius-md)">
+              <span>💳 Pagamentos (Pix/Cartão)</span><button class="btn btn-ghost" type="button">Conectado</button></li>
+            <li
+              style="display:flex;justify-content:space-between;align-items:center;padding:0.6rem;border:1px solid var(--color-border);border-radius:var(--radius-md)">
+              <span>📧 SMTP de e-mail</span><button class="btn btn-ghost" type="button">Configurar</button></li>
+          </ul>
+        </article>
+
+        <article class="panel">
+          <header class="panel-head">
+            <h2>Plano</h2>
+          </header>
+          <p style="font-size:0.92rem;color:var(--color-text-muted)">Você está no plano <strong
+              style="color:var(--color-text)">Profissional</strong> · R$ 199/mês · próxima cobrança em 02/06/2026.</p>
+          <section class="form-actions"><a class="btn btn-ghost" href="../public/precos.html">Mudar plano</a></section>
+        </article>
       </section>
     </main>
   </section>
   <script src="scripts/app.js"></script>
   <script src="scripts/perfil.js"></script>
+  <script src="scripts/notification-badge.js"></script>
 </body>
 
 </html>

@@ -4,83 +4,82 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ordens de serviço — TechOS Admin</title>
-  <meta name="description" content="Gestão de ordens de serviço no painel administrativo do TechOS.">
+  <title>Ordens de serviço — TechOS</title>
+  <meta name="description" content="Painel da assistência técnica no TechOS.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet"
     href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@600;700;800&display=swap">
   <link rel="stylesheet" href="../_common/styles/base.css">
-  <link rel="stylesheet" href="styles/admin.css">
+  <link rel="stylesheet" href="styles/app.css">
 </head>
 
-<body class="admin">
-
-  <header class="admin-topbar">
+<body class="app">
+  <header class="app-topbar">
     <section style="display:flex;align-items:center;gap:0.75rem">
       <button class="sidebar-toggle" type="button" aria-label="Abrir menu lateral" data-sidebar-toggle>
         <span></span><span></span><span></span>
       </button>
-      <a class="brand" href="painel.html">
+      <a class="brand" href="dashboard.html">
         <img src="../_common/images/logo.png" class="logo">
-        TechOS <span style="font-size:0.7rem;font-weight:500;color:var(--color-text-muted);margin-left:0.25rem">Admin</span>
+        TechOS
       </a>
     </section>
-    <label class="admin-search" aria-label="Buscar">
-      <input type="search" placeholder="Buscar OS, usuário ou cliente…" data-global-search>
+    <label class="app-search" aria-label="Buscar">
+      <input type="search" placeholder="Buscar OS, cliente ou equipamento…" data-global-search>
     </label>
-    <section class="admin-topbar-actions">
-      <button class="icon-btn" type="button" aria-label="Notificações" data-badge="5">🔔</button>
-      <a class="user-chip" href="configuracoes.html" aria-label="Conta">
-        <span class="avatar" style="width:1.75rem;height:1.75rem;font-size:0.78rem" aria-hidden="true">VS</span>
-        <span>Admin</span>
-      </a>
+    <section class="app-topbar-actions">
+      <button class="icon-btn" type="button" aria-label="Notificações" data-badge="3">🔔</button>
+      <button class="user-chip" type="button" aria-label="Conta" data-user-menu>
+        <span class="avatar" aria-hidden="true">MC</span>
+        <span>Marina</span>
+      </button>
     </section>
   </header>
-
-  <section class="admin-shell">
-
-    <aside class="admin-sidebar" data-sidebar>
+  <section class="app-shell">
+    <aside class="app-sidebar" data-sidebar>
       <section class="sidebar-section">
         <h4>Operação</h4>
         <ul>
-          <li><a class="sidebar-link" href="painel.html"><span class="ico" aria-hidden="true">📊</span>Painel</a></li>
-          <li><a class="sidebar-link" aria-current="page" href="ordens.html"><span class="ico" aria-hidden="true">🧾</span>Ordens de serviço</a></li>
-          <li><a class="sidebar-link" href="ordem-nova.html"><span class="ico" aria-hidden="true">➕</span>Nova OS</a></li>
-          <li><a class="sidebar-link" href="clientes.html"><span class="ico" aria-hidden="true">👥</span>Clientes</a></li>
-        </ul>
-      </section>
-      <section class="sidebar-section">
-        <h4>Administração</h4>
-        <ul>
-          <li><a class="sidebar-link" href="usuarios.html"><span class="ico" aria-hidden="true">👤</span>Usuários</a></li>
-          <li><a class="sidebar-link" href="configuracoes.html"><span class="ico" aria-hidden="true">⚙️</span>Configurações</a></li>
+          <li><a class="sidebar-link" href="dashboard.html"><span class="ico" aria-hidden="true">📊</span>Visão
+              geral</a></li>
+          <li><a class="sidebar-link" aria-current="page" href="ordens.html"><span class="ico"
+                aria-hidden="true">🧾</span>Ordens de serviço</a></li>
+          <li><a class="sidebar-link" href="ordem-nova.html"><span class="ico" aria-hidden="true">➕</span>Nova OS</a>
+          </li>
+          <li><a class="sidebar-link" href="clientes.html"><span class="ico" aria-hidden="true">👥</span>Clientes</a>
+          </li>
+          <li><a class="sidebar-link" href="equipamentos.html"><span class="ico"
+                aria-hidden="true">🛠️</span>Equipamentos</a></li>
+          <li><a class="sidebar-link" href="equipe.html"><span class="ico" aria-hidden="true">👷</span>Equipe</a></li>
+                aria-hidden="true">📈</span>Relatórios</a></li>
         </ul>
       </section>
       <section class="sidebar-section">
         <h4>Conta</h4>
         <ul>
-          <li><a class="sidebar-link" href="../public/login.html"><span class="ico" aria-hidden="true">🚪</span>Sair</a></li>
+          <li><a class="sidebar-link" href="perfil.html"><span class="ico" aria-hidden="true">👤</span>Perfil</a></li>
+          <li><a class="sidebar-link" href="configuracoes.html"><span class="ico"
+                aria-hidden="true">⚙️</span>Configurações</a></li>
+          <li><a class="sidebar-link" href="../../../index.html"><span class="ico" aria-hidden="true">🚪</span>Sair</a>
+          </li>
         </ul>
       </section>
     </aside>
-
-    <main class="admin-main">
-
+    <main class="app-main">
       <section class="page-head">
         <section>
           <h1>Ordens de serviço</h1>
-          <p>Gerencie todas as OS da VS Tech.</p>
+          <p>Gerencie todas as OS da sua assistência.</p>
         </section>
         <section class="page-actions">
-          <button class="btn btn-ghost" type="button" data-export-csv>Exportar CSV</button>
+          <a class="btn btn-ghost" href="#" data-export-csv>Exportar CSV</a>
           <a class="btn btn-primary" href="ordem-nova.html">+ Nova OS</a>
         </section>
       </section>
 
       <article class="panel">
-        <!-- TODO: substituir filtros por chamadas reais à API GET /api/admin/ordens -->
-        <form class="toolbar" data-filter-form>
+        <form class="toolbar" data-filter-form onsubmit="return false">
           <input class="grow" type="search" name="q" placeholder="Buscar por nº, cliente ou equipamento…">
           <select name="status" aria-label="Status">
             <option value="">Todos os status</option>
@@ -90,19 +89,23 @@
             <option value="concluida">Concluída</option>
             <option value="cancelada">Cancelada</option>
           </select>
+          <select name="tecnico" aria-label="Técnico">
+            <option value="">Todos os técnicos</option>
+            <option>Ricardo Alves</option>
+            <option>Júlia Pires</option>
+            <option>Felipe Torres</option>
+          </select>
           <input type="date" name="from" aria-label="De">
           <input type="date" name="to" aria-label="Até">
         </form>
-
         <section class="table-wrap">
-          <!-- TODO: substituir por dados reais da API GET /api/admin/ordens -->
           <table class="data" data-os-table>
             <thead>
               <tr>
                 <th>Nº</th>
                 <th>Cliente</th>
                 <th>Equipamento</th>
-                <th>Defeito</th>
+                <th>Técnico</th>
                 <th>Status</th>
                 <th>Abertura</th>
                 <th>Conclusão</th>
@@ -114,8 +117,8 @@
               <tr>
                 <td>#1042</td>
                 <td>Carla Andrade</td>
-                <td>iPhone 14 Pro</td>
-                <td>Tela quebrada</td>
+                <td>Notebook Dell G15</td>
+                <td>Ricardo Alves</td>
                 <td><span class="pill andamento">Em andamento</span></td>
                 <td>14/05</td>
                 <td></td>
@@ -125,88 +128,86 @@
               <tr>
                 <td>#1041</td>
                 <td>João Vieira</td>
-                <td>Samsung Galaxy S23</td>
-                <td>Bateria</td>
+                <td>iPhone 13</td>
+                <td>Júlia Pires</td>
                 <td><span class="pill aguardando">Aguardando peça</span></td>
                 <td>14/05</td>
-                <td></td>
-                <td>R$ 180,00</td>
-                <td><span class="row-actions"><a href="ordem-detalhe.html">Abrir</a></span></td>
-              </tr>
-              <tr>
-                <td>#1040</td>
-                <td>Pedro Lemos</td>
-                <td>Motorola Edge 30</td>
-                <td>Não carrega</td>
-                <td><span class="pill aberta">Aberta</span></td>
-                <td>14/05</td>
-                <td></td>
-                <td>R$ 90,00</td>
-                <td><span class="row-actions"><a href="ordem-detalhe.html">Abrir</a></span></td>
-              </tr>
-              <tr>
-                <td>#1039</td>
-                <td>Ana Beatriz</td>
-                <td>iPhone 13</td>
-                <td>Câmera com defeito</td>
-                <td><span class="pill concluida">Concluída</span></td>
-                <td>13/05</td>
-                <td>R$ 320,00</td>
-                <td><span class="row-actions"><a href="ordem-detalhe.html">Abrir</a></span></td>
-              </tr>
-              <tr>
-                <td>#1038</td>
-                <td>Lucas Martins</td>
-                <td>Xiaomi Redmi Note 12</td>
-                <td>Software / travando</td>
-                <td><span class="pill cancelada">Cancelada</span></td>
-                <td>13/05</td>
-                <td>R$ 0,00</td>
-                <td><span class="row-actions"><a href="ordem-detalhe.html">Abrir</a></span></td>
-              </tr>
-              <tr>
-                <td>#1037</td>
-                <td>Fernanda Costa</td>
-                <td>iPhone 12</td>
-                <td>Tela piscando</td>
-                <td><span class="pill concluida">Concluída</span></td>
-                <td>12/05</td>
                 <td></td>
                 <td>R$ 280,00</td>
                 <td><span class="row-actions"><a href="ordem-detalhe.html">Abrir</a></span></td>
               </tr>
               <tr>
+                <td>#1040</td>
+                <td>Mercado União</td>
+                <td>Impressora Epson L3250</td>
+                <td>Felipe Torres</td>
+                <td><span class="pill aberta">Aberta</span></td>
+                <td>14/05</td>
+                <td></td>
+                <td>R$ 150,00</td>
+                <td><span class="row-actions"><a href="ordem-detalhe.html">Abrir</a></span></td>
+              </tr>
+              <tr>
+                <td>#1039</td>
+                <td>Studio Foco</td>
+                <td>iMac 2019</td>
+                <td>Ricardo Alves</td>
+                <td><span class="pill concluida">Concluída</span></td>
+                <td>13/05</td>
+                <td></td>
+                <td>R$ 980,00</td>
+                <td><span class="row-actions"><a href="ordem-detalhe.html">Abrir</a></span></td>
+              </tr>
+              <tr>
+                <td>#1038</td>
+                <td>Pedro Lemos</td>
+                <td>PS5</td>
+                <td>Júlia Pires</td>
+                <td><span class="pill cancelada">Cancelada</span></td>
+                <td>13/05</td>
+                <td></td>
+                <td>R$ 0,00</td>
+                <td><span class="row-actions"><a href="ordem-detalhe.html">Abrir</a></span></td>
+              </tr>
+              <tr>
+                <td>#1037</td>
+                <td>Loja Bicicletas Sul</td>
+                <td>Roteador Mikrotik</td>
+                <td>Felipe Torres</td>
+                <td><span class="pill concluida">Concluída</span></td>
+                <td>12/05</td>
+                <td>12/05</td>
+                <td>R$ 220,00</td>
+                <td><span class="row-actions"><a href="ordem-detalhe.html">Abrir</a></span></td>
+              </tr>
+              <tr>
                 <td>#1036</td>
-                <td>Rafael Souza</td>
-                <td>Samsung A54</td>
-                <td>Alto-falante</td>
+                <td>Ana Beatriz</td>
+                <td>MacBook Air M1</td>
+                <td>Ricardo Alves</td>
                 <td><span class="pill andamento">Em andamento</span></td>
                 <td>12/05</td>
-                <td>R$ 120,00</td>
+                <td>R$ 690,00</td>
                 <td><span class="row-actions"><a href="ordem-detalhe.html">Abrir</a></span></td>
               </tr>
             </tbody>
           </table>
         </section>
-
         <nav class="toolbar" style="justify-content:space-between;margin-top:1rem" aria-label="Paginação">
           <p style="font-size:0.85rem;color:var(--color-text-muted)">Mostrando 7 de 142 OS</p>
-          <section class="pagination">
-            <button type="button">‹</button>
-            <button type="button" aria-current="true">1</button>
+          <section class="row-actions">
+            <button type="button">‹ Anterior</button>
+            <button type="button">1</button>
             <button type="button">2</button>
             <button type="button">3</button>
-            <button type="button">›</button>
+            <button type="button">Próxima ›</button>
           </section>
         </nav>
       </article>
-
     </main>
   </section>
-
-  <script src="scripts/admin.js"></script>
+  <script src="scripts/app.js"></script>
   <script src="scripts/ordens.js"></script>
-  <script src="scripts/notification-badge.js"></script>
 </body>
 
 </html>

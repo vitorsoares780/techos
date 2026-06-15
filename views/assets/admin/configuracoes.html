@@ -31,10 +31,10 @@
     </label>
     <section class="admin-topbar-actions">
       <button class="icon-btn" type="button" aria-label="Notificações" data-badge="5">🔔</button>
-      <button class="user-chip" type="button" aria-label="Conta" data-user-menu>
+      <a class="user-chip" href="configuracoes.html" aria-label="Conta">
         <span class="avatar" style="width:1.75rem;height:1.75rem;font-size:0.78rem" aria-hidden="true">VS</span>
         <span>Admin</span>
-      </button>
+      </a>
     </section>
   </header>
 
@@ -45,19 +45,16 @@
         <h4>Operação</h4>
         <ul>
           <li><a class="sidebar-link" href="painel.html"><span class="ico" aria-hidden="true">📊</span>Painel</a></li>
-          <li><a class="sidebar-link" href="ordens.html"><span class="ico" aria-hidden="true">🧾</span>Ordens de serviço</a></li>
+          <li><a class="sidebar-link" href="ordens.html"><span class="ico" aria-hidden="true">🧾</span>Ordens de serviço
+            <span class="admin-badge">27</span></a></li>
           <li><a class="sidebar-link" href="ordem-nova.html"><span class="ico" aria-hidden="true">➕</span>Nova OS</a></li>
           <li><a class="sidebar-link" href="clientes.html"><span class="ico" aria-hidden="true">👥</span>Clientes</a></li>
-          <li><a class="sidebar-link" href="equipamentos.html"><span class="ico" aria-hidden="true">📱</span>Equipamentos</a></li>
-          <li><a class="sidebar-link" href="relatorios.html"><span class="ico" aria-hidden="true">📈</span>Relatórios</a></li>
         </ul>
       </section>
       <section class="sidebar-section">
         <h4>Administração</h4>
         <ul>
           <li><a class="sidebar-link" href="usuarios.html"><span class="ico" aria-hidden="true">👤</span>Usuários</a></li>
-          <li><a class="sidebar-link" href="permissoes.html"><span class="ico" aria-hidden="true">🔐</span>Permissões</a></li>
-          <li><a class="sidebar-link" href="empresa.html"><span class="ico" aria-hidden="true">🏢</span>Empresa</a></li>
           <li><a class="sidebar-link" aria-current="page" href="configuracoes.html"><span class="ico" aria-hidden="true">⚙️</span>Configurações</a></li>
         </ul>
       </section>
@@ -85,15 +82,38 @@
 
         <article class="panel">
           <header class="panel-head">
-            <h2>Empresa</h2>
+            <h2>Dados da empresa</h2>
           </header>
           <section class="form-grid">
-            <section class="form-field"><label for="cfg-raz">Razão social</label><input id="cfg-raz" type="text" value="TechOS Assistência Técnica Ltda"></section>
-            <section class="form-field"><label for="cfg-cnpj">CNPJ</label><input id="cfg-cnpj" type="text" value="12.345.678/0001-90"></section>
-            <section class="form-field"><label for="cfg-tel">Telefone comercial</label><input id="cfg-tel" type="tel" value="(11) 4002-8922"></section>
-            <section class="form-field full"><label for="cfg-end">Endereço</label><input id="cfg-end" type="text" value="Av. Paulista, 1000 — São Paulo/SP"></section>
+            <section class="form-field"><label for="emp-name">Razão social</label><input id="emp-name" type="text" value="TechOS Assistência Técnica Ltda"></section>
+            <section class="form-field"><label for="emp-fantasia">Nome fantasia</label><input id="emp-fantasia" type="text" value="TechOS"></section>
+            <section class="form-field"><label for="emp-cnpj">CNPJ</label><input id="emp-cnpj" type="text" value="12.345.678/0001-90"></section>
+            <section class="form-field"><label for="emp-tel">Telefone</label><input id="emp-tel" type="tel" value="(11) 4002-8922"></section>
+            <section class="form-field full"><label for="emp-email">E-mail de contato</label><input id="emp-email" type="email" value="contato@techos.com.br"></section>
+            <section class="form-field full"><label for="emp-end">Endereço</label><input id="emp-end" type="text" value="Av. Paulista, 1000 — São Paulo/SP"></section>
           </section>
-          <section class="form-actions"><button class="btn btn-primary" type="button">Salvar</button></section>
+        </article>
+
+        <article class="panel">
+          <header class="panel-head">
+            <h2>Informações fiscais</h2>
+          </header>
+          <section class="form-grid">
+            <section class="form-field"><label for="emp-inscricao">Inscrição estadual</label><input id="emp-inscricao" type="text" value="123.456.789.000"></section>
+            <section class="form-field"><label for="emp-regime">Regime tributário</label><select id="emp-regime"><option>Simples Nacional</option><option>Lucro Presumido</option><option>Lucro Real</option></select></section>
+            <section class="form-field full"><label for="emp-site">Website</label><input id="emp-site" type="url" value="https://www.techos.com.br"></section>
+          </section>
+        </article>
+
+        <article class="panel">
+          <header class="panel-head">
+            <h2>Contato administrativo</h2>
+          </header>
+          <section class="form-grid">
+            <section class="form-field"><label for="emp-resp">Responsável</label><input id="emp-resp" type="text" value="Vanessa Souza"></section>
+            <section class="form-field"><label for="emp-resp-email">E-mail</label><input id="emp-resp-email" type="email" value="vanessa.souza@techos.com.br"></section>
+            <section class="form-field"><label for="emp-resp-tel">Telefone</label><input id="emp-resp-tel" type="tel" value="(11) 98888-0000"></section>
+          </section>
         </article>
 
         <article class="panel">
@@ -106,6 +126,14 @@
             <li style="display:flex;justify-content:space-between;align-items:center"><label for="pref-orca">Exigir aprovação de orçamento acima de R$ 200</label><input id="pref-orca" type="checkbox"></li>
             <li style="display:flex;justify-content:space-between;align-items:center"><label for="pref-pdf">Anexar PDF ao e-mail de conclusão</label><input id="pref-pdf" type="checkbox" checked></li>
           </ul>
+        </article>
+
+        <article class="panel">
+          <header class="panel-head">
+            <h2>Permissões</h2>
+          </header>
+          <p style="font-size:0.92rem;color:var(--color-text-muted)">Defina o que cada perfil de usuário pode acessar no sistema.</p>
+          <section class="form-actions" style="margin-top:0.75rem"><a class="btn btn-primary" href="permissoes.html">Gerenciar permissões</a></section>
         </article>
 
         <article class="panel">
@@ -134,6 +162,7 @@
 
   <script src="scripts/admin.js"></script>
   <script src="scripts/configuracoes.js"></script>
+  <script src="scripts/notification-badge.js"></script>
 </body>
 
 </html>

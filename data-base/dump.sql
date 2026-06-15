@@ -184,5 +184,22 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2026-05-20  8:40:09
 
+-- ----------------------------------------------------------
+--
+-- Table service_orders
+--
+DROP TABLE IF EXISTS `service_orders`;
+CREATE TABLE IF NOT EXISTS `service_orders`(
+	`id` INT(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    `user_id` INT(11) NOT NULL,
+	CONSTRAINT `fk_users_service_order_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
+    `device_id` INT(11) NOT NULL,
+	CONSTRAINT `fk_devices_service_order_device` FOREIGN KEY (`device_id`) REFERENCES `devices` (`id`),
+    `defect` VARCHAR(150) NOT NULL,
+    `diagnosis` VARCHAR(150) DEFAULT NULL,
+    `status` ENUM('aberta', 'aguardando_peca', 'em_andamento', 'cancelada', 'concluida') NOT NULL DEFAULT 'aberta',
+    `price` DOUBLE NOT NULL,
+    `photo` VARCHAR(255) DEFAULT NULL,
+    `creation_time` TIMESTAMP NULL DEFAULT current_timestamp()
+) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

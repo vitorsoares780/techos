@@ -44,10 +44,12 @@
 
       <button class="icon-btn" type="button" aria-label="Notificações" data-badge="3">🔔</button>
 
-      <a class="user-chip" href="perfil.html" aria-label="Conta">
+      <button class="user-chip" type="button" aria-label="Conta" data-user-menu>
+
         <span class="avatar" aria-hidden="true">MC</span>
         <span>Marina</span>
-      </a>
+
+      </button>
 
     </section>
 
@@ -69,7 +71,10 @@
           </li>
           <li><a class="sidebar-link" aria-current="page" href="clientes.html"><span class="ico"
                 aria-hidden="true">👥</span>Clientes</a></li>
+          <li><a class="sidebar-link" href="equipamentos.html"><span class="ico"
+                aria-hidden="true">🛠️</span>Equipamentos</a></li>
           <li><a class="sidebar-link" href="equipe.html"><span class="ico" aria-hidden="true">👷</span>Equipe</a></li>
+                aria-hidden="true">📈</span>Relatórios</a></li>
         </ul>
 
       </section>
@@ -77,7 +82,9 @@
       <section class="sidebar-section">
         <h4>Conta</h4>
         <ul>
-          <li><a class="sidebar-link" href="perfil.html"><span class="ico" aria-hidden="true">👤</span>Perfil e Configurações</a></li>
+          <li><a class="sidebar-link" href="perfil.html"><span class="ico" aria-hidden="true">👤</span>Perfil</a></li>
+          <li><a class="sidebar-link" href="configuracoes.html"><span class="ico"
+                aria-hidden="true">⚙️</span>Configurações</a></li>
           <li><a class="sidebar-link" href="../public/login.html"><span class="ico" aria-hidden="true">🚪</span>Sair</a>
           </li>
         </ul>
@@ -130,7 +137,7 @@
                 <td>PF</td>
                 <td>carla@email.com</td>
                 <td>8</td>
-                <td></td>
+                <td>14/05/2026</td>
                 <td><span class="row-actions"><a href="#">Ver</a></span></td>
               </tr>
               <tr>
@@ -138,7 +145,7 @@
                 <td>PJ</td>
                 <td>compras@uniao.com.br</td>
                 <td>21</td>
-                <td></td>
+                <td>14/05/2026</td>
                 <td><span class="row-actions"><a href="#">Ver</a></span></td>
               </tr>
               <tr>
@@ -146,7 +153,7 @@
                 <td>PF</td>
                 <td>joaov@email.com</td>
                 <td>3</td>
-                <td></td>
+                <td>14/05/2026</td>
                 <td><span class="row-actions"><a href="#">Ver</a></span></td>
               </tr>
               <tr>
@@ -154,7 +161,7 @@
                 <td>PJ</td>
                 <td>contato@studiofoco.com</td>
                 <td>12</td>
-                <td></td>
+                <td>13/05/2026</td>
                 <td><span class="row-actions"><a href="#">Ver</a></span></td>
               </tr>
               <tr>
@@ -162,7 +169,7 @@
                 <td>PF</td>
                 <td>anab@email.com</td>
                 <td>5</td>
-                <td></td>
+                <td>12/05/2026</td>
                 <td><span class="row-actions"><a href="#">Ver</a></span></td>
               </tr>
               <tr>
@@ -170,7 +177,7 @@
                 <td>PJ</td>
                 <td>contato@bikesul.com</td>
                 <td>9</td>
-                <td></td>
+                <td>12/05/2026</td>
                 <td><span class="row-actions"><a href="#">Ver</a></span></td>
               </tr>
             </tbody>
@@ -186,7 +193,6 @@
   </section>
 
   <script src="scripts/app.js"></script>
-  <script src="scripts/notification-badge.js"></script>
 </body>
 
 </html>

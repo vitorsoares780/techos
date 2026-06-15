@@ -32,10 +32,10 @@
     </label>
     <section class="admin-topbar-actions">
       <button class="icon-btn" type="button" aria-label="Notificações" data-badge="5">🔔</button>
-      <button class="user-chip" type="button" aria-label="Conta" data-user-menu>
+      <a class="user-chip" href="configuracoes.html" aria-label="Conta">
         <span class="avatar" style="width:1.75rem;height:1.75rem;font-size:0.78rem" aria-hidden="true">VS</span>
         <span>Admin</span>
-      </button>
+      </a>
     </section>
   </header>
 
@@ -53,10 +53,6 @@
           </li>
           <li><a class="sidebar-link" href="clientes.html"><span class="ico" aria-hidden="true">👥</span>Clientes</a>
           </li>
-          <li><a class="sidebar-link" href="equipamentos.html"><span class="ico"
-                aria-hidden="true">📱</span>Equipamentos</a></li>
-          <li><a class="sidebar-link" href="relatorios.html"><span class="ico"
-                aria-hidden="true">📈</span>Relatórios</a></li>
         </ul>
       </section>
       <section class="sidebar-section">
@@ -64,9 +60,6 @@
         <ul>
           <li><a class="sidebar-link" href="usuarios.html"><span class="ico" aria-hidden="true">👤</span>Usuários</a>
           </li>
-          <li><a class="sidebar-link" href="permissoes.html"><span class="ico"
-                aria-hidden="true">🔐</span>Permissões</a></li>
-          <li><a class="sidebar-link" href="empresa.html"><span class="ico" aria-hidden="true">🏢</span>Empresa</a></li>
           <li><a class="sidebar-link" href="configuracoes.html"><span class="ico"
                 aria-hidden="true">⚙️</span>Configurações</a></li>
         </ul>
@@ -88,7 +81,6 @@
           <p>Resumo geral da assistência técnica — hoje, 17 de maio de 2026.</p>
         </section>
         <section class="page-actions">
-          <a class="btn btn-ghost" href="relatorios.html">Ver relatórios</a>
           <a class="btn btn-primary" href="ordem-nova.html">+ Nova OS</a>
         </section>
       </section>
@@ -110,17 +102,7 @@
           <p class="value">182</p>
           <p class="trend up">▲ 12% vs mês anterior</p>
         </article>
-        <article class="kpi">
-          <p class="label">Faturamento</p>
-          <p class="value">R$ 48.320</p>
-          <p class="trend up">▲ 8,4%</p>
-        </article>
-        <article class="kpi">
-          <p class="label">Usuários ativos</p>
-          <p class="value">3</p>
-          <p class="trend">1 admin · 2 técnicos</p>
-        </article>
-        <article class="kpi">
+                <article class="kpi">
           <p class="label">Clientes cadastrados</p>
           <p class="value">248</p>
           <p class="trend up">▲ 7 este mês</p>
@@ -129,13 +111,13 @@
 
       <section class="detail-grid">
 
-        <article class="panel">
+        <article class="panel" style="grid-column:1/-1">
           <header class="panel-head">
-            <h2>OS recentes</h2>
-            <a class="btn-link" href="ordens.html">Ver todas →</a>
+            <h2>Atividades recentes</h2>
+            <a class="btn-link" href="ordens.html">Ver todas as OS →</a>
           </header>
-          <!-- TODO: substituir por dados reais da API GET /api/admin/ordens?limit=5 -->
-          <section class="table-wrap">
+          <!-- TODO: substituir por dados reais da API GET /api/admin/atividades?limit=8 -->
+          <section class="table-wrap" style="margin-block-end:1rem">
             <table class="data">
               <thead>
                 <tr>
@@ -185,13 +167,6 @@
               </tbody>
             </table>
           </section>
-        </article>
-
-        <article class="panel">
-          <header class="panel-head">
-            <h2>Atividade recente</h2>
-          </header>
-          <!-- TODO: substituir por dados reais da API GET /api/admin/atividades -->
           <ol class="timeline">
             <li class="timeline-item">
               <time>09:42</time>
@@ -223,51 +198,12 @@
 
       </section>
 
-      <section class="detail-grid" style="margin-top:1.5rem">
-
-        <article class="panel">
-          <header class="panel-head">
-            <h2>OS por semana</h2>
-            <select aria-label="Período">
-              <option>Últimas 6 semanas</option>
-              <option>Últimos 3 meses</option>
-            </select>
-          </header>
-          <!-- TODO: substituir por gráfico real da API GET /api/admin/relatorios/semana -->
-          <ul class="bars" aria-label="Gráfico de OS por semana">
-            <li><span class="bar" style="height:55%"></span>S1</li>
-            <li><span class="bar" style="height:70%"></span>S2</li>
-            <li><span class="bar" style="height:60%"></span>S3</li>
-            <li><span class="bar" style="height:85%"></span>S4</li>
-            <li><span class="bar" style="height:78%"></span>S5</li>
-            <li><span class="bar" style="height:95%"></span>S6</li>
-          </ul>
-        </article>
-
-        <article class="panel">
-          <header class="panel-head">
-            <h2>Distribuição por status</h2>
-          </header>
-          <!-- TODO: substituir por dados reais da API GET /api/admin/relatorios/status -->
-          <section class="donut-wrap">
-            <figure class="donut" aria-hidden="true"></figure>
-            <ul class="donut-legend">
-              <li><span class="dot" style="background:#1465BB"></span>Aberta — 42%</li>
-              <li><span class="dot" style="background:#f59e0b"></span>Em andamento — 20%</li>
-              <li><span class="dot" style="background:#6d28d9"></span>Aguardando — 13%</li>
-              <li><span class="dot" style="background:#22c55e"></span>Concluída — 20%</li>
-              <li><span class="dot" style="background:#ef4444"></span>Cancelada — 5%</li>
-            </ul>
-          </section>
-        </article>
-
-      </section>
-
-    </main>
+      </main>
   </section>
 
   <script src="scripts/admin.js"></script>
   <script src="scripts/painel.js"></script>
+  <script src="scripts/notification-badge.js"></script>
 </body>
 
 </html>

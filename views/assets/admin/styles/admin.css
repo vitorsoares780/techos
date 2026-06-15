@@ -246,8 +246,18 @@ table.data tbody tr:hover { background: var(--color-bg-soft); }
   font-weight: 500;
 }
 .row-actions a:hover, .row-actions button:hover { background: var(--color-bg-soft); }
-.row-actions .danger { color: var(--danger); border-color: #fecaca; background: #fff5f5; }
-.row-actions .danger:hover { background: #fee2e2; }
+.row-actions .danger { color: var(--danger); border-color: #fecaca; background: #fff5f5; font-weight: 600; }
+.row-actions .danger:hover { background: #fee2e2; border-color: var(--danger); }
+
+/* ----- Danger button (full) ----- */
+.btn-danger {
+  color: var(--danger);
+  border-color: #fecaca;
+  background: #fff5f5;
+}
+.btn-danger:hover {
+  background: #fee2e2;
+}
 
 /* ----- Status pill ----- */
 .pill {

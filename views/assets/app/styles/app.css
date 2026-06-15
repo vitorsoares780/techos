@@ -80,6 +80,8 @@
   background: var(--color-surface);
   cursor: pointer;
   font-size: 0.9rem;
+  color: inherit;
+  text-decoration: none;
 }
 .user-chip .avatar {
   width: 1.75rem; height: 1.75rem;

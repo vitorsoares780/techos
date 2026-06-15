@@ -31,10 +31,10 @@
     </label>
     <section class="admin-topbar-actions">
       <button class="icon-btn" type="button" aria-label="Notificações" data-badge="5">🔔</button>
-      <button class="user-chip" type="button" aria-label="Conta" data-user-menu>
+      <a class="user-chip" href="configuracoes.html" aria-label="Conta">
         <span class="avatar" style="width:1.75rem;height:1.75rem;font-size:0.78rem" aria-hidden="true">VS</span>
         <span>Admin</span>
-      </button>
+      </a>
     </section>
   </header>
 
@@ -45,19 +45,16 @@
         <h4>Operação</h4>
         <ul>
           <li><a class="sidebar-link" href="painel.html"><span class="ico" aria-hidden="true">📊</span>Painel</a></li>
-          <li><a class="sidebar-link" href="ordens.html"><span class="ico" aria-hidden="true">🧾</span>Ordens de serviço</a></li>
+          <li><a class="sidebar-link" href="ordens.html"><span class="ico" aria-hidden="true">🧾</span>Ordens de serviço
+            <span class="admin-badge">27</span></a></li>
           <li><a class="sidebar-link" href="ordem-nova.html"><span class="ico" aria-hidden="true">➕</span>Nova OS</a></li>
           <li><a class="sidebar-link" href="clientes.html"><span class="ico" aria-hidden="true">👥</span>Clientes</a></li>
-          <li><a class="sidebar-link" href="equipamentos.html"><span class="ico" aria-hidden="true">📱</span>Equipamentos</a></li>
-          <li><a class="sidebar-link" href="relatorios.html"><span class="ico" aria-hidden="true">📈</span>Relatórios</a></li>
         </ul>
       </section>
       <section class="sidebar-section">
         <h4>Administração</h4>
         <ul>
           <li><a class="sidebar-link" aria-current="page" href="usuarios.html"><span class="ico" aria-hidden="true">👤</span>Usuários</a></li>
-          <li><a class="sidebar-link" href="permissoes.html"><span class="ico" aria-hidden="true">🔐</span>Permissões</a></li>
-          <li><a class="sidebar-link" href="empresa.html"><span class="ico" aria-hidden="true">🏢</span>Empresa</a></li>
           <li><a class="sidebar-link" href="configuracoes.html"><span class="ico" aria-hidden="true">⚙️</span>Configurações</a></li>
         </ul>
       </section>
@@ -79,6 +76,13 @@
         <section class="page-actions">
           <button class="btn btn-primary" type="button" data-novo-usuario>+ Convidar usuário</button>
         </section>
+      </section>
+
+      <section class="kpi-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:1rem;margin-bottom:1.5rem">
+        <article class="kpi"><p class="label">Total</p><p class="value">7</p></article>
+        <article class="kpi"><p class="label">Administradores</p><p class="value">1</p></article>
+        <article class="kpi"><p class="label">Técnicos</p><p class="value">4</p></article>
+        <article class="kpi"><p class="label">Gestores</p><p class="value">2</p></article>
       </section>
 
       <article class="panel">
@@ -201,6 +205,7 @@
 
   <script src="scripts/admin.js"></script>
   <script src="scripts/usuarios.js"></script>
+  <script src="scripts/notification-badge.js"></script>
 </body>
 
 </html>

@@ -31,10 +31,10 @@
     </label>
     <section class="admin-topbar-actions">
       <button class="icon-btn" type="button" aria-label="Notificações" data-badge="5">🔔</button>
-      <button class="user-chip" type="button" aria-label="Conta" data-user-menu>
+      <a class="user-chip" href="configuracoes.html" aria-label="Conta">
         <span class="avatar" style="width:1.75rem;height:1.75rem;font-size:0.78rem" aria-hidden="true">VS</span>
         <span>Admin</span>
-      </button>
+      </a>
     </section>
   </header>
 
@@ -48,16 +48,12 @@
           <li><a class="sidebar-link" aria-current="page" href="ordens.html"><span class="ico" aria-hidden="true">🧾</span>Ordens de serviço</a></li>
           <li><a class="sidebar-link" href="ordem-nova.html"><span class="ico" aria-hidden="true">➕</span>Nova OS</a></li>
           <li><a class="sidebar-link" href="clientes.html"><span class="ico" aria-hidden="true">👥</span>Clientes</a></li>
-          <li><a class="sidebar-link" href="equipamentos.html"><span class="ico" aria-hidden="true">📱</span>Equipamentos</a></li>
-          <li><a class="sidebar-link" href="relatorios.html"><span class="ico" aria-hidden="true">📈</span>Relatórios</a></li>
         </ul>
       </section>
       <section class="sidebar-section">
         <h4>Administração</h4>
         <ul>
           <li><a class="sidebar-link" href="usuarios.html"><span class="ico" aria-hidden="true">👤</span>Usuários</a></li>
-          <li><a class="sidebar-link" href="permissoes.html"><span class="ico" aria-hidden="true">🔐</span>Permissões</a></li>
-          <li><a class="sidebar-link" href="empresa.html"><span class="ico" aria-hidden="true">🏢</span>Empresa</a></li>
           <li><a class="sidebar-link" href="configuracoes.html"><span class="ico" aria-hidden="true">⚙️</span>Configurações</a></li>
         </ul>
       </section>
@@ -104,7 +100,7 @@
                 <option value="cancelada">Cancelada</option>
               </select>
               <input type="date" value="2026-05-20" aria-label="Prazo estimado">
-              <input type="date" value="2026-05-18" aria-label="Data de conclusão">
+              <input type="date" value="2026-05-18" aria-label="Data de conclusão" data-conclusao>
               <button class="btn btn-ghost" type="button" data-atualizar-status>Atualizar</button>
             </section>
           </article>
@@ -289,6 +285,7 @@
 
   <script src="scripts/admin.js"></script>
   <script src="scripts/ordem-detalhe.js"></script>
+  <script src="scripts/notification-badge.js"></script>
 </body>
 
 </html>
