@@ -1,8 +1,6 @@
-/* TechOS — Dashboard: hidratação dos KPIs (TODO: API) */
+/* TechOS — Dashboard do cliente: indicadores das próprias OS */
 (function () {
   "use strict";
-  // TODO: substituir por HttpClientBase.js → GET /api/dashboard/resumo
-  document.querySelectorAll(".kpi .value").forEach(function (el) {
-    el.dataset.loaded = "true";
-  });
+  // Placeholder: futuramente integrar com API para carregar dados reais do cliente.
+  console.log("Dashboard cliente carregado.");
 })();

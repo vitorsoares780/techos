@@ -26,13 +26,13 @@
       </a>
     </section>
     <label class="app-search" aria-label="Buscar">
-      <input type="search" placeholder="Buscar OS, cliente ou equipamento…" data-global-search>
+      <input type="search" placeholder="Buscar minhas ordens…" data-global-search>
     </label>
     <section class="app-topbar-actions">
-      <button class="icon-btn" type="button" aria-label="Notificações" data-badge="3">🔔</button>
+      <button class="icon-btn" type="button" aria-label="Notificações" data-badge="2">🔔</button>
       <a class="user-chip" href="perfil.html" aria-label="Conta">
-        <span class="avatar" aria-hidden="true">MC</span>
-        <span>Marina</span>
+        <span class="avatar" aria-hidden="true">CA</span>
+        <span>Carlos</span>
       </a>
     </section>
   </header>
@@ -47,9 +47,6 @@
               serviço</a></li>
           <li><a class="sidebar-link" href="ordem-nova.html"><span class="ico" aria-hidden="true">➕</span>Nova OS</a>
           </li>
-          <li><a class="sidebar-link" href="clientes.html"><span class="ico" aria-hidden="true">👥</span>Clientes</a>
-          </li>
-          <li><a class="sidebar-link" href="equipe.html"><span class="ico" aria-hidden="true">👷</span>Equipe</a></li>
         </ul>
       </section>
       <section class="sidebar-section">
@@ -64,8 +61,8 @@
     <main class="app-main">
       <section class="page-head">
         <section>
-          <h1>Boa tarde, Marina 👋</h1>
-          <p>Resumo das operações da AssistTech Reparos — hoje, 16 de maio.</p>
+          <h1>Minhas ordens de serviço</h1>
+          <p>Acompanhe suas ordens de serviço em tempo real.</p>
         </section>
         <section class="page-actions">
           <a class="btn btn-primary" href="ordem-nova.html">+ Nova OS</a>
@@ -74,100 +71,66 @@
 
       <section class="kpi-grid">
         <article class="kpi">
-          <p class="label">OS abertas</p>
-          <p class="value">27</p>
-          <p class="trend up">▲ 4 nos últimos 7 dias</p>
+          <p class="label">Abertas</p>
+          <p class="value">2</p>
+          <p class="trend">Aguardando análise</p>
         </article>
         <article class="kpi">
           <p class="label">Em andamento</p>
-          <p class="value">14</p>
-          <p class="trend">SLA médio 2,1 dias</p>
+          <p class="value">1</p>
+          <p class="trend">Em manutenção</p>
         </article>
         <article class="kpi">
-          <p class="label">Concluídas no mês</p>
-          <p class="value">182</p>
-          <p class="trend up">▲ 12% vs mês anterior</p>
+          <p class="label">Concluídas</p>
+          <p class="value">5</p>
+          <p class="trend">Últimos 30 dias</p>
         </article>
       </section>
 
-      <section class="detail-grid">
-        <article class="panel">
-          <header class="panel-head">
-            <h2>OS recentes</h2>
-            <a class="btn-link" href="ordens.html">Ver todas →</a>
-          </header>
-          <section class="table-wrap">
-            <table class="data">
-              <thead>
-                <tr>
-                  <th>Nº</th>
-                  <th>Cliente</th>
-                  <th>Equipamento</th>
-                  <th>Status</th>
-                  <th>Atualizado</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>#1042</td>
-                  <td>Carla Andrade</td>
-                  <td>Notebook Dell G15</td>
-                  <td><span class="pill andamento">Em andamento</span></td>
-                  <td>há 12 min</td>
-                </tr>
-                <tr>
-                  <td>#1041</td>
-                  <td>João Vieira</td>
-                  <td>iPhone 13</td>
-                  <td><span class="pill aguardando">Aguardando peça</span></td>
-                  <td>há 1 h</td>
-                </tr>
-                <tr>
-                  <td>#1040</td>
-                  <td>Mercado União</td>
-                  <td>Impressora Epson L3250</td>
-                  <td><span class="pill aberta">Aberta</span></td>
-                  <td>há 3 h</td>
-                </tr>
-                <tr>
-                  <td>#1039</td>
-                  <td>Studio Foco</td>
-                  <td>iMac 2019</td>
-                  <td><span class="pill concluida">Concluída</span></td>
-                  <td>ontem</td>
-                </tr>
-                <tr>
-                  <td>#1038</td>
-                  <td>Pedro Lemos</td>
-                  <td>PS5</td>
-                  <td><span class="pill cancelada">Cancelada</span></td>
-                  <td>ontem</td>
-                </tr>
-              </tbody>
-            </table>
-          </section>
-        </article>
-      </section>
-
-      <section class="detail-grid" style="margin-top:1.5rem">
-        <article class="panel">
-          <header class="panel-head">
-            <h2>OS por semana</h2>
-            <select aria-label="Período">
-              <option>Últimas 6 semanas</option>
-              <option>Últimos 3 meses</option>
-            </select>
-          </header>
-          <ul class="bars" aria-label="Gráfico de OS por semana">
-            <li><span class="bar" style="height:55%"></span>S1</li>
-            <li><span class="bar" style="height:70%"></span>S2</li>
-            <li><span class="bar" style="height:60%"></span>S3</li>
-            <li><span class="bar" style="height:85%"></span>S4</li>
-            <li><span class="bar" style="height:78%"></span>S5</li>
-            <li><span class="bar" style="height:95%"></span>S6</li>
-          </ul>
-        </article>
-      </section>
+      <article class="panel">
+        <header class="panel-head">
+          <h2>Minhas OS recentes</h2>
+          <a class="btn-link" href="ordens.html">Ver todas →</a>
+        </header>
+        <section class="table-wrap">
+          <table class="data">
+            <thead>
+              <tr>
+                <th>Nº</th>
+                <th>Equipamento</th>
+                <th>Status</th>
+                <th>Atualizado</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><a href="ordem-detalhe.html">#1042</a></td>
+                <td>Notebook Dell G15</td>
+                <td><span class="pill andamento">Em andamento</span></td>
+                <td>há 12 min</td>
+              </tr>
+              <tr>
+                <td><a href="ordem-detalhe.html">#1037</a></td>
+                <td>iPhone 13</td>
+                <td><span class="pill aberta">Aberta</span></td>
+                <td>há 2 dias</td>
+              </tr>
+              <tr>
+                <td><a href="ordem-detalhe.html">#1021</a></td>
+                <td>PS5</td>
+                <td><span class="pill concluida">Concluída</span></td>
+                <td>há 2 sem</td>
+              </tr>
+              <tr>
+                <td><a href="ordem-detalhe.html">#1015</a></td>
+                <td>iPad Air</td>
+                <td><span class="pill concluida">Concluída</span></td>
+                <td>há 1 mês</td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+      </article>
     </main>
   </section>
   <script src="scripts/app.js"></script>

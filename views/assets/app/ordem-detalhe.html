@@ -26,13 +26,13 @@
       </a>
     </section>
     <label class="app-search" aria-label="Buscar">
-      <input type="search" placeholder="Buscar OS, cliente ou equipamento…" data-global-search>
+      <input type="search" placeholder="Buscar minhas ordens…" data-global-search>
     </label>
     <section class="app-topbar-actions">
-      <button class="icon-btn" type="button" aria-label="Notificações" data-badge="3">🔔</button>
+      <button class="icon-btn" type="button" aria-label="Notificações" data-badge="2">🔔</button>
       <a class="user-chip" href="perfil.html" aria-label="Conta">
-        <span class="avatar" aria-hidden="true">MC</span>
-        <span>Marina</span>
+        <span class="avatar" aria-hidden="true">CA</span>
+        <span>Carlos</span>
       </a>
     </section>
   </header>
@@ -47,9 +47,6 @@
                 aria-hidden="true">🧾</span>Ordens de serviço</a></li>
           <li><a class="sidebar-link" href="ordem-nova.html"><span class="ico" aria-hidden="true">➕</span>Nova OS</a>
           </li>
-          <li><a class="sidebar-link" href="clientes.html"><span class="ico" aria-hidden="true">👥</span>Clientes</a>
-          </li>
-          <li><a class="sidebar-link" href="equipe.html"><span class="ico" aria-hidden="true">👷</span>Equipe</a></li>
         </ul>
       </section>
       <section class="sidebar-section">
@@ -66,12 +63,10 @@
         <section>
           <p style="font-size:0.85rem;color:var(--color-text-muted)"><a href="ordens.html">← Ordens</a></p>
           <h1>OS #1042 · Notebook Dell G15</h1>
-          <p>Aberta em 14/05/2026 · Cliente: <strong>Carla Andrade</strong></p>
+          <p>Aberta em 14/06/2026 · <strong>Em andamento</strong></p>
         </section>
         <section class="page-actions">
-          <button class="btn btn-ghost" type="button">Imprimir</button>
-          <button class="btn btn-ghost" type="button">Enviar ao cliente</button>
-          <button class="btn btn-primary" type="button" data-finalizar>Concluir OS</button>
+          <a class="btn btn-ghost" href="ordens.html">← Voltar para ordens</a>
         </section>
       </section>
 
@@ -82,23 +77,6 @@
               <h2>Status</h2>
               <span class="pill andamento">Em andamento</span>
             </header>
-            <section class="toolbar">
-              <select aria-label="Mudar status" data-status-select>
-                <option value="aberta">Aberta</option>
-                <option value="andamento" selected>Em andamento</option>
-                <option value="aguardando">Aguardando peça</option>
-                <option value="concluida">Concluída</option>
-                <option value="cancelada">Cancelada</option>
-              </select>
-              <select aria-label="Técnico">
-                <option>Ricardo Alves</option>
-                <option>Júlia Pires</option>
-                <option>Felipe Torres</option>
-              </select>
-              <input type="date" value="2026-05-18" aria-label="Prazo">
-              <input type="date" value="2026-05-15" aria-label="Data de conclusão" data-conclusao>
-              <button class="btn btn-ghost" type="button">Atualizar</button>
-            </section>
           </article>
 
           <article class="panel">
@@ -113,7 +91,6 @@
           <article class="panel">
             <header class="panel-head">
               <h2>Itens e serviços</h2>
-              <button class="btn btn-ghost" type="button">+ Adicionar item</button>
             </header>
             <section class="table-wrap">
               <table class="data">
@@ -168,7 +145,7 @@
             <ol class="timeline">
               <li class="timeline-item"><time>14/05 08:10</time>
                 <h4>OS aberta</h4>
-                <p>Por Marina Costa</p>
+                <p>Pela AssistTech</p>
               </li>
               <li class="timeline-item"><time>14/05 10:32</time>
                 <h4>Diagnóstico registrado</h4>
@@ -191,10 +168,9 @@
             <header class="panel-head">
               <h2>Cliente</h2>
             </header>
-            <p><strong>Carla Andrade</strong></p>
-            <p style="font-size:0.9rem;color:var(--color-text-muted)">carla.andrade@email.com</p>
+            <p><strong>Carlos Andrade</strong></p>
+            <p style="font-size:0.9rem;color:var(--color-text-muted)">carlos@email.com</p>
             <p style="font-size:0.9rem;color:var(--color-text-muted)">(11) 98765-4321</p>
-            <a class="btn btn-ghost" style="margin-top:0.75rem" href="clientes.html">Ver histórico</a>
           </article>
           <article class="panel">
             <header class="panel-head">
@@ -204,16 +180,7 @@
             <p style="font-size:0.9rem;color:var(--color-text-muted)">SN: DLG15-7782-29A</p>
             <p style="font-size:0.9rem;color:var(--color-text-muted)">Acessórios: carregador 240W, mochila</p>
           </article>
-          <article class="panel">
-            <header class="panel-head">
-              <h2>Anexos</h2><button class="btn-link" type="button">+ Enviar</button>
-            </header>
-            <ul style="display:flex;flex-direction:column;gap:0.5rem;font-size:0.9rem">
-              <li>📎 diagnostico-foto.jpg</li>
-              <li>📎 orcamento.pdf</li>
-            </ul>
-          </article>
-        </section>
+                  </section>
       </section>
     </main>
   </section>

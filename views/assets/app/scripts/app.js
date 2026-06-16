@@ -11,14 +11,7 @@
     });
   }
 
-  const userMenu = document.querySelector("[data-user-menu]");
-  if (userMenu) {
-    userMenu.addEventListener("click", function () {
-      // TODO: substituir por dropdown real com HttpClientBase.js
-      alert("Perfil · Configurações · Sair");
-    });
-  }
-
+  
   const search = document.querySelector("[data-global-search]");
   if (search) {
     search.addEventListener("keydown", function (event) {

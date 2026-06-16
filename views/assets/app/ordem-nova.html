@@ -26,13 +26,13 @@
       </a>
     </section>
     <label class="app-search" aria-label="Buscar">
-      <input type="search" placeholder="Buscar OS, cliente ou equipamento…" data-global-search>
+      <input type="search" placeholder="Buscar minhas ordens…" data-global-search>
     </label>
     <section class="app-topbar-actions">
-      <button class="icon-btn" type="button" aria-label="Notificações" data-badge="3">🔔</button>
+      <button class="icon-btn" type="button" aria-label="Notificações" data-badge="2">🔔</button>
       <a class="user-chip" href="perfil.html" aria-label="Conta">
-        <span class="avatar" aria-hidden="true">MC</span>
-        <span>Marina</span>
+        <span class="avatar" aria-hidden="true">CA</span>
+        <span>Carlos</span>
       </a>
     </section>
   </header>
@@ -46,10 +46,8 @@
           <li><a class="sidebar-link" href="ordens.html"><span class="ico" aria-hidden="true">🧾</span>Ordens de
               serviço</a></li>
           <li><a class="sidebar-link" aria-current="page" href="ordem-nova.html"><span class="ico"
-                aria-hidden="true">➕</span>Nova OS</a></li>
-          <li><a class="sidebar-link" href="clientes.html"><span class="ico" aria-hidden="true">👥</span>Clientes</a>
+                aria-hidden="true">➕</span>Nova OS</a>
           </li>
-          <li><a class="sidebar-link" href="equipe.html"><span class="ico" aria-hidden="true">👷</span>Equipe</a></li>
         </ul>
       </section>
       <section class="sidebar-section">
@@ -65,7 +63,7 @@
       <section class="page-head">
         <section>
           <h1>Nova ordem de serviço</h1>
-          <p>Registre o cliente, o equipamento e o defeito relatado.</p>
+          <p>Descreva o problema do seu equipamento para iniciar o atendimento.</p>
         </section>
         <section class="page-actions">
           <a class="btn btn-ghost" href="ordens.html">Cancelar</a>
@@ -73,35 +71,6 @@
       </section>
 
       <form class="panel" data-os-form novalidate>
-
-        <fieldset style="border:0;padding:0;margin:0 0 1.5rem">
-          <legend style="font-weight:600;margin-bottom:0.75rem">Cliente</legend>
-
-          <section class="form-grid">
-
-            <section class="form-field">
-              <label for="os-cliente">Cliente</label>
-              <input id="os-cliente" name="cliente" list="clientes-list" required>
-              <datalist id="clientes-list">
-                <option value="Carla Andrade"></option>
-                <option value="João Vieira"></option>
-                <option value="Mercado União"></option>
-              </datalist>
-            </section>
-
-            <section class="form-field">
-              <label for="os-telefone">Telefone</label>
-              <input id="os-telefone" name="telefone" inputmode="tel" placeholder="(00) 00000-0000">
-            </section>
-
-            <section class="form-field">
-              <label for="os-email">E-mail</label>
-              <input id="os-email" name="email" type="email">
-            </section>
-
-          </section>
-
-        </fieldset>
 
         <fieldset style="border:0;padding:0;margin:0 0 1.5rem">
           <legend style="font-weight:600;margin-bottom:0.75rem">Equipamento</legend>
@@ -128,52 +97,34 @@
             <section class="form-field"><label for="os-serial">Nº de série</label><input id="os-serial" name="serial">
             </section>
 
-            <section class="form-field full">
-              <label for="os-acessorios">Acessórios entregues</label>
-              <input id="os-acessorios" name="acessorios" placeholder="Carregador, capa, cabo…">
             </section>
-
-          </section>
-          
         </fieldset>
 
         <fieldset style="border:0;padding:0;margin:0 0 1.5rem">
-          <legend style="font-weight:600;margin-bottom:0.75rem">Atendimento</legend>
+          <legend style="font-weight:600;margin-bottom:0.75rem">Defeito</legend>
           <section class="form-grid">
-            <section class="form-field">
-              <label for="os-tecnico">Técnico responsável</label>
-              <select id="os-tecnico" name="tecnico">
-                <option>Ricardo Alves</option>
-                <option>Júlia Pires</option>
-                <option>Felipe Torres</option>
-              </select>
-            </section>
-            <section class="form-field">
-              <label for="os-prioridade">Prioridade</label>
-              <select id="os-prioridade" name="prioridade">
-                <option>Normal</option>
-                <option>Alta</option>
-                <option>Urgente</option>
-              </select>
-            </section>
-            <section class="form-field">
-              <label for="os-prazo">Prazo previsto</label>
-              <input id="os-prazo" name="prazo" type="date">
-            </section>
             <section class="form-field full">
               <label for="os-defeito">Defeito relatado</label>
-              <textarea id="os-defeito" name="defeito" rows="4" required></textarea>
+              <textarea id="os-defeito" name="defeito" rows="4" required placeholder="Descreva detalhadamente o problema do seu equipamento…"></textarea>
             </section>
+          </section>
+        </fieldset>
+
+        <fieldset style="border:0;padding:0;margin:0 0 1.5rem">
+          <legend style="font-weight:600;margin-bottom:0.75rem">Fotos do aparelho</legend>
+          <section class="form-grid">
             <section class="form-field full">
-              <label for="os-obs">Observações internas</label>
-              <textarea id="os-obs" name="observacoes" rows="3"></textarea>
+              <label for="os-fotos">Envie fotos para ajudar no diagnóstico</label>
+              <input id="os-fotos" name="fotos" type="file" accept="image/*" multiple>
+              <p style="font-size:0.82rem;color:var(--color-text-muted);margin-top:0.35rem">
+                PNG, JPG ou WEBP. Máximo de 5 fotos.
+              </p>
             </section>
           </section>
         </fieldset>
 
         <section class="form-actions">
-          <button type="button" class="btn btn-ghost">Salvar rascunho</button>
-          <button type="submit" class="btn btn-primary">Criar ordem de serviço</button>
+          <button type="submit" class="btn btn-primary">Solicitar ordem de serviço</button>
         </section>
       </form>
     </main>

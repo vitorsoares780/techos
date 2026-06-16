@@ -1,7 +1,7 @@
 // Notification Badge Module - Simulates OS count on frontend
 // This updates the notification badge (bolinha) on all pages
 
-const NOTIFICATION_COUNT = 27;
+const NOTIFICATION_COUNT = 2;
 
 function updateNotificationBadge() {
     const badges = document.querySelectorAll('.icon-btn[data-badge]');

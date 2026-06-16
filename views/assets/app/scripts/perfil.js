@@ -1,29 +1,27 @@
-/* TechOS — Perfil: salvar dados e trocar senha */
+/* TechOS — Perfil do cliente: dados pessoais e senha */
 (function () {
   "use strict";
 
-  const perfil = document.querySelector("[data-perfil-form]");
-  if (perfil) {
-    perfil.addEventListener("submit", function (event) {
+  const perfilForm = document.querySelector("[data-perfil-form]");
+  if (perfilForm) {
+    perfilForm.addEventListener("submit", function (event) {
       event.preventDefault();
-      if (!perfil.checkValidity()) { perfil.reportValidity(); return; }
-      // TODO: substituir por HttpClientBase.js → PUT /api/perfil
-      alert("Perfil atualizado (demo).");
+      alert("Dados atualizados com sucesso!");
     });
   }
 
-  const senha = document.querySelector("[data-senha-form]");
-  if (senha) {
-    senha.addEventListener("submit", function (event) {
+  const senhaForm = document.querySelector("[data-senha-form]");
+  if (senhaForm) {
+    senhaForm.addEventListener("submit", function (event) {
       event.preventDefault();
-      if (!senha.checkValidity()) { senha.reportValidity(); return; }
-      if (senha.elements.nova.value !== senha.elements.confirmar.value) {
-        alert("A confirmação não coincide com a nova senha.");
+      const nova = document.querySelector("[data-senha-nova]");
+      const confirma = document.querySelector("[data-senha-confirma]");
+      if (nova.value !== confirma.value) {
+        alert("As senhas não conferem.");
         return;
       }
-      // TODO: substituir por HttpClientBase.js → POST /api/perfil/senha
-      alert("Senha atualizada (demo).");
-      senha.reset();
+      alert("Senha atualizada com sucesso!");
+      senhaForm.reset();
     });
   }
 })();
