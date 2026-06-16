@@ -54,6 +54,18 @@ class Api
         return $this;
     }
 
+    protected function getRequestBody (array $data): array
+    {
+        $body = file_get_contents("php://input");
+        $json = json_decode($body, true);
+
+        if (json_last_error() === JSON_ERROR_NONE) {
+            return array_merge($data, $json);
+        }
+
+        return $data;
+    }
+
     protected function back(object | array $data = null): Api
     {
         header('Content-Type: application/json');

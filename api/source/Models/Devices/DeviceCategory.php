@@ -72,33 +72,31 @@ class DeviceCategory
         return false;
     }
 
-    public function update(array $data): bool
+    public function update(): bool
     {
         $query = "SELECT * FROM devices_categories WHERE id = :id";
         $stmt = Connect::getInstance()->prepare($query);
-        $stmt->bindParam(':id', $data['categoryId']);
+        $stmt->bindParam(':id', $this->id);
         $stmt->execute();
         if ($stmt->rowCount() <= 0) {
             return false;
         }
-        $stmt->fetch();
 
         $query = "UPDATE devices_categories SET name = :name WHERE id = :id";
         $stmt = Connect::getInstance()->prepare($query);
-        $stmt->bindParam(':name', $data['name']);
-        $stmt->bindParam(':id', $data['categoryId']);
+        $stmt->bindParam(':name', $this->name);
+        $stmt->bindParam(':id', $this->id);
         $stmt->execute();
         if ($stmt->rowCount() > 0) {
-            $stmt->fetch();
             return true;
         }
         return false;
     }
 
-    public function delete(int $id): int|bool{
-        $query = "SELECT * FROM devices WHERE devices_category_id = :id AND active = 1";
+    public function delete(): int|bool{
+        $query = "SELECT * FROM devices WHERE category_id = :id AND active = 1";
         $stmt = Connect::getInstance()->prepare($query);
-        $stmt->bindValue(':id', $id);
+        $stmt->bindValue(':id', $this->id);
         $stmt->execute();
         if($stmt->rowCount() > 0){
             return 400;
@@ -106,10 +104,9 @@ class DeviceCategory
 
         $query = "UPDATE devices_categories SET active = 0 WHERE id = :id AND active = 1";
         $stmt = Connect::getInstance()->prepare($query);
-        $stmt->bindValue(':id', $id);
+        $stmt->bindValue(':id', $this->id);
         $stmt->execute();
         if($stmt->rowCount() > 0){
-            $stmt->fetch();
             return true;
         }
         return false;

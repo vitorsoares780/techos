@@ -131,8 +131,15 @@ class Company
 
     public function insert(): array|bool
     {
-        $query = "INSERT INTO companies (cnpj, name, email, owner_id, plan_id) VALUES ($this->cnpj, $this->name, $this->email, $this->ownerId, $this->planId)";
-        $stmt = Connect::getInstance()->query($query);
+        $query = "INSERT INTO companies (cnpj, name, email, owner_id, plan_id) VALUES (:cnpj, :name, :email, :owner_id, :plan_id)";
+        $stmt = Connect::getInstance()->prepare($query);
+        $stmt->execute([
+            ":cnpj" => $this->cnpj,
+            ":name" => $this->name,
+            ":email" => $this->email,
+            ":owner_id" => $this->ownerId,
+            ":plan_id" => $this->planId
+        ]);
         if ($stmt->rowCount() > 0) {
             $this->id = Connect::getInstance()->lastInsertId();
             $query = "SELECT * FROM companies as c
@@ -149,26 +156,33 @@ class Company
         return false;
     }
 
-    public function update(array $data): array|bool
+    public function update(): array|bool
     {
-        $query = "SELECT * FROM companies WHERE id = :id";
+        $query = "SELECT * FROM companies WHERE id = :id AND active = 1";
         $stmt = Connect::getInstance()->prepare($query);
-        $stmt->bindValue(':id', $data['companyId']);
+        $stmt->bindValue(':id', $this->id);
         $stmt->execute();
         if ($stmt->rowCount() <= 0) {
             return false;
         }
-        $stmt->fetch();
+
+        $current = $stmt->fetch();
+
+        $cnpj = $this->cnpj ?? $current->cnpj;
+        $name = $this->name ?? $current->name;
+        $email = $this->email ?? $current->email;
+        $ownerId = $this->ownerId ?? $current->owner_id;
+        $planId = $this->planId ?? $current->plan_id;
 
         $query = "UPDATE companies SET cnpj = :cnpj, name = :name, email = :email, owner_id = :owner_id, plan_id = :plan_id WHERE id = :id";
         $stmt = Connect::getInstance()->prepare($query);
         $stmt->execute([
-            ":cnpj" => $data['cnpj'],
-            ":name" => $data['name'],
-            ":email" => $data['email'],
-            ":owner_id" => $data['owner_id'],
-            ":plan_id" => $data['plan_id'],
-            ":id" => $data['companyId']
+            ":cnpj" => $cnpj,
+            ":name" => $name,
+            ":email" => $email,
+            ":owner_id" => $ownerId,
+            ":plan_id" => $planId,
+            ":id" => $this->id
         ]);
         if ($stmt->rowCount() > 0) {
             $query = "SELECT * FROM companies as c
@@ -176,7 +190,7 @@ class Company
                       JOIN plans as p ON c.plan_id = p.id
                       WHERE c.id = :id";
             $stmt = Connect::getInstance()->prepare($query);
-            $stmt->bindParam(':id', $data['companyId']);
+            $stmt->bindParam(':id', $this->id);
             $stmt->execute();
             if ($stmt->rowCount() > 0) {
                 return $stmt->fetchAll();
@@ -185,14 +199,13 @@ class Company
         return false;
     }
 
-    public function delete(int $id): bool
+    public function delete(): bool
     {
         $query = "UPDATE companies SET active = 0 WHERE id = :id AND active = 1";
         $stmt = Connect::getInstance()->prepare($query);
-        $stmt->bindValue(':id', $id);
+        $stmt->bindValue(':id', $this->id);
         $stmt->execute();
         if ($stmt->rowCount() > 0) {
-            $stmt->fetch();
             return true;
         }
         return false;

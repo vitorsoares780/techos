@@ -1,172 +1,96 @@
 <?php
 
-namespace source\Controller\Devices;
+namespace Source\Controller\Devices;
 
 use Source\Controller\Api;
 use Source\Models\Devices\Device;
 
-class Devices extends Api{
-    public function devicesListAll()
+class Devices extends Api
+{
+    public function devicesListAll(): void
     {
         $device = new Device();
-        $this->call(
-            200,
-            "success",
-            "Lista de Aparelhos",
-            "success",
-        )->back($device->listAll());
+        $this->call(200, "success", "Lista de dispositivos", "success")->back($device->listAll());
     }
 
     public function devicesListById(array $data): void
     {
-        if (!filter_var($data['deviceId'], FILTER_VALIDATE_INT)) {
-            $this->call(
-                400,
-                "bad_request",
-                "ID do aparelho é obrigatório e deve ser um número inteiro",
-                "error"
-            )->back();
+        if (!isset($data['deviceId'])) {
+            $this->call(400, "bad_request", "ID do dispositivo obrigatório", "error")->back();
             return;
         }
 
         $device = new Device();
-        $device = $device->listById($data['deviceId']);
+        $result = $device->listById($data['deviceId']);
 
-        if ($device == false) {
-            $this->call(
-                404,
-                "not_found",
-                "Aparelho não encontrado",
-                "error"
-            )->back();
+        if (!$result) {
+            $this->call(404, "not_found", "Dispositivo não encontrado", "error")->back();
             return;
         }
 
-        $this->call(
-            200,
-            "success",
-            "Aparelho encontrado",
-            "success"
-        )->back($device);
+        $this->call(200, "success", "Dispositivo encontrado", "success")->back($result);
     }
 
     public function deviceInsert(array $data): void
     {
-        $user_id = $data['user_id'];
-        $cat_id = $data['category_id'];
-        $serial_number = $data['serial_number'];
-        $model = $data['model'];
-        $brand = $data['brand'];
+        $data = $this->getRequestBody($data);
 
-        if (
-            empty($user_id) || $user_id == null ||
-            empty($cat_id) || $cat_id == null ||
-            empty($serial_number) || $serial_number == null ||
-            empty($model) || $model == null ||
-            empty($brand) || $brand == null
-        ) {
-            $this->call(
-                400,
-                "bad_request",
-                "Todos os campos são obrigatórios",
-                "error"
-            )->back();
+        if (!isset($data['user_id']) || !isset($data['category_id']) || !isset($data['serial_number']) || !isset($data['model']) || !isset($data['brand'])) {
+            $this->call(400, "bad_request", "Os campos user_id, category_id, serial_number, model e brand são obrigatórios", "error")->back();
             return;
         }
 
-        $device = new Device(null, $user_id, $cat_id, $serial_number, $model, $brand);
+        $device = new Device(null, (int)$data['user_id'], (int)$data['category_id'], $data['serial_number'], $data['model'], $data['brand']);
+        $result = $device->insert();
 
-        if ($device->insert() == false) {
-            $this->call(
-                500,
-                "internal_server_error",
-                "Não foi possível cadastrar o aparelho",
-                "error"
-            )->back();
+        if (!$result) {
+            $this->call(500, "internal_server_error", "Erro ao inserir dispositivo", "error")->back();
             return;
         }
 
-        $response = $device->insert();
-
-        $this->call(
-            201,
-            "created",
-            "Aparelho registrado com sucesso",
-            "success"
-        )->back($response);
+        $this->call(201, "created", "Dispositivo inserido com sucesso", "success")->back($result);
     }
 
     public function deviceUpdate(array $data): void
     {
-        var_dump($data);  // DEBUG
-        if (!filter_var($data['deviceId'], FILTER_VALIDATE_INT)) {
-            $this->call(
-                400,
-                "bad_request",
-                "ID inválido ou campos obrigatórios ausentes",
-                "error"
-            )->back();
+        $data = $this->getRequestBody($data);
+
+        if (!isset($data['deviceId'])) {
+            $this->call(400, "bad_request", "ID do dispositivo obrigatório", "error")->back();
             return;
         }
 
-        $device = new Device();
+        $device = new Device(
+            (int)$data['deviceId'],
+            isset($data['user_id']) ? (int)$data['user_id'] : null,
+            isset($data['category_id']) ? (int)$data['category_id'] : null,
+            $data['serial_number'] ?? null,
+            $data['model'] ?? null,
+            $data['brand'] ?? null
+        );
+        $result = $device->update();
 
-        if ($device->update($data) === false) {
-            $this->call(
-                404,
-                "not_found",
-                "Aparelho não encontrado",
-                "error"
-            )->back();
+        if (!$result) {
+            $this->call(500, "internal_server_error", "Erro ao atualizar dispositivo", "error")->back();
             return;
         }
 
-        $response = [
-            "id" => $data['deviceId'],
-            "user_id" => $data['user_id'],
-            "category_id" => $data['category_id'],
-            "serial_number" => $data['serial_number'],
-            "model" => $data['model'],
-            "brand" => $data['brand']
-        ];
-
-        $this->call(
-            200,
-            "success",
-            "Aparelho atualizado com sucesso",
-            "success"
-        )->back($response);
+        $this->call(200, "success", "Dispositivo atualizado com sucesso", "success")->back($result);
     }
 
     public function deviceDelete(array $data): void
     {
-        if(!filter_var($data['deviceId'], FILTER_VALIDATE_INT)){
-            $this->call(
-                400,
-                "bad_request",
-                "ID do aparelho é obrigatório e deve ser um número inteiro",
-                "error"
-            )->back();
+        if (!isset($data['deviceId'])) {
+            $this->call(400, "bad_request", "ID do dispositivo obrigatório", "error")->back();
             return;
         }
 
-        $device = new Device();
-
-        if($device->delete($data['deviceId']) === false){
-            $this->call(
-                404,
-                "not_found",
-                "Aparelho não encontrado",
-                "error"
-            )->back();
+        $device = new Device((int)$data['deviceId']);
+        if (!$device->delete()) {
+            $this->call(500, "internal_server_error", "Erro ao deletar dispositivo", "error")->back();
             return;
         }
 
-        $this->call(
-            200,
-            "success",
-            "Aparelho removido com sucesso",
-            "success"
-        )->back();
+        $this->call(200, "success", "Dispositivo deletado com sucesso", "success")->back();
     }
 }

@@ -1,164 +1,93 @@
 <?php
 
-namespace source\Controller\Companies;
+namespace Source\Controller\Companies;
 
 use Source\Controller\Api;
 use Source\Models\Companies\Employee;
 
 class Employees extends Api
 {
-    public function employeesListAll()
+    public function employeesListAll(): void
     {
         $employee = new Employee();
-        $this->call(
-            200,
-            "success",
-            "Lista de Funcionários",
-            "success",
-        )->back($employee->listAll());
+        $this->call(200, "success", "Lista de funcionários", "success")->back($employee->listAll());
     }
 
     public function employeesListById(array $data): void
     {
-        if (!filter_var($data['employeeId'], FILTER_VALIDATE_INT)) {
-            $this->call(
-                400,
-                "bad_request",
-                "ID do funcionário é obrigatório e deve ser um número inteiro",
-                "error"
-            )->back();
+        if (!isset($data['employeeId'])) {
+            $this->call(400, "bad_request", "ID do funcionário obrigatório", "error")->back();
             return;
         }
 
         $employee = new Employee();
-        $employee = $employee->listById($data['employeeId']);
+        $result = $employee->listById($data['employeeId']);
 
-        if ($employee == false) {
-            $this->call(
-                404,
-                "not_found",
-                "Funcionário não encontrado",
-                "error"
-            )->back();
+        if (!$result) {
+            $this->call(404, "not_found", "Funcionário não encontrado", "error")->back();
             return;
         }
 
-        $this->call(
-            200,
-            "success",
-            "Funcionário encontrado",
-            "success"
-        )->back($employee);
+        $this->call(200, "success", "Funcionário encontrado", "success")->back($result);
     }
 
     public function employeeInsert(array $data): void
     {
-        $user_id = $data['user_id'];
-        $company_id = $data['company_id'];
+        $data = $this->getRequestBody($data);
 
-        if (
-            empty($user_id) || $user_id == null ||
-            empty($company_id) || $company_id == null
-        ) {
-            $this->call(
-                400,
-                "bad_request",
-                "Todos os campos são obrigatórios",
-                "error"
-            )->back();
+        if (!isset($data['user_id']) || !isset($data['company_id'])) {
+            $this->call(400, "bad_request", "Os campos user_id e company_id são obrigatórios", "error")->back();
             return;
         }
 
-        $employee = new Employee(null, $user_id, $company_id);
+        $employee = new Employee(null, (int)$data['user_id'], (int)$data['company_id']);
+        $result = $employee->insert();
 
-        if ($employee->insert() == false) {
-            $this->call(
-                500,
-                "internal_server_error",
-                "Não foi possível cadastrar o funcionário",
-                "error"
-            )->back();
+        if (!$result) {
+            $this->call(500, "internal_server_error", "Erro ao inserir funcionário", "error")->back();
             return;
         }
 
-        $response = $employee->insert();
-
-        $this->call(
-            201,
-            "created",
-            "Funcionário registrado com sucesso",
-            "success"
-        )->back($response);
+        $this->call(201, "created", "Funcionário inserido com sucesso", "success")->back($result);
     }
 
     public function employeeUpdate(array $data): void
     {
-        var_dump($data);  // DEBUG
-        if (!filter_var($data['employeeId'], FILTER_VALIDATE_INT)) {
-            $this->call(
-                400,
-                "bad_request",
-                "ID inválido ou campos obrigatórios ausentes",
-                "error"
-            )->back();
+        $data = $this->getRequestBody($data);
+
+        if (!isset($data['employeeId'])) {
+            $this->call(400, "bad_request", "ID do funcionário obrigatório", "error")->back();
             return;
         }
 
-        $employee = new Employee();
+        $employee = new Employee(
+            (int)$data['employeeId'],
+            isset($data['user_id']) ? (int)$data['user_id'] : null,
+            isset($data['company_id']) ? (int)$data['company_id'] : null
+        );
+        $result = $employee->update();
 
-        if ($employee->update($data) === false) {
-            $this->call(
-                404,
-                "not_found",
-                "Funcionário não encontrado",
-                "error"
-            )->back();
+        if (!$result) {
+            $this->call(500, "internal_server_error", "Erro ao atualizar funcionário", "error")->back();
             return;
         }
 
-        $response = [
-            "id" => $data['employeeId'],
-            "user_id" => $data['user_id'],
-            "company_id" => $data['company_id'],
-        ];
-
-        $this->call(
-            200,
-            "success",
-            "Funcionário atualizado com sucesso",
-            "success"
-        )->back($response);
+        $this->call(200, "success", "Funcionário atualizado com sucesso", "success")->back($result);
     }
 
     public function employeeDelete(array $data): void
     {
-        if (!filter_var($data['employeeId'], FILTER_VALIDATE_INT)) {
-            $this->call(
-                400,
-                "bad_request",
-                "ID do funcionário é obrigatório e deve ser um número inteiro",
-                "error"
-            )->back();
+        if (!isset($data['employeeId'])) {
+            $this->call(400, "bad_request", "ID do funcionário obrigatório", "error")->back();
             return;
         }
 
-        $employee = new Employee();
-
-        if ($employee->delete($data['employeeId']) === false) {
-            $this->call(
-                404,
-                "not_found",
-                "Funcionário não encontrado",
-                "error"
-            )->back();
+        $employee = new Employee((int)$data['employeeId']);
+        if (!$employee->delete()) {
+            $this->call(500, "internal_server_error", "Erro ao deletar funcionário", "error")->back();
             return;
         }
 
-        $this->call(
-            200,
-            "success",
-            "Funcionário removido com sucesso",
-            "success"
-        )->back();
+        $this->call(200, "success", "Funcionário deletado com sucesso", "success")->back();
     }
 }

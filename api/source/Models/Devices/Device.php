@@ -130,8 +130,15 @@ class Device
 
     public function insert(): array|bool
     {
-        $query = "INSERT INTO devices (user_id, category_id, serial_number, model, brand) VALUES ($this->userId, $this->categoryId, $this->serialNumber, $this->model, $this->brand)";
-        $stmt = Connect::getInstance()->query($query);
+        $query = "INSERT INTO devices (user_id, category_id, serial_number, model, brand) VALUES (:user_id, :cat_id, :serial_number, :model, :brand)";
+        $stmt = Connect::getInstance()->prepare($query);
+        $stmt->execute([
+            ":user_id" => $this->userId,
+            ":cat_id" => $this->categoryId,
+            ":serial_number" => $this->serialNumber,
+            ":model" => $this->model,
+            ":brand" => $this->brand
+        ]);
         if ($stmt->rowCount() > 0) {
             $this->id = Connect::getInstance()->lastInsertId();
             $query = "SELECT * FROM devices as d
@@ -148,26 +155,33 @@ class Device
         return false;
     }
 
-    public function update(array $data): array|bool
+    public function update(): array|bool
     {
-        $query = "SELECT * FROM devices WHERE id = :id";
+        $query = "SELECT * FROM devices WHERE id = :id AND active = 1";
         $stmt = Connect::getInstance()->prepare($query);
-        $stmt->bindValue(':id', $data['deviceId']);
+        $stmt->bindValue(':id', $this->id);
         $stmt->execute();
         if ($stmt->rowCount() <= 0) {
             return false;
         }
-        $stmt->fetch();
+
+        $current = $stmt->fetch();
+
+        $userId = $this->userId ?? $current->user_id;
+        $catId = $this->categoryId ?? $current->category_id;
+        $serial = $this->serialNumber ?? $current->serial_number;
+        $model = $this->model ?? $current->model;
+        $brand = $this->brand ?? $current->brand;
 
         $query = "UPDATE devices SET user_id = :user_id, category_id = :cat_id, serial_number = :serial_number, model = :model, brand = :brand WHERE id = :id";
         $stmt = Connect::getInstance()->prepare($query);
         $stmt->execute([
-            ":user_id" => $data['user_id'],
-            ":cat_id" => $data['category_id'],
-            ":serial_number" => $data['serial_number'],
-            ":model" => $data['model'],
-            ":brand" => $data['brand'],
-            ":id" => $data['deviceId']
+            ":user_id" => $userId,
+            ":cat_id" => $catId,
+            ":serial_number" => $serial,
+            ":model" => $model,
+            ":brand" => $brand,
+            ":id" => $this->id
         ]);
         if ($stmt->rowCount() > 0) {
             $query = "SELECT * FROM devices as d
@@ -175,7 +189,7 @@ class Device
                       JOIN devices_categories as c ON d.category_id = c.id
                       WHERE d.id = :id";
             $stmt = Connect::getInstance()->prepare($query);
-            $stmt->bindParam(':id', $data['deviceId']);
+            $stmt->bindParam(':id', $this->id);
             $stmt->execute();
             if ($stmt->rowCount() > 0) {
                 return $stmt->fetchAll();
@@ -184,14 +198,13 @@ class Device
         return false;
     }
 
-    public function delete(int $id): bool
+    public function delete(): bool
     {
         $query = "UPDATE devices SET active = 0 WHERE id = :id AND active = 1";
         $stmt = Connect::getInstance()->prepare($query);
-        $stmt->bindValue(':id', $id);
+        $stmt->bindValue(':id', $this->id);
         $stmt->execute();
         if ($stmt->rowCount() > 0) {
-            $stmt->fetch();
             return true;
         }
         return false;

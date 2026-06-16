@@ -1,168 +1,97 @@
 <?php
 
-namespace source\Controller\Devices;
+namespace Source\Controller\Devices;
 
 use Source\Controller\Api;
 use Source\Models\Devices\DeviceCategory;
 
-class DevicesCategories extends Api{
-    public function devicesCategoryList()
+class DevicesCategories extends Api
+{
+    public function devicesCategoryList(): void
     {
-        $devicesCategories = new DeviceCategory();
-        $this->call(
-            200,
-            "success",
-            "Lista de Categorias de FAQ",
-            "success"
-        )->back($devicesCategories->listAll());
+        $category = new DeviceCategory();
+        $this->call(200, "success", "Lista de categorias", "success")->back($category->listAll());
     }
 
     public function devicesCategoryListById(array $data): void
     {
-        if (!filter_var($data['categoryId'], FILTER_VALIDATE_INT)) {
-            $this->call(
-                400,
-                "bad_request",
-                "ID da categoria é obrigatório e deve ser um número inteiro",
-                "error"
-            )->back();
+        if (!isset($data['categoryId'])) {
+            $this->call(400, "bad_request", "ID da categoria obrigatório", "error")->back();
             return;
         }
 
-        $deviceCategory = new DeviceCategory();
-        $deviceCategory = $deviceCategory->listById($data['categoryId']);
+        $category = new DeviceCategory();
+        $result = $category->listById($data['categoryId']);
 
-        if ($deviceCategory == false) {
-            $this->call(
-                404,
-                "not_found",
-                "Categoria não encontrada",
-                "error"
-            )->back();
+        if (!$result) {
+            $this->call(404, "not_found", "Categoria não encontrada", "error")->back();
             return;
         }
 
-        $this->call(
-            200,
-            "success",
-            "Categoria encontrada",
-            "success"
-        )->back($deviceCategory);
-        return;
+        $this->call(200, "success", "Categoria encontrada", "success")->back($result);
     }
 
     public function devicesCategoriesCreate(array $data): void
     {
-        if (empty(trim($data['name']))) {
-            $this->call(
-                400,
-                "bad_request",
-                "O campo name é obrigatório",
-                "error"
-            )->back();
+        $data = $this->getRequestBody($data);
+
+        if (!isset($data['name'])) {
+            $this->call(400, "bad_request", "O campo name é obrigatório", "error")->back();
             return;
         }
 
-        $deviceCategory = new DeviceCategory(null, $data['name']);
-
-        if (!$deviceCategory->insert()) {
-            $this->call(
-                500,
-                "internal_server_error",
-                "Não foi possível cadastrar a categoria",
-                "error"
-            )->back();
+        $category = new DeviceCategory(null, $data['name']);
+        if (!$category->insert()) {
+            $this->call(500, "internal_server_error", "Erro ao inserir categoria", "error")->back();
             return;
         }
 
-        $response = [
-            "id" => $deviceCategory->getId(),
-            "name" => $deviceCategory->getName()
-        ];
-
-        $this->call(
-            201,
-            "success",
-            "Categoria de aparelho criada com sucesso",
-            "created"
-        )->back($response);
+        $this->call(201, "created", "Categoria inserida com sucesso", "success")->back([
+            "id" => $category->getId(),
+            "name" => $category->getName()
+        ]);
     }
 
     public function deviceCategoryUpdate(array $data): void
     {
-        if(!filter_var($data['categoryId'], FILTER_VALIDATE_INT)){
-            $this->call(
-                400,
-                "bad_request",
-                "ID inválido ou campo name é obrigatório",
-                "error"
-            )->back();
+        $data = $this->getRequestBody($data);
+
+        if (!isset($data['categoryId'])) {
+            $this->call(400, "bad_request", "ID da categoria obrigatório", "error")->back();
             return;
         }
 
-        $deviceCategory = new DeviceCategory();
+        $category = new DeviceCategory((int)$data['categoryId'], $data['name'] ?? null);
+        $result = $category->update();
 
-        if($deviceCategory->update($data) === false){
-            $this->call(
-                404,
-                "not_found",
-                "Categoria não encontrada",
-                "error"
-            )->back();
+        if ($result === false) {
+            $this->call(500, "internal_server_error", "Erro ao atualizar categoria", "error")->back();
             return;
         }
 
-        $response = [
-            "id" => $data['categoryId'],
-            "name" => $data['name']
-        ];
-
-        $this->call(
-            200,
-            "success",
-            "Categoria atualizada com sucesso",
-            "success"
-        )->back($response);
+        $this->call(200, "success", "Categoria atualizada com sucesso", "success")->back();
     }
 
     public function deviceCategoryDelete(array $data): void
     {
-        if(!filter_var($data['categoryId'], FILTER_VALIDATE_INT)){
-            $this->call(
-                400,
-                "bad_request",
-                "ID da categoria é obrigatório e deve ser um número inteiro",
-                "error"
-            )->back();
+        if (!isset($data['categoryId'])) {
+            $this->call(400, "bad_request", "ID da categoria obrigatório", "error")->back();
             return;
         }
 
-        $deviceCategory = new DeviceCategory();
-        $deviceCategory = $deviceCategory->delete($data['categoryId']);
+        $category = new DeviceCategory((int)$data['categoryId']);
+        $result = $category->delete();
 
-        if($deviceCategory === 400){
-            $this->call(
-                400,
-                "bad_request",
-                "Não é possível remover uma categoria que possui aparelhos ativos",
-                "error"
-            )->back();
-            return;
-        }else if($deviceCategory === false){
-            $this->call(
-                404,
-                "not_found",
-                "Aparelho não encontrado",
-                "error"
-            )->back();
+        if ($result === 400) {
+            $this->call(400, "bad_request", "Existem dispositivos vinculados a esta categoria", "error")->back();
             return;
         }
 
-        $this->call(
-            200,
-            "success",
-            "Aparelho removido com sucesso",
-            "success"
-        )->back();
+        if (!$result) {
+            $this->call(500, "internal_server_error", "Erro ao deletar categoria", "error")->back();
+            return;
+        }
+
+        $this->call(200, "success", "Categoria deletada com sucesso", "success")->back();
     }
 }

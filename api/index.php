@@ -71,6 +71,42 @@ $route->delete("/faqs/{faqId}", "Faqs\Faqs:faqDelete");
 $route->delete("/faqs-categories/{categoryId}", "Faqs\FaqsCategories:faqCategoryDelete");
 
 
+//----------- COMPANIES -----------------------
+$route->get("/companies/list", "Companies\Companies:companiesListAll");
+$route->get("/companies/list/{companyId}", "Companies\Companies:companiesListById");
+$route->post("/companies", "Companies\Companies:companyInsert");
+$route->put("/companies/{companyId}", "Companies\Companies:companyUpdate");
+$route->delete("/companies/{companyId}", "Companies\Companies:companyDelete");
+
+//----------- EMPLOYEES -----------------------
+$route->get("/employees/list", "Companies\Employees:employeesListAll");
+$route->get("/employees/list/{employeeId}", "Companies\Employees:employeesListById");
+$route->post("/employees", "Companies\Employees:employeeInsert");
+$route->put("/employees/{employeeId}", "Companies\Employees:employeeUpdate");
+$route->delete("/employees/{employeeId}", "Companies\Employees:employeeDelete");
+
+//----------- DEVICES -----------------------
+$route->get("/devices/list", "Devices\Devices:devicesListAll");
+$route->get("/devices/list/{deviceId}", "Devices\Devices:devicesListById");
+$route->post("/devices", "Devices\Devices:deviceInsert");
+$route->put("/devices/{deviceId}", "Devices\Devices:deviceUpdate");
+$route->delete("/devices/{deviceId}", "Devices\Devices:deviceDelete");
+
+//----------- DEVICES CATEGORIES -----------------------
+$route->get("/devices-categories/list", "Devices\DevicesCategories:devicesCategoryList");
+$route->get("/devices-categories/list/{categoryId}", "Devices\DevicesCategories:devicesCategoryListById");
+$route->post("/devices-categories", "Devices\DevicesCategories:devicesCategoriesCreate");
+$route->put("/devices-categories/{categoryId}", "Devices\DevicesCategories:deviceCategoryUpdate");
+$route->delete("/devices-categories/{categoryId}", "Devices\DevicesCategories:deviceCategoryDelete");
+
+//----------- PLANS -----------------------
+$route->get("/plans/list", "Plans:plansListAll");
+$route->get("/plans/list/{planId}", "Plans:plansListById");
+$route->post("/plans", "Plans:planInsert");
+$route->put("/plans/{planId}", "Plans:planUpdate");
+$route->delete("/plans/{planId}", "Plans:planDelete");
+
+
 // --------------- Fim - Exercícios - Desafios ---------------
 
 

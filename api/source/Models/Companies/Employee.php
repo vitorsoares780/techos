@@ -57,7 +57,7 @@ class Employee
 
     public function listAll(): array
     {
-        $query = "SELECT e.id, u.name as 'user_name', c.name as 'company_name', 
+        $query = "SELECT e.id, u.name as 'user_name', c.name as 'company_name'
                   FROM employees as e
                   JOIN users as u ON e.user_id = u.id
                   JOIN companies as c ON e.company_id = c.id
@@ -85,14 +85,18 @@ class Employee
 
     public function insert(): array|bool
     {
-        $query = "INSERT INTO employees (user_id, company_id) VALUES ($this->userId, $this->companyId)";
-        $stmt = Connect::getInstance()->query($query);
+        $query = "INSERT INTO employees (user_id, company_id) VALUES (:user_id, :company_id)";
+        $stmt = Connect::getInstance()->prepare($query);
+        $stmt->execute([
+            ":user_id" => $this->userId,
+            ":company_id" => $this->companyId
+        ]);
         if ($stmt->rowCount() > 0) {
             $this->id = Connect::getInstance()->lastInsertId();
             $query = "SELECT * FROM employees as e
                   JOIN users as u ON e.user_id = u.id
                   JOIN companies as c ON e.company_id = c.id
-                  AND e.id = :id";
+                  WHERE e.id = :id";
             $stmt = Connect::getInstance()->prepare($query);
             $stmt->bindParam(':id', $this->id);
             $stmt->execute();
@@ -103,22 +107,27 @@ class Employee
         return false;
     }
 
-    public function update(array $data): array|bool
+    public function update(): array|bool
     {
-        $query = "SELECT * FROM employees WHERE id = :id";
+        $query = "SELECT * FROM employees WHERE id = :id AND active = 1";
         $stmt = Connect::getInstance()->prepare($query);
-        $stmt->bindValue(':id', $data['employeeId']);
+        $stmt->bindValue(':id', $this->id);
         $stmt->execute();
         if ($stmt->rowCount() <= 0) {
             return false;
         }
-        $stmt->fetch();
+
+        $current = $stmt->fetch();
+
+        $userId = $this->userId ?? $current->user_id;
+        $companyId = $this->companyId ?? $current->company_id;
 
         $query = "UPDATE employees SET user_id = :user_id, company_id = :company_id WHERE id = :id";
         $stmt = Connect::getInstance()->prepare($query);
         $stmt->execute([
-            ":user_id" => $data['user_id'],
-            ":company_id" => $data['company_id']
+            ":user_id" => $userId,
+            ":company_id" => $companyId,
+            ":id" => $this->id
         ]);
         if ($stmt->rowCount() > 0) {
             $query = "SELECT * FROM employees as e
@@ -126,7 +135,7 @@ class Employee
                       JOIN companies as c ON e.company_id = c.id
                       WHERE e.id = :id";
             $stmt = Connect::getInstance()->prepare($query);
-            $stmt->bindParam(':id', $data['employeeId']);
+            $stmt->bindParam(':id', $this->id);
             $stmt->execute();
             if ($stmt->rowCount() > 0) {
                 return $stmt->fetchAll();
@@ -135,14 +144,13 @@ class Employee
         return false;
     }
 
-    public function delete(int $id): bool
+    public function delete(): bool
     {
         $query = "UPDATE employees SET active = 0 WHERE id = :id AND active = 1";
         $stmt = Connect::getInstance()->prepare($query);
-        $stmt->bindValue(':id', $id);
+        $stmt->bindValue(':id', $this->id);
         $stmt->execute();
         if ($stmt->rowCount() > 0) {
-            $stmt->fetch();
             return true;
         }
         return false;

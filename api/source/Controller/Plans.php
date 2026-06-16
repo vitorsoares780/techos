@@ -1,163 +1,88 @@
 <?php
 
-namespace source\Controller;
+namespace Source\Controller;
 
-use Source\Controller\Api;
 use Source\Models\Plan;
 
 class Plans extends Api
 {
-    public function plansListAll()
+    public function plansListAll(): void
     {
         $plan = new Plan();
-        $this->call(
-            200,
-            "success",
-            "Lista de planos",
-            "success",
-        )->back($plan->listAll());
+        $this->call(200, "success", "Lista de planos", "success")->back($plan->listAll());
     }
 
     public function plansListById(array $data): void
     {
-        if (!filter_var($data['planId'], FILTER_VALIDATE_INT)) {
-            $this->call(
-                400,
-                "bad_request",
-                "ID do plano é obrigatório e deve ser um número inteiro",
-                "error"
-            )->back();
+        if (!isset($data['planId'])) {
+            $this->call(400, "bad_request", "ID do plano obrigatório", "error")->back();
             return;
         }
 
         $plan = new Plan();
-        $plan = $plan->listById($data['planId']);
+        $result = $plan->listById($data['planId']);
 
-        if ($plan == false) {
-            $this->call(
-                404,
-                "not_found",
-                "Plano não encontrado",
-                "error"
-            )->back();
+        if (!$result) {
+            $this->call(404, "not_found", "Plano não encontrado", "error")->back();
             return;
         }
 
-        $this->call(
-            200,
-            "success",
-            "Plano encontrado",
-            "success"
-        )->back($plan);
+        $this->call(200, "success", "Plano encontrado", "success")->back($result);
     }
 
     public function planInsert(array $data): void
     {
-        $name = $data['name'];
-        $price = $data['price'];
+        $data = $this->getRequestBody($data);
 
-        if (
-            empty($name) || $name == null ||
-            empty($price) || $price == null
-        ) {
-            $this->call(
-                400,
-                "bad_request",
-                "Os campos name e price são obrigatórios",
-                "error"
-            )->back();
+        if (!isset($data['name']) || !isset($data['price'])) {
+            $this->call(400, "bad_request", "Os campos name e price são obrigatórios", "error")->back();
             return;
         }
 
-        $plan = new Plan(null, $name, $price);
+        $plan = new Plan(null, $data['name'], (float)$data['price']);
 
-        if ($plan->insert() == false) {
-            $this->call(
-                500,
-                "internal_server_error",
-                "Não foi possível cadastrar o plano",
-                "error"
-            )->back();
+        $result = $plan->insert();
+        if (!$result) {
+            $this->call(500, "internal_server_error", "Erro ao inserir plano", "error")->back();
             return;
         }
 
-        $response = $plan->insert();
-
-        $this->call(
-            201,
-            "created",
-            "Plano criado com sucesso",
-            "success"
-        )->back($response);
+        $this->call(201, "created", "Plano inserido com sucesso", "success")->back($result);
     }
 
     public function planUpdate(array $data): void
     {
-        if (!filter_var($data['planId'], FILTER_VALIDATE_INT)) {
-            $this->call(
-                400,
-                "bad_request",
-                "ID inválido ou campos obrigatórios ausentes",
-                "error"
-            )->back();
+        $data = $this->getRequestBody($data);
+
+        if (!isset($data['planId'])) {
+            $this->call(400, "bad_request", "ID do plano obrigatório", "error")->back();
             return;
         }
 
-        $plan = new Plan();
+        $plan = new Plan((int)$data['planId'], $data['name'] ?? null, isset($data['price']) ? (float)$data['price'] : null);
+        $result = $plan->update();
 
-        if ($plan->update($data) === false) {
-            $this->call(
-                404,
-                "not_found",
-                "Plano não encontrado",
-                "error"
-            )->back();
+        if (!$result) {
+            $this->call(500, "internal_server_error", "Erro ao atualizar plano", "error")->back();
             return;
         }
 
-        $response = [
-            "id" => $data['planId'],
-            "name" => $data['name'],
-            "price" => $data['price']
-        ];
-
-        $this->call(
-            200,
-            "success",
-            "Plano atualizado com sucesso",
-            "success"
-        )->back($response);
+        $this->call(200, "success", "Plano atualizado com sucesso", "success")->back($result);
     }
 
     public function planDelete(array $data): void
     {
-        if (!filter_var($data['planId'], FILTER_VALIDATE_INT)) {
-            $this->call(
-                400,
-                "bad_request",
-                "ID do plano é obrigatório e deve ser um número inteiro",
-                "error"
-            )->back();
+        if (!isset($data['planId'])) {
+            $this->call(400, "bad_request", "ID do plano obrigatório", "error")->back();
             return;
         }
 
-        $plan = new Plan();
-
-        if ($plan->delete($data['planId']) === false) {
-            $this->call(
-                404,
-                "not_found",
-                "Plano não encontrado",
-                "error"
-            )->back();
+        $plan = new Plan((int)$data['planId']);
+        if (!$plan->delete()) {
+            $this->call(500, "internal_server_error", "Erro ao deletar plano", "error")->back();
             return;
         }
 
-        $this->call(
-            200,
-            "success",
-            "Plano removido com sucesso",
-            "success"
-        )->back();
+        $this->call(200, "success", "Plano deletado com sucesso", "success")->back();
     }
 }
