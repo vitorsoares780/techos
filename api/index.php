@@ -43,7 +43,7 @@ $route->put("/update-admin","Users:updateAdmin"); // update de usuário admin
 $route->group(null);
 
 
-//----------- PRODUCTS -----------------------
+//----------- PRODUCTS ----------------------- RETIRAR FUTURAMENTE
 $route->get("/products/list", "Products:productsList");
 $route->get("/products/list/{productId}", "Products:productsListById");
 $route->post("/products", "Products:create");
@@ -106,6 +106,12 @@ $route->post("/plans", "Plans:planInsert");
 $route->put("/plans/{planId}", "Plans:planUpdate");
 $route->delete("/plans/{planId}", "Plans:planDelete");
 
+//----------- SERVICE ORDERS -----------------------
+$route->get("/serviceOrders/list", "ServiceOrders:serviceOrdersListAll");
+$route->get("/serviceOrders/list/{serviceOrderId}", "ServiceOrders:serviceOrdersListById");
+$route->post("/serviceOrders", "ServiceOrders:serviceOrderInsert");
+$route->put("/serviceOrders/{serviceOrderId}", "ServiceOrders:serviceOrderUpdate");
+$route->delete("/serviceOrders/{serviceOrderId}", "ServiceOrders:serviceOrderDelete");
 
 // --------------- Fim - Exercícios - Desafios ---------------
 

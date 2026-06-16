@@ -80,7 +80,7 @@ class ServiceOrders extends Api
             return;
         }
 
-        $serviceOrder = new serviceOrder(null, $user_id, $device_id, $company_id, $defect, $status, $price, $photo);
+        $serviceOrder = new ServiceOrder(null, $user_id, $device_id, $company_id, $defect, $status, $price, $photo);
 
         if ($serviceOrder->insert() == false) {
             $this->call(
