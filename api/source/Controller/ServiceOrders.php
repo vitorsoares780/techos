@@ -8,37 +8,37 @@ use Source\Models\ServiceOrder;
 class ServiceOrders extends Api
 {
 
-    public function devicesListAll()
+    public function serviceOrdersListAll()
     {
-        $device = new Device();
+        $serviceOrder = new ServiceOrder();
         $this->call(
             200,
             "success",
-            "Lista de Aparelhos",
+            "Lista de Ordens de Serviço",
             "success",
-        )->back($device->listAll());
+        )->back($serviceOrder->listAll());
     }
 
-    public function devicesListById(array $data): void
+    public function serviceOrdersListById(array $data): void
     {
-        if (!filter_var($data['deviceId'], FILTER_VALIDATE_INT)) {
+        if (!filter_var($data['serviceOrderId'], FILTER_VALIDATE_INT)) {
             $this->call(
                 400,
                 "bad_request",
-                "ID do aparelho é obrigatório e deve ser um número inteiro",
+                "ID da ordem é obrigatório e deve ser um número inteiro",
                 "error"
             )->back();
             return;
         }
 
-        $device = new Device();
-        $device = $device->listById($data['deviceId']);
+        $serviceOrder = new ServiceOrder();
+        $serviceOrder = $serviceOrder->listById($data['serviceOrderId']);
 
-        if ($device == false) {
+        if ($serviceOrder == false) {
             $this->call(
                 404,
                 "not_found",
-                "Aparelho não encontrado",
+                "Ordem de serviço não encontrada",
                 "error"
             )->back();
             return;
@@ -47,25 +47,29 @@ class ServiceOrders extends Api
         $this->call(
             200,
             "success",
-            "Aparelho encontrado",
+            "Ordem de serviço encontrada",
             "success"
-        )->back($device);
+        )->back($serviceOrder);
     }
 
-    public function deviceInsert(array $data): void
+    public function serviceOrderInsert(array $data): void
     {
         $user_id = $data['user_id'];
-        $cat_id = $data['category_id'];
-        $serial_number = $data['serial_number'];
-        $model = $data['model'];
-        $brand = $data['brand'];
+        $device_id = $data['device_id'];
+        $company_id = $data['company_id'];
+        $defect = $data['defect'];
+        $status = $data['status'];
+        $price = $data['price'];
+        $photo = $data['photo'];
 
         if (
             empty($user_id) || $user_id == null ||
-            empty($cat_id) || $cat_id == null ||
-            empty($serial_number) || $serial_number == null ||
-            empty($model) || $model == null ||
-            empty($brand) || $brand == null
+            empty($device_id) || $device_id == null ||
+            empty($company_id) || $company_id == null ||
+            empty($defect) || $defect == null ||
+            empty($status) || $status == null ||
+            empty($price) || $price == null ||
+            empty($photo) || $photo == null
         ) {
             $this->call(
                 400,
@@ -76,32 +80,31 @@ class ServiceOrders extends Api
             return;
         }
 
-        $device = new Device(null, $user_id, $cat_id, $serial_number, $model, $brand);
+        $serviceOrder = new serviceOrder(null, $user_id, $device_id, $company_id, $defect, $status, $price, $photo);
 
-        if ($device->insert() == false) {
+        if ($serviceOrder->insert() == false) {
             $this->call(
                 500,
                 "internal_server_error",
-                "Não foi possível cadastrar o aparelho",
+                "Não foi possível cadastrar a ordem",
                 "error"
             )->back();
             return;
         }
 
-        $response = $device->insert();
+        $response = $serviceOrder->insert();
 
         $this->call(
             201,
             "created",
-            "Aparelho registrado com sucesso",
+            "Ordem de serviço registrada com sucesso",
             "success"
         )->back($response);
     }
 
-    public function deviceUpdate(array $data): void
+    public function serviceOrderUpdate(array $data): void
     {
-        var_dump($data);  // DEBUG
-        if (!filter_var($data['deviceId'], FILTER_VALIDATE_INT)) {
+        if (!filter_var($data['serviceOrderId'], FILTER_VALIDATE_INT)) {
             $this->call(
                 400,
                 "bad_request",
@@ -111,54 +114,56 @@ class ServiceOrders extends Api
             return;
         }
 
-        $device = new Device();
+        $serviceOrder = new ServiceOrder();
 
-        if ($device->update($data) === false) {
+        if ($serviceOrder->update($data) === false) {
             $this->call(
                 404,
                 "not_found",
-                "Aparelho não encontrado",
+                "Ordem de serviço não encontrada",
                 "error"
             )->back();
             return;
         }
 
         $response = [
-            "id" => $data['deviceId'],
+            "id" => $data['serviceOrderId'],
             "user_id" => $data['user_id'],
-            "category_id" => $data['category_id'],
-            "serial_number" => $data['serial_number'],
-            "model" => $data['model'],
-            "brand" => $data['brand']
+            "device_id" => $data['device_id'],
+            "company_id" => $data['company_id'],
+            "defect" => $data['defect'],
+            "status" => $data['status'],
+            "price" => $data['price'],
+            "photo" => $data['photo']
         ];
 
         $this->call(
             200,
             "success",
-            "Aparelho atualizado com sucesso",
+            "Ordem de serviço atualizada com sucesso",
             "success"
         )->back($response);
     }
 
-    public function deviceDelete(array $data): void
+    public function serviceOrderDelete(array $data): void
     {
-        if (!filter_var($data['deviceId'], FILTER_VALIDATE_INT)) {
+        if (!filter_var($data['serviceOrderId'], FILTER_VALIDATE_INT)) {
             $this->call(
                 400,
                 "bad_request",
-                "ID do aparelho é obrigatório e deve ser um número inteiro",
+                "ID da ordem é obrigatório e deve ser um número inteiro",
                 "error"
             )->back();
             return;
         }
 
-        $device = new Device();
+        $serviceOrder = new ServiceOrder();
 
-        if ($device->delete($data['deviceId']) === false) {
+        if ($serviceOrder->delete($data['serviceOrderId']) === false) {
             $this->call(
                 404,
                 "not_found",
-                "Aparelho não encontrado",
+                "Ordem de serviço não encontrada",
                 "error"
             )->back();
             return;
@@ -167,7 +172,7 @@ class ServiceOrders extends Api
         $this->call(
             200,
             "success",
-            "Aparelho removido com sucesso",
+            "Ordem de serviço removida com sucesso",
             "success"
         )->back();
     }
