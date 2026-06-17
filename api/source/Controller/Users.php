@@ -1,7 +1,8 @@
 <?php
 
-namespace Source\Controller;
+namespace source\Controller;
 
+use Source\Controller\Api;
 use Source\Models\User;
 
 class Users extends Api
@@ -26,7 +27,7 @@ class Users extends Api
 
         $user = new User(
             null,
-            2,
+            3,
             $data['name'],
             $data['email'],
             $data['password']

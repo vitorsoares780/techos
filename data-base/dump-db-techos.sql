@@ -147,7 +147,6 @@ AUTO_INCREMENT = 3
 DEFAULT CHARACTER SET = utf8mb3;
 
 
-
 -- -----------------------------------------------------
 -- Table `db-techos`.`users`
 -- -----------------------------------------------------
@@ -169,7 +168,6 @@ AUTO_INCREMENT = 3
 DEFAULT CHARACTER SET = utf8mb3;
 
 
-
 -- -----------------------------------------------------
 -- Table `db-techos`.`devices_categories`
 -- -----------------------------------------------------
@@ -179,6 +177,7 @@ CREATE TABLE IF NOT EXISTS `db-techos`.`devices_categories` (
   `active` TINYINT(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;
+insert into `users` (name) values (3, 'Mateus', 'mateus@gmail.com', '123456', null);
 
 
 
