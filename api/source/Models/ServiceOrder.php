@@ -144,7 +144,7 @@ class ServiceOrder
 
     public function listById(int $id): object|bool
     {
-        $query = "SELECT * FROM service_orders as s
+        $query = "SELECT s.* FROM service_orders as s
                   JOIN users as u ON s.user_id = u.id
                   JOIN devices as d ON s.device_id = d.id
                   JOIN companies as c ON s.company_id = c.id
@@ -166,17 +166,17 @@ class ServiceOrder
         $stmt = Connect::getInstance()->query($query);
         if ($stmt->rowCount() > 0) {
             $this->id = Connect::getInstance()->lastInsertId();
-            $query = "SELECT * FROM service_orders as s
+            $query = "SELECT s.* FROM service_orders as s
                   JOIN users as u ON s.user_id = u.id
                   JOIN devices as d ON s.device_id = d.id
                   JOIN companies as c ON s.company_id = c.id
                   WHERE s.active = 1
                   AND s.id = :id";
-            $stmt = Connect::getInstance()->prepare($query);
-            $stmt->bindParam(':id', $this->id);
-            $stmt->execute();
-            if ($stmt->rowCount() > 0) {
-                return $stmt->fetchAll();
+            $stmt2 = Connect::getInstance()->prepare($query);
+            $stmt2->bindParam(':id', $this->id);
+            $stmt2->execute();
+            if ($stmt2->rowCount() > 0) {
+                return $stmt2->fetchAll();
             }
         }
         return false;
@@ -213,7 +213,7 @@ class ServiceOrder
             ":id" => $data['serviceOrderId']
         ]);
         if ($stmt->rowCount() > 0) {
-            $query = "SELECT * FROM service_orders as s
+            $query = "SELECT s.* FROM service_orders as s
                   JOIN users as u ON s.user_id = u.id
                   JOIN devices as d ON s.device_id = d.id
                   JOIN companies as c ON s.company_id = c.id
