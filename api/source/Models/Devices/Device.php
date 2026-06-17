@@ -137,7 +137,7 @@ class Device
             ":cat_id" => $this->categoryId,
             ":serial_number" => $this->serialNumber,
             ":model" => $this->model,
-            ":brand" => $this->brand
+            ":brand" => $this->brand    
         ]);
         if ($stmt->rowCount() > 0) {
             $this->id = Connect::getInstance()->lastInsertId();
