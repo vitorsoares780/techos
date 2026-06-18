@@ -1,6 +1,6 @@
 <?php
 
-namespace Source\Controller\Devices;
+namespace source\Controller\Devices;
 
 use Source\Controller\Api;
 use Source\Models\Devices\Device;
@@ -35,12 +35,12 @@ class Devices extends Api
     {
         $data = $this->getRequestBody($data);
 
-        if (!isset($data['user_id']) || !isset($data['category_id']) || !isset($data['serial_number']) || !isset($data['model']) || !isset($data['brand'])) {
-            $this->call(400, "bad_request", "Os campos user_id, category_id, serial_number, model e brand são obrigatórios", "error")->back();
+        if (!isset($data['user_id']) || !isset($data['category_id']) || !isset($data['serial_number']) || !isset($data['name'])) {
+            $this->call(400, "bad_request", "Os campos user_id, category_id, serial_number e name são obrigatórios", "error")->back();
             return;
         }
 
-        $device = new Device(null, (int)$data['user_id'], (int)$data['category_id'], $data['serial_number'], $data['model'], $data['brand']);
+        $device = new Device(null, (int)$data['user_id'], (int)$data['category_id'], $data['serial_number'], $data['name']);
         $result = $device->insert();
 
         if (!$result) {
@@ -65,8 +65,7 @@ class Devices extends Api
             isset($data['user_id']) ? (int)$data['user_id'] : null,
             isset($data['category_id']) ? (int)$data['category_id'] : null,
             $data['serial_number'] ?? null,
-            $data['model'] ?? null,
-            $data['brand'] ?? null
+            $data['name'] ?? null,
         );
         $result = $device->update();
 

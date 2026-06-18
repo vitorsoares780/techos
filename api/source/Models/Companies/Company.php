@@ -106,7 +106,6 @@ class Company
                   JOIN users as u ON c.owner_id = u.id
                   JOIN plans as p ON c.plan_id = p.id
                   WHERE c.active = 1
-                  GROUP BY c.name
                   ORDER BY c.creation_time DESC";
         $stmt = Connect::getInstance()->query($query);
         return $stmt->fetchAll();
@@ -142,7 +141,7 @@ class Company
         ]);
         if ($stmt->rowCount() > 0) {
             $this->id = Connect::getInstance()->lastInsertId();
-            $query = "SELECT * FROM companies as c
+            $query = "SELECT c.* FROM companies as c
                       JOIN users as u ON c.owner_id = u.id
                       JOIN plans as p ON c.plan_id = p.id
                       WHERE c.id = :id";
@@ -185,7 +184,7 @@ class Company
             ":id" => $this->id
         ]);
         if ($stmt->rowCount() > 0) {
-            $query = "SELECT * FROM companies as c
+            $query = "SELECT c.* FROM companies as c
                       JOIN users as u ON c.owner_id = u.id
                       JOIN plans as p ON c.plan_id = p.id
                       WHERE c.id = :id";

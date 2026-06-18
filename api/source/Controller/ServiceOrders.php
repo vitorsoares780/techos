@@ -82,7 +82,9 @@ class ServiceOrders extends Api
 
         $serviceOrder = new ServiceOrder(null, $user_id, $device_id, $company_id, $defect, $status, $price, $photo);
 
-        if ($serviceOrder->insert() == false) {
+        $response = $serviceOrder->insert();
+
+        if ($response == false) {
             $this->call(
                 500,
                 "internal_server_error",
@@ -91,8 +93,6 @@ class ServiceOrders extends Api
             )->back();
             return;
         }
-
-        $response = $serviceOrder->insert();
 
         $this->call(
             201,

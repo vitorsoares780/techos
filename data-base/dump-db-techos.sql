@@ -9,6 +9,7 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,N
 -- -----------------------------------------------------
 CREATE SCHEMA IF NOT EXISTS `db-techos` DEFAULT CHARACTER SET utf8mb3 ;
 USE `db-techos` ;
+
  -- drop database `db-techos`;
 -- -----------------------------------------------------
 -- Table `db-techos`.`faqs_categories`
@@ -99,7 +100,7 @@ CREATE TABLE IF NOT EXISTS `db-techos`.`employees` (
     FOREIGN KEY (`company_id`)
     REFERENCES `db-techos`.`companies` (`id`))
 ENGINE = InnoDB
-AUTO_INCREMENT = 51
+AUTO_INCREMENT = 100
 DEFAULT CHARACTER SET = utf8mb3;
 
 
@@ -147,6 +148,7 @@ CREATE TABLE IF NOT EXISTS `db-techos`.`user_types` (
 ENGINE = InnoDB
 AUTO_INCREMENT = 3
 DEFAULT CHARACTER SET = utf8mb3;
+insert into `user_types` (name) values ('cliente');
 
 
 -- -----------------------------------------------------
@@ -154,7 +156,7 @@ DEFAULT CHARACTER SET = utf8mb3;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `db-techos`.`users` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `typeId` INT NOT NULL,
+  `type_id` INT NOT NULL,
   `name` VARCHAR(255) NOT NULL,
   `email` VARCHAR(255) NOT NULL,
   `password` VARCHAR(255) NOT NULL,
@@ -168,6 +170,7 @@ CREATE TABLE IF NOT EXISTS `db-techos`.`users` (
 ENGINE = InnoDB
 AUTO_INCREMENT = 3
 DEFAULT CHARACTER SET = utf8mb3;
+insert into `users` (type_id, name, email, password) values (3,'mateus', 'mateus@gmail.com', '123456');
 
 
 -- -----------------------------------------------------
@@ -179,6 +182,7 @@ CREATE TABLE IF NOT EXISTS `db-techos`.`devices_categories` (
   `active` TINYINT(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;
+insert into `devices_categories` (name) values ('smartphone');
 
 -- -----------------------------------------------------
 -- Table `db-techos`.`devices`
@@ -188,8 +192,7 @@ CREATE TABLE IF NOT EXISTS `db-techos`.`devices` (
   `user_id` INT NOT NULL,
   `category_id` INT NOT NULL,
   `serial_number` BIGINT NOT NULL,
-  `model` VARCHAR(80) NOT NULL,
-  `brand` VARCHAR(50) NOT NULL,
+  `name` VARCHAR(150) NOT NULL,
   `creation_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `active` TINYINT(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`),
