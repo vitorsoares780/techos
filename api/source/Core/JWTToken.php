@@ -2,10 +2,10 @@
 
 namespace Source\Core;
 
-use Firebase\JWT\JWT;
-use Firebase\JWT\Key;
 use \DateTimeImmutable;
 use \Exception;
+use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
 
 class JWTToken
 {
@@ -37,7 +37,10 @@ class JWTToken
         );
     }
 
-    public function decode($token): bool | object
+    /**
+     * @return bool|object
+     */
+    public function decode($token)
     {
         try {
             $token = JWT::decode($token, new Key($this->secretKey, $this->headerJWT));

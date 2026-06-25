@@ -9,7 +9,8 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,N
 -- -----------------------------------------------------
 CREATE SCHEMA IF NOT EXISTS `db-techos` DEFAULT CHARACTER SET utf8mb3 ;
 USE `db-techos` ;
--- drop database `db-techos`;
+
+ -- drop database `db-techos`;
 -- -----------------------------------------------------
 -- Table `db-techos`.`faqs_categories`
 -- -----------------------------------------------------
@@ -55,8 +56,9 @@ CREATE TABLE IF NOT EXISTS `db-techos`.`plans` (
 ENGINE = InnoDB
 AUTO_INCREMENT = 6
 DEFAULT CHARACTER SET = utf8mb3;
+insert into `plans` (name, price) values ('Plano standard', 19.90);
 
-
+-- INSERT INTO devices (user_id, category_id, serial_number, model, brand) VALUES (1, 1, 123131421, "M54", "Samsung");
 -- -----------------------------------------------------
 -- Table `db-techos`.`companies`
 -- -----------------------------------------------------
@@ -79,6 +81,7 @@ CREATE TABLE IF NOT EXISTS `db-techos`.`companies` (
 ENGINE = InnoDB
 AUTO_INCREMENT = 9
 DEFAULT CHARACTER SET = utf8mb3;
+insert into `companies` (cnpj, name, email, owner_id, plan_id) values ('123456789', 'companhia', 'companhia@gmail.com', 4, 6);
 
 
 -- -----------------------------------------------------
@@ -97,7 +100,7 @@ CREATE TABLE IF NOT EXISTS `db-techos`.`employees` (
     FOREIGN KEY (`company_id`)
     REFERENCES `db-techos`.`companies` (`id`))
 ENGINE = InnoDB
-AUTO_INCREMENT = 51
+AUTO_INCREMENT = 100
 DEFAULT CHARACTER SET = utf8mb3;
 
 
@@ -145,7 +148,7 @@ CREATE TABLE IF NOT EXISTS `db-techos`.`user_types` (
 ENGINE = InnoDB
 AUTO_INCREMENT = 3
 DEFAULT CHARACTER SET = utf8mb3;
-
+insert into `user_types` (name) values ('cliente');
 
 
 -- -----------------------------------------------------
@@ -153,7 +156,7 @@ DEFAULT CHARACTER SET = utf8mb3;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `db-techos`.`users` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `typeId` INT NOT NULL,
+  `type_id` INT NOT NULL,
   `name` VARCHAR(255) NOT NULL,
   `email` VARCHAR(255) NOT NULL,
   `password` VARCHAR(255) NOT NULL,
@@ -167,31 +170,29 @@ CREATE TABLE IF NOT EXISTS `db-techos`.`users` (
 ENGINE = InnoDB
 AUTO_INCREMENT = 3
 DEFAULT CHARACTER SET = utf8mb3;
-
+insert into `users` (type_id, name, email, password) values (3,'mateus', 'mateus@gmail.com', '123456');
 
 
 -- -----------------------------------------------------
 -- Table `db-techos`.`devices_categories`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `db-techos`.`devices_categories` (
-  `id` INT NOT NULL,
+  `id` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(100) NOT NULL,
   `active` TINYINT(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;
-
-
+insert into `devices_categories` (name) values ('smartphone');
 
 -- -----------------------------------------------------
 -- Table `db-techos`.`devices`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `db-techos`.`devices` (
-  `id` INT NOT NULL,
+  `id` INT NOT NULL AUTO_INCREMENT,
   `user_id` INT NOT NULL,
   `category_id` INT NOT NULL,
   `serial_number` BIGINT NOT NULL,
-  `model` VARCHAR(80) NOT NULL,
-  `brand` VARCHAR(50) NOT NULL,
+  `name` VARCHAR(150) NOT NULL,
   `creation_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `active` TINYINT(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`),
@@ -208,6 +209,8 @@ CREATE TABLE IF NOT EXISTS `db-techos`.`devices` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
+insert into `devices` (user_id, category_id, serial_number, model, brand) values (4, 1, '123456789', 'S21', 'Samsung');
+
 
 
 SET SQL_MODE=@OLD_SQL_MODE;

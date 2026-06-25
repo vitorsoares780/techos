@@ -7,35 +7,35 @@ namespace Composer\Autoload;
 class ComposerStaticInit005683ec4e262a29d04b9ead07429804
 {
     public static $files = array (
-        '213a7c8e59c7bff0006969c4d083be1c' => __DIR__ . '/../..' . '/source/Support/Helpers.php',
-        '710b7bc17b96dd6ad2996e40711f00b3' => __DIR__ . '/../..' . '/source/Config/Config.php',
+        '5bf78d2a6ccbcd7b0d0a91f2fbbcf700' => __DIR__ . '/../..' . '/source/Support/Helpers.php',
+        '6506645b694c60a6f275c63fa750c431' => __DIR__ . '/../..' . '/source/Config/Config.php',
     );
 
     public static $prefixLengthsPsr4 = array (
-        'S' => 
+        'S' =>
         array (
             'Source\\' => 7,
         ),
-        'F' => 
+        'F' =>
         array (
             'Firebase\\JWT\\' => 13,
         ),
-        'C' => 
+        'C' =>
         array (
             'CoffeeCode\\Router\\' => 18,
         ),
     );
 
     public static $prefixDirsPsr4 = array (
-        'Source\\' => 
+        'Source\\' =>
         array (
             0 => __DIR__ . '/../..' . '/source',
         ),
-        'Firebase\\JWT\\' => 
+        'Firebase\\JWT\\' =>
         array (
             0 => __DIR__ . '/..' . '/firebase/php-jwt/src',
         ),
-        'CoffeeCode\\Router\\' => 
+        'CoffeeCode\\Router\\' =>
         array (
             0 => __DIR__ . '/..' . '/coffeecode/router/src',
         ),

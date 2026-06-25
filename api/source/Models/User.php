@@ -1,6 +1,6 @@
 <?php
 
-namespace Source\Models;
+namespace source\Models;
 
 use PDO;
 use Source\Core\Model;
@@ -29,7 +29,8 @@ class User extends Model
 
         $this->table = 'users'; // nome da tabela do banco
         $this->primaryKey = 'id'; // nome da chave primária da tabela
-        $this->fillable = ['typeId', 'name', 'email', 'password', 'photo']; // camelCase
+        // use camelCase field names so extractPayloadFromGetters() finds getters
+        $this->fillable = ['typeId', 'name', 'email', 'password', 'photo'];
     }
 
     public function getId(): ?int
@@ -116,7 +117,7 @@ class User extends Model
         return true;
     }
 
-    public function login (string $email, string $password, int $typeId = 2): bool
+    public function login (string $email, string $password, int $typeId = 3): bool
     {
         $query = "SELECT * FROM {$this->table} WHERE email = :email AND type_id = :typeId";
         $stmt = Connect::getInstance()->prepare($query);

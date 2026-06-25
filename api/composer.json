@@ -17,7 +17,12 @@
     }
   ],
   "config": {
-    "vendor-dir": "vendor"
+    "vendor-dir": "vendor",
+    "policy": {
+      "advisories": {
+        "block": false
+      }
+    }
   },
   "autoload": {
     "psr-4": {
@@ -29,9 +34,9 @@
     ]
   },
   "require": {
-    "php": "8.1.*",
+    "php": "^7.4 || ^8.0",
     "ext-pdo": "*",
-    "coffeecode/router" : "2.0.2",
-    "firebase/php-jwt": "^7.0"
+    "coffeecode/router" : "^1.0",
+    "firebase/php-jwt": "^6.0"
   }
 }
