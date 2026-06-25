@@ -9,12 +9,30 @@ class Devices extends Api
 {
     public function devicesListAll(): void
     {
+        if (!$this->authToken(2)) {
+            $this->call(
+                401,
+                "unauthorized",
+                "Token de autenticação inválido ou expirado.",
+                "error"
+            )->back();
+            return;
+        }
         $device = new Device();
         $this->call(200, "success", "Lista de dispositivos", "success")->back($device->listAll());
     }
 
     public function devicesListById(array $data): void
     {
+        if (!$this->authToken(2)) {
+            $this->call(
+                401,
+                "unauthorized",
+                "Token de autenticação inválido ou expirado.",
+                "error"
+            )->back();
+            return;
+        }
         if (!isset($data['deviceId'])) {
             $this->call(400, "bad_request", "ID do dispositivo obrigatório", "error")->back();
             return;
@@ -33,6 +51,15 @@ class Devices extends Api
 
     public function deviceInsert(array $data): void
     {
+        if (!$this->authToken(2)) {
+            $this->call(
+                401,
+                "unauthorized",
+                "Token de autenticação inválido ou expirado.",
+                "error"
+            )->back();
+            return;
+        }
         $data = $this->getRequestBody($data);
 
         if (!isset($data['user_id']) || !isset($data['category_id']) || !isset($data['serial_number']) || !isset($data['model']) || !isset($data['brand'])) {
@@ -53,6 +80,15 @@ class Devices extends Api
 
     public function deviceUpdate(array $data): void
     {
+        if (!$this->authToken(2)) {
+            $this->call(
+                401,
+                "unauthorized",
+                "Token de autenticação inválido ou expirado.",
+                "error"
+            )->back();
+            return;
+        }
         $data = $this->getRequestBody($data);
 
         if (!isset($data['deviceId'])) {
@@ -80,6 +116,15 @@ class Devices extends Api
 
     public function deviceDelete(array $data): void
     {
+        if (!$this->authToken(2)) {
+            $this->call(
+                401,
+                "unauthorized",
+                "Token de autenticação inválido ou expirado.",
+                "error"
+            )->back();
+            return;
+        }
         if (!isset($data['deviceId'])) {
             $this->call(400, "bad_request", "ID do dispositivo obrigatório", "error")->back();
             return;

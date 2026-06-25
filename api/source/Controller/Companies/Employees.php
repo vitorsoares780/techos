@@ -9,12 +9,32 @@ class Employees extends Api
 {
     public function employeesListAll(): void
     {
+        if (!$this->authToken(1)) {
+            $this->call(
+                401,
+                "unauthorized",
+                "Token de autenticação inválido ou expirado.",
+                "error"
+            )->back();
+            return;
+        }
+
         $employee = new Employee();
         $this->call(200, "success", "Lista de funcionários", "success")->back($employee->listAll());
     }
 
     public function employeesListById(array $data): void
     {
+        if (!$this->authToken(1)) {
+            $this->call(
+                401,
+                "unauthorized",
+                "Token de autenticação inválido ou expirado.",
+                "error"
+            )->back();
+            return;
+        }
+    
         if (!isset($data['employeeId'])) {
             $this->call(400, "bad_request", "ID do funcionário obrigatório", "error")->back();
             return;
@@ -33,6 +53,16 @@ class Employees extends Api
 
     public function employeeInsert(array $data): void
     {
+        if (!$this->authToken(1)) {
+            $this->call(
+                401,
+                "unauthorized",
+                "Token de autenticação inválido ou expirado.",
+                "error"
+            )->back();
+            return;
+        }
+
         $data = $this->getRequestBody($data);
 
         if (!isset($data['user_id']) || !isset($data['company_id'])) {
@@ -53,6 +83,15 @@ class Employees extends Api
 
     public function employeeUpdate(array $data): void
     {
+        if (!$this->authToken(1)) {
+            $this->call(
+                401,
+                "unauthorized",
+                "Token de autenticação inválido ou expirado.",
+                "error"
+            )->back();
+            return;
+        }
         $data = $this->getRequestBody($data);
 
         if (!isset($data['employeeId'])) {
@@ -77,6 +116,15 @@ class Employees extends Api
 
     public function employeeDelete(array $data): void
     {
+        if (!$this->authToken(1)) {
+            $this->call(
+                401,
+                "unauthorized",
+                "Token de autenticação inválido ou expirado.",
+                "error"
+            )->back();
+            return;
+        }
         if (!isset($data['employeeId'])) {
             $this->call(400, "bad_request", "ID do funcionário obrigatório", "error")->back();
             return;

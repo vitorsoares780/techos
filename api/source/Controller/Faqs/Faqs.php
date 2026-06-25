@@ -53,6 +53,15 @@ class Faqs extends Api
 
     public function faqInsert(array $data): void
     {
+        if (!$this->authToken(1)) {
+            $this->call(
+                401,
+                "unauthorized",
+                "Token de autenticação inválido ou expirado.",
+                "error"
+            )->back();
+            return;
+        }
         $faqs_cat_id = $data['faqs_category_id'];
         $question = $data['question'];
         $answer = $data['answer'];
@@ -95,7 +104,15 @@ class Faqs extends Api
 
     public function faqUpdate(array $data): void
     {
-        var_dump($data);  // DEBUG
+        if (!$this->authToken(1)) {
+            $this->call(
+                401,
+                "unauthorized",
+                "Token de autenticação inválido ou expirado.",
+                "error"
+            )->back();
+            return;
+        }
         if (!filter_var($data['faqId'], FILTER_VALIDATE_INT)) {
             $this->call(
                 400,
@@ -135,7 +152,16 @@ class Faqs extends Api
 
     public function faqDelete(array $data): void
     {
-        if(!filter_var($data['faqId'], FILTER_VALIDATE_INT)){
+        if (!$this->authToken(1)) {
+            $this->call(
+                401,
+                "unauthorized",
+                "Token de autenticação inválido ou expirado.",
+                "error"
+            )->back();
+            return;
+        }
+        if (!filter_var($data['faqId'], FILTER_VALIDATE_INT)) {
             $this->call(
                 400,
                 "bad_request",
@@ -147,7 +173,7 @@ class Faqs extends Api
 
         $faq = new Faq();
 
-        if($faq->delete($data['faqId']) === false){
+        if ($faq->delete($data['faqId']) === false) {
             $this->call(
                 404,
                 "not_found",

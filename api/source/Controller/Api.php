@@ -71,7 +71,7 @@ class Api
         return $data;
     }
 
-    protected function back(object | array $data = null): Api
+    protected function back(object | bool | array $data = null): Api
     {
         header('Content-Type: application/json');
         if ($data) {

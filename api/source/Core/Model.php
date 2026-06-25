@@ -19,7 +19,7 @@ abstract class Model
         return $this->errorMessage;
     }
 
-    public function selectById(int $id): bool
+    public function listById(int $id): bool | object
     {
         $query = "SELECT * 
                   FROM {$this->table} 
@@ -53,14 +53,14 @@ abstract class Model
                 }
             }
 
-            return true;
+            return $result;
         } catch (PDOException $e) {
             $this->errorMessage = $e->getMessage();
             return false;
         }
     }
 
-    public function selectAll(array $filters = [], ?string $orderBy = 'id', string $direction = 'ASC'): array
+    public function listAll(array $filters = [], ?string $orderBy = 'id', string $direction = 'ASC'): array
     {
         try {
             $query = "SELECT * FROM {$this->table}";
@@ -171,7 +171,7 @@ abstract class Model
         }
     }
 
-    public function updateById(int $id): bool
+    public function update(int $id): bool
     {
         try {
             $payload = $this->extractPayloadFromGetters();
@@ -214,7 +214,7 @@ abstract class Model
         }
     }
 
-    public function deleteById(int $id): bool
+    public function delete(int $id): bool
     {
         try {
             $query = "DELETE FROM {$this->table} WHERE {$this->primaryKey} = :id";
@@ -232,7 +232,7 @@ abstract class Model
         }
     }
 
-    public function softDeleteById(int $id): bool
+    public function softDelete(int $id): bool
     {
         try {
             $query = "UPDATE {$this->table} SET active = 0 WHERE {$this->primaryKey} = :id";

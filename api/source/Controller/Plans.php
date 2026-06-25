@@ -39,7 +39,7 @@ class Plans extends Api
             return;
         }
 
-        $plan = new Plan(null, $data['name'], (float)$data['price']);
+        $plan = new Plan(null, $data['name'], (float) $data['price']);
 
         $result = $plan->insert();
         if (!$result) {
@@ -59,8 +59,8 @@ class Plans extends Api
             return;
         }
 
-        $plan = new Plan((int)$data['planId'], $data['name'] ?? null, isset($data['price']) ? (float)$data['price'] : null);
-        $result = $plan->update();
+        $plan = new Plan((int) $data['planId'], $data['name'] ?? null, isset($data['price']) ? (float) $data['price'] : null);
+        $result = $plan->update((int) $data['planId']);
 
         if (!$result) {
             $this->call(500, "internal_server_error", "Erro ao atualizar plano", "error")->back();
@@ -77,8 +77,8 @@ class Plans extends Api
             return;
         }
 
-        $plan = new Plan((int)$data['planId']);
-        if (!$plan->delete()) {
+        $plan = new Plan((int) $data['planId']);
+        if (!$plan->delete((int) $data['planId'])) {
             $this->call(500, "internal_server_error", "Erro ao deletar plano", "error")->back();
             return;
         }
