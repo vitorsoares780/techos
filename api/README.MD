@@ -1,74 +1,237 @@
-# 📁 api/source/
+# TechOS API
 
-## O Código-Fonte — Organização MVC
-
----
-
-### 🎯 Para que serve esta pasta?
-
-A pasta `source/` contém **todo o código-fonte** escrito por nós, organizado seguindo o padrão **MVC**.
-Cada subpasta tem uma responsabilidade clara e específica.
+Base: `http://localhost/techos/api`
 
 ---
 
-### 📂 Estrutura desta pasta
+## Respostas
 
-```
-source/
-├── Config/         ← Configurações do sistema (banco, constantes)
-├── Controller/     ← Controllers — recebem requisições e retornam respostas
-├── Core/           ← Núcleo — classes fundamentais do framework (Router, Connect)
-├── Models/         ← Models — representam as tabelas do banco de dados
-└── Support/        ← Helpers — funções utilitárias auxiliares
-```
+Tudo que a API devolve segue esse formato:
 
----
-
-### 🧩 Como as pastas se relacionam?
-
-```
-Requisição HTTP
-      ↓
-[Core/Router.php]       → Analisa a URL e encontra o Controller certo
-      ↓
-[Controller/Api.php]    → Executa a lógica de negócio
-      ↓
-[Models/User.php]       → Consulta/salva dados no banco
-      ↓
-[Core/Connect.php]      → Fornece a conexão PDO com o banco
-      ↓
-[Config/Config.php]     → Fornece as credenciais e configurações
-      ↓
-[Support/Helpers.php]   → Funções auxiliares usadas em qualquer lugar
-```
-
----
-
-### 📖 Conceito: Namespaces em PHP
-
-Cada pasta corresponde a um **namespace** (espaço de nomes) no PHP.
-Namespaces organizam as classes e evitam conflitos de nomes.
-
-```php
-// A classe User está no namespace source\Models
-namespace source\Models;
-
-class User
+```json
 {
-    // ...
+  "code": 200,
+  "type": "success",
+  "status": "success",
+  "message": "alguma mensagem",
+  "data": {}
 }
 ```
 
-Para usar essa classe em outro arquivo:
-```php
-use source\Models\User;
+---
 
-$usuario = new User();
-```
+## Autenticacao
 
-> 💡 O **Composer** faz o carregamento automático (autoload) das classes baseado nos namespaces.
+Algumas rotas exigem token JWT. Faz login no `/users/login`, pega o token que volta e manda no cabecalho `token: SEU_TOKEN`.
+
+**Niveis:** Admin (`type_id = 1`) e Usuario comum (`type_id = 2`). Rotas com `-admin` no nome sao so pra admin.
 
 ---
 
-> 📚 Acesse cada subpasta para entender sua responsabilidade em detalhes.
+## Rotas
+
+### Usuarios
+
+**Cadastrar usuario**
+```
+POST /users/register
+```
+```json
+{ "name": "Joao", "email": "joao@email.com", "password": "123" }
+```
+
+**Cadastro admin**
+```
+POST /users/register-admin
+```
+
+**Login**
+```
+POST /users/login
+```
+```json
+{ "email": "joao@email.com", "password": "123" }
+```
+
+**Login admin**
+```
+POST /users/login-admin
+```
+Mesma coisa, mas so aceita admin.
+
+**Atualizar dados**
+```
+PUT /users/update
+```
+```json
+{ "name": "Joao Novo", "email": "joao.novo@email.com" }
+```
+
+---
+
+### Empresas
+
+```
+GET    /companies/list              → Lista todas
+GET    /companies/list/{id}         → Uma especifica
+POST   /companies                   → Criar
+PUT    /companies/{id}              → Atualizar
+DELETE /companies/{id}              → Deletar (soft delete)
+```
+
+**Criar empresa:**
+```json
+{ "cnpj": "123", "name": "Minha Empresa", "email": "contato@empresa.com", "owner_id": 1, "plan_id": 1 }
+```
+
+**Listagem retorna:**
+```json
+{ "data": [{ "id": 1, "cnpj": "123", "name": "Minha Empresa", "owner_name": "Joao", "plan_name": "Basico" }] }
+```
+
+---
+
+### Funcionarios
+
+```
+GET    /employees/list              → Lista todos
+GET    /employees/list/{id}         → Um especifico
+POST   /employees                   → Criar
+PUT    /employees/{id}              → Atualizar
+DELETE /employees/{id}              → Deletar (soft delete)
+```
+
+**Criar:**
+```json
+{ "user_id": 1, "company_id": 1 }
+```
+
+---
+
+### Dispositivos
+
+```
+GET    /devices/list                → Lista todos
+GET    /devices/list/{id}           → Um especifico
+POST   /devices                     → Criar
+PUT    /devices/{id}                → Atualizar
+DELETE /devices/{id}                → Deletar (soft delete)
+```
+
+**Criar:**
+```json
+{ "user_id": 1, "category_id": 1, "serial_number": "SN123", "model": "iPhone 14", "brand": "Apple" }
+```
+
+**Listagem retorna nome do usuario e da categoria junto.**
+
+---
+
+### Categorias de Dispositivos
+
+```
+GET    /devices-categories/list     → Lista todas
+GET    /devices-categories/list/{id}
+POST   /devices-categories          → Criar
+PUT    /devices-categories/{id}     → Atualizar
+DELETE /devices-categories/{id}     → Deletar
+```
+
+**Criar:**
+```json
+{ "name": "Tablet" }
+```
+
+Se tentar deletar uma categoria que tem dispositivos vinculados, a API devolve 400 e nao deixa.
+
+---
+
+### Ordens de Servico (OS)
+
+```
+GET    /serviceOrders/list          → Lista todas
+GET    /serviceOrders/list/{id}     → Uma especifica
+POST   /serviceOrders               → Criar
+PUT    /serviceOrders/{id}          → Atualizar
+DELETE /serviceOrders/{id}          → Deletar (soft delete)
+```
+
+**Criar:**
+```json
+{
+  "user_id": 1,
+  "device_id": 1,
+  "company_id": 1,
+  "defect": "Tela quebrada",
+  "status": "aberta",
+  "price": 350.00,
+  "photo": "foto.jpg"
+}
+```
+
+**Status possiveis:** `aberta`, `aguardando_peca`, `em_andamento`, `cancelada`, `concluida`
+
+---
+
+### Planos
+
+```
+GET    /plans/list                  → Lista todos
+GET    /plans/list/{id}
+POST   /plans                       → Criar
+PUT    /plans/{id}                  → Atualizar
+DELETE /plans/{id}                  → Deletar (soft delete)
+```
+
+**Criar:**
+```json
+{ "name": "Plano Premium", "price": 99.90 }
+```
+
+---
+
+### FAQs
+
+```
+GET    /faqs/list                   → Lista todas
+GET    /faqs/list/{id}
+POST   /faqs/insert                 → Criar
+PUT    /faqs/update/{id}            → Atualizar
+DELETE /faqs/{id}                   → Deletar (soft delete)
+```
+
+**Criar:**
+```json
+{ "faqs_category_id": 1, "question": "Pergunta?", "answer": "Resposta." }
+```
+
+---
+
+### Categorias de FAQ
+
+```
+GET    /faqs-categories/list        → Lista todas
+GET    /faqs-categories/list/{id}
+POST   /faqs-categories             → Criar
+PUT    /faqs-categories/update/{id} → Atualizar
+DELETE /faqs-categories/{id}        → Deletar
+```
+
+**Criar:**
+```json
+{ "name": "Suporte" }
+```
+
+Se tiver FAQ vinculada a categoria, nao deixa deletar.
+
+---
+
+### Produtos
+
+```
+GET /products/list              → Lista todos
+GET /products/list/{id}
+```
+
+---
 
