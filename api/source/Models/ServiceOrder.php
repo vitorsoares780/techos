@@ -125,7 +125,7 @@ class ServiceOrder
     {
         $query = "SELECT s.id, 
                          u.name as 'user_name', 
-                         d.model as 'device_model', 
+                         d.name as 'device_model', 
                          c.name as 'company_name', 
                          s.defect, 
                          s.status, 

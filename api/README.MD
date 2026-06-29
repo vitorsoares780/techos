@@ -24,7 +24,9 @@ Tudo que a API devolve segue esse formato:
 
 Algumas rotas exigem token JWT. Faz login no `/users/login`, pega o token que volta e manda no cabecalho `token: SEU_TOKEN`.
 
-**Niveis:** Admin (`type_id = 1`) e Usuario comum (`type_id = 2`). Rotas com `-admin` no nome sao so pra admin.
+**Niveis:** Admin (`type_id = 1`), Usuario comum (`type_id = 2`) e Cliente (`type_id = 3`). Rotas com `-admin` no nome sao so pra admin.
+
+**Observacao sobre seguranca:** As rotas de Planos nao tem autenticacao implementada. As rotas de OS que sao de listagem exigem nivel 2+, e as de CRUD exigem admin. Dispositivos e Funcionarios exigem admin.
 
 ---
 
@@ -32,7 +34,7 @@ Algumas rotas exigem token JWT. Faz login no `/users/login`, pega o token que vo
 
 ### Usuarios
 
-**Cadastrar usuario**
+**Cadastrar cliente** (sempre type_id = 3)
 ```
 POST /users/register
 ```
@@ -52,6 +54,7 @@ POST /users/login
 ```json
 { "email": "joao@email.com", "password": "123" }
 ```
+Retorna: `id`, `name`, `photo`, `token`
 
 **Login admin**
 ```
@@ -59,7 +62,7 @@ POST /users/login-admin
 ```
 Mesma coisa, mas so aceita admin.
 
-**Atualizar dados**
+**Atualizar dados** (exige token, nivel 2+)
 ```
 PUT /users/update
 ```
@@ -74,9 +77,9 @@ PUT /users/update
 ```
 GET    /companies/list              → Lista todas
 GET    /companies/list/{id}         → Uma especifica
-POST   /companies                   → Criar
-PUT    /companies/{id}              → Atualizar
-DELETE /companies/{id}              → Deletar (soft delete)
+POST   /companies                   → Criar (exige token, nivel 2+)
+PUT    /companies/{id}              → Atualizar (exige token, admin)
+DELETE /companies/{id}              → Deletar (soft delete, exige token, admin)
 ```
 
 **Criar empresa:**
@@ -86,12 +89,12 @@ DELETE /companies/{id}              → Deletar (soft delete)
 
 **Listagem retorna:**
 ```json
-{ "data": [{ "id": 1, "cnpj": "123", "name": "Minha Empresa", "owner_name": "Joao", "plan_name": "Basico" }] }
+{ "data": [{ "id": 1, "cnpj": "123", "name": "Minha Empresa", "email": "contato@empresa.com", "owner_name": "Joao", "plan_name": "Basico" }] }
 ```
 
 ---
 
-### Funcionarios
+### Funcionarios (exige token, admin)
 
 ```
 GET    /employees/list              → Lista todos
@@ -108,7 +111,7 @@ DELETE /employees/{id}              → Deletar (soft delete)
 
 ---
 
-### Dispositivos
+### Dispositivos (exige token, admin)
 
 ```
 GET    /devices/list                → Lista todos
@@ -120,14 +123,16 @@ DELETE /devices/{id}                → Deletar (soft delete)
 
 **Criar:**
 ```json
-{ "user_id": 1, "category_id": 1, "serial_number": "SN123", "model": "iPhone 14", "brand": "Apple" }
+{ "user_id": 1, "category_id": 1, "serial_number": "SN123", "name": "iPhone 14" }
 ```
 
-**Listagem retorna nome do usuario e da categoria junto.**
+**Listagem retorna:** `id`, `serial_number`, `name`, `category_name`, `user_name`
+
+**Obs:** A tabela `devices` nao tem colunas `model` nem `brand`. O nome do aparelho e o campo `name`.
 
 ---
 
-### Categorias de Dispositivos
+### Categorias de Dispositivos (exige token, admin)
 
 ```
 GET    /devices-categories/list     → Lista todas
@@ -149,11 +154,11 @@ Se tentar deletar uma categoria que tem dispositivos vinculados, a API devolve 4
 ### Ordens de Servico (OS)
 
 ```
-GET    /serviceOrders/list          → Lista todas
-GET    /serviceOrders/list/{id}     → Uma especifica
-POST   /serviceOrders               → Criar
-PUT    /serviceOrders/{id}          → Atualizar
-DELETE /serviceOrders/{id}          → Deletar (soft delete)
+GET    /serviceOrders/list          → Lista todas (exige token, nivel 2+)
+GET    /serviceOrders/list/{id}     → Uma especifica (exige token, nivel 2+)
+POST   /serviceOrders               → Criar (exige token, admin)
+PUT    /serviceOrders/{id}          → Atualizar (exige token, admin)
+DELETE /serviceOrders/{id}          → Deletar (soft delete, exige token, admin)
 ```
 
 **Criar:**
@@ -171,6 +176,8 @@ DELETE /serviceOrders/{id}          → Deletar (soft delete)
 
 **Status possiveis:** `aberta`, `aguardando_peca`, `em_andamento`, `cancelada`, `concluida`
 
+**Obs:** A listagem retorna `device_model` que vem do campo `name` da tabela `devices` (nao existe coluna `model`).
+
 ---
 
 ### Planos
@@ -180,7 +187,7 @@ GET    /plans/list                  → Lista todos
 GET    /plans/list/{id}
 POST   /plans                       → Criar
 PUT    /plans/{id}                  → Atualizar
-DELETE /plans/{id}                  → Deletar (soft delete)
+DELETE /plans/{id}                  → Deletar (delete fisico, nao soft delete)
 ```
 
 **Criar:**
@@ -195,9 +202,9 @@ DELETE /plans/{id}                  → Deletar (soft delete)
 ```
 GET    /faqs/list                   → Lista todas
 GET    /faqs/list/{id}
-POST   /faqs/insert                 → Criar
-PUT    /faqs/update/{id}            → Atualizar
-DELETE /faqs/{id}                   → Deletar (soft delete)
+POST   /faqs/insert                 → Criar (exige token, admin)
+PUT    /faqs/update/{id}            → Atualizar (exige token, admin)
+DELETE /faqs/{id}                   → Deletar (soft delete, exige token, admin)
 ```
 
 **Criar:**
@@ -212,9 +219,9 @@ DELETE /faqs/{id}                   → Deletar (soft delete)
 ```
 GET    /faqs-categories/list        → Lista todas
 GET    /faqs-categories/list/{id}
-POST   /faqs-categories             → Criar
-PUT    /faqs-categories/update/{id} → Atualizar
-DELETE /faqs-categories/{id}        → Deletar
+POST   /faqs-categories             → Criar (exige token, admin)
+PUT    /faqs-categories/update/{id} → Atualizar (exige token, admin)
+DELETE /faqs-categories/{id}        → Deletar (exige token, admin)
 ```
 
 **Criar:**
@@ -233,5 +240,15 @@ GET /products/list              → Lista todos
 GET /products/list/{id}
 ```
 
+(CRUD completo nao implementado — so listagem)
+
 ---
 
+### Categorias de Produtos
+
+```
+GET /products-categories/list       → Lista todas
+GET /products-categories/list/{id}  → Uma especifica
+```
+
+(So listagem, sem CRUD)
