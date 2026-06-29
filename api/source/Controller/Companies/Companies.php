@@ -33,6 +33,16 @@ class Companies extends Api
 
     public function companyInsert(array $data): void
     {
+        if (!$this->authToken(2)) {
+            $this->call(
+                401,
+                "unauthorized",
+                "Token de autenticação inválido ou expirado.",
+                "error"
+            )->back();
+            return;
+        }
+
         $data = $this->getRequestBody($data);
 
         if (!isset($data['cnpj']) || !isset($data['name']) || !isset($data['email']) || !isset($data['owner_id']) || !isset($data['plan_id'])) {
@@ -40,7 +50,7 @@ class Companies extends Api
             return;
         }
 
-        $company = new Company(null, $data['cnpj'], $data['name'], $data['email'], (int)$data['owner_id'], (int)$data['plan_id']);
+        $company = new Company(null, $data['cnpj'], $data['name'], $data['email'], (int) $data['owner_id'], (int) $data['plan_id']);
         $result = $company->insert();
 
         if (!$result) {
@@ -53,6 +63,15 @@ class Companies extends Api
 
     public function companyUpdate(array $data): void
     {
+        if (!$this->authToken(1)) {
+            $this->call(
+                401,
+                "unauthorized",
+                "Token de autenticação inválido ou expirado.",
+                "error"
+            )->back();
+            return;
+        }
         $data = $this->getRequestBody($data);
 
         if (!isset($data['companyId'])) {
@@ -61,12 +80,12 @@ class Companies extends Api
         }
 
         $company = new Company(
-            (int)$data['companyId'],
+            (int) $data['companyId'],
             $data['cnpj'] ?? null,
             $data['name'] ?? null,
             $data['email'] ?? null,
-            isset($data['owner_id']) ? (int)$data['owner_id'] : null,
-            isset($data['plan_id']) ? (int)$data['plan_id'] : null
+            isset($data['owner_id']) ? (int) $data['owner_id'] : null,
+            isset($data['plan_id']) ? (int) $data['plan_id'] : null
         );
         $result = $company->update();
 
@@ -80,12 +99,22 @@ class Companies extends Api
 
     public function companyDelete(array $data): void
     {
+        if (!$this->authToken(1)) {
+            $this->call(
+                401,
+                "unauthorized",
+                "Token de autenticação inválido ou expirado.",
+                "error"
+            )->back();
+            return;
+        }
+
         if (!isset($data['companyId'])) {
             $this->call(400, "bad_request", "ID da empresa obrigatório", "error")->back();
             return;
         }
 
-        $company = new Company((int)$data['companyId']);
+        $company = new Company((int) $data['companyId']);
         if (!$company->delete()) {
             $this->call(500, "internal_server_error", "Erro ao deletar empresa", "error")->back();
             return;

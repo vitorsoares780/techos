@@ -10,6 +10,15 @@ class ServiceOrders extends Api
 
     public function serviceOrdersListAll()
     {
+        if (!$this->authToken(2)) {
+            $this->call(
+                401,
+                "unauthorized",
+                "Token de autenticação inválido ou expirado.",
+                "error"
+            )->back();
+            return;
+        }
         $serviceOrder = new ServiceOrder();
         $this->call(
             200,
@@ -21,6 +30,15 @@ class ServiceOrders extends Api
 
     public function serviceOrdersListById(array $data): void
     {
+        if (!$this->authToken(2)) {
+            $this->call(
+                401,
+                "unauthorized",
+                "Token de autenticação inválido ou expirado.",
+                "error"
+            )->back();
+            return;
+        }
         if (!filter_var($data['serviceOrderId'], FILTER_VALIDATE_INT)) {
             $this->call(
                 400,
@@ -54,6 +72,15 @@ class ServiceOrders extends Api
 
     public function serviceOrderInsert(array $data): void
     {
+        if (!$this->authToken(1)) {
+            $this->call(
+                401,
+                "unauthorized",
+                "Token de autenticação inválido ou expirado.",
+                "error"
+            )->back();
+            return;
+        }
         $user_id = $data['user_id'];
         $device_id = $data['device_id'];
         $company_id = $data['company_id'];
@@ -82,7 +109,9 @@ class ServiceOrders extends Api
 
         $serviceOrder = new ServiceOrder(null, $user_id, $device_id, $company_id, $defect, $status, $price, $photo);
 
-        if ($serviceOrder->insert() == false) {
+        $response = $serviceOrder->insert();
+
+        if ($response == false) {
             $this->call(
                 500,
                 "internal_server_error",
@@ -91,8 +120,6 @@ class ServiceOrders extends Api
             )->back();
             return;
         }
-
-        $response = $serviceOrder->insert();
 
         $this->call(
             201,
@@ -104,6 +131,15 @@ class ServiceOrders extends Api
 
     public function serviceOrderUpdate(array $data): void
     {
+        if (!$this->authToken(1)) {
+            $this->call(
+                401,
+                "unauthorized",
+                "Token de autenticação inválido ou expirado.",
+                "error"
+            )->back();
+            return;
+        }
         if (!filter_var($data['serviceOrderId'], FILTER_VALIDATE_INT)) {
             $this->call(
                 400,
@@ -147,6 +183,15 @@ class ServiceOrders extends Api
 
     public function serviceOrderDelete(array $data): void
     {
+        if (!$this->authToken(1)) {
+            $this->call(
+                401,
+                "unauthorized",
+                "Token de autenticação inválido ou expirado.",
+                "error"
+            )->back();
+            return;
+        }
         if (!filter_var($data['serviceOrderId'], FILTER_VALIDATE_INT)) {
             $this->call(
                 400,

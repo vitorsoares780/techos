@@ -9,12 +9,30 @@ class DevicesCategories extends Api
 {
     public function devicesCategoryList(): void
     {
+        if (!$this->authToken(1)) {
+            $this->call(
+                401,
+                "unauthorized",
+                "Token de autenticação inválido ou expirado.",
+                "error"
+            )->back();
+            return;
+        }
         $category = new DeviceCategory();
         $this->call(200, "success", "Lista de categorias", "success")->back($category->listAll());
     }
 
     public function devicesCategoryListById(array $data): void
     {
+        if (!$this->authToken(1)) {
+            $this->call(
+                401,
+                "unauthorized",
+                "Token de autenticação inválido ou expirado.",
+                "error"
+            )->back();
+            return;
+        }
         if (!isset($data['categoryId'])) {
             $this->call(400, "bad_request", "ID da categoria obrigatório", "error")->back();
             return;
@@ -33,6 +51,15 @@ class DevicesCategories extends Api
 
     public function devicesCategoriesCreate(array $data): void
     {
+        if (!$this->authToken(1)) {
+            $this->call(
+                401,
+                "unauthorized",
+                "Token de autenticação inválido ou expirado.",
+                "error"
+            )->back();
+            return;
+        }
         $data = $this->getRequestBody($data);
 
         if (!isset($data['name'])) {
@@ -54,6 +81,15 @@ class DevicesCategories extends Api
 
     public function deviceCategoryUpdate(array $data): void
     {
+        if (!$this->authToken(1)) {
+            $this->call(
+                401,
+                "unauthorized",
+                "Token de autenticação inválido ou expirado.",
+                "error"
+            )->back();
+            return;
+        }
         $data = $this->getRequestBody($data);
 
         if (!isset($data['categoryId'])) {
@@ -74,6 +110,15 @@ class DevicesCategories extends Api
 
     public function deviceCategoryDelete(array $data): void
     {
+        if (!$this->authToken(1)) {
+            $this->call(
+                401,
+                "unauthorized",
+                "Token de autenticação inválido ou expirado.",
+                "error"
+            )->back();
+            return;
+        }
         if (!isset($data['categoryId'])) {
             $this->call(400, "bad_request", "ID da categoria obrigatório", "error")->back();
             return;

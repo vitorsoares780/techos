@@ -61,15 +61,14 @@ class Employee
                   FROM employees as e
                   JOIN users as u ON e.user_id = u.id
                   JOIN companies as c ON e.company_id = c.id
-                  WHERE e.active = 1
-                  GROUP BY c.name";
+                  WHERE e.active = 1";
         $stmt = Connect::getInstance()->query($query);
         return $stmt->fetchAll();
     }
 
     public function listById(int $id): object|bool
     {
-        $query = "SELECT * FROM employees as e
+        $query = "SELECT e.* FROM employees as e
                   JOIN users as u ON e.user_id = u.id
                   JOIN companies as c ON e.company_id = c.id
                   WHERE e.active = 1
@@ -93,7 +92,7 @@ class Employee
         ]);
         if ($stmt->rowCount() > 0) {
             $this->id = Connect::getInstance()->lastInsertId();
-            $query = "SELECT * FROM employees as e
+            $query = "SELECT e.* FROM employees as e
                   JOIN users as u ON e.user_id = u.id
                   JOIN companies as c ON e.company_id = c.id
                   WHERE e.id = :id";
@@ -130,7 +129,7 @@ class Employee
             ":id" => $this->id
         ]);
         if ($stmt->rowCount() > 0) {
-            $query = "SELECT * FROM employees as e
+            $query = "SELECT e.* FROM employees as e
                       JOIN users as u ON e.user_id = u.id
                       JOIN companies as c ON e.company_id = c.id
                       WHERE e.id = :id";

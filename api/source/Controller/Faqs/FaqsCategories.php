@@ -54,6 +54,15 @@ class FaqsCategories extends Api
 
     public function faqsCategoriesCreate(array $data): void
     {
+        if (!$this->authToken(1)) {
+            $this->call(
+                401,
+                "unauthorized",
+                "Token de autenticação inválido ou expirado.",
+                "error"
+            )->back();
+            return;
+        }
         if (empty(trim($data['name']))) {
             $this->call(
                 400,
@@ -91,6 +100,15 @@ class FaqsCategories extends Api
 
     public function faqCategoryUpdate(array $data): void
     {
+        if (!$this->authToken(1)) {
+            $this->call(
+                401,
+                "unauthorized",
+                "Token de autenticação inválido ou expirado.",
+                "error"
+            )->back();
+            return;
+        }
         if(!filter_var($data['categoryId'], FILTER_VALIDATE_INT)){
             $this->call(
                 400,
@@ -128,6 +146,15 @@ class FaqsCategories extends Api
 
     public function faqCategoryDelete(array $data): void
     {
+        if (!$this->authToken(1)) {
+            $this->call(
+                401,
+                "unauthorized",
+                "Token de autenticação inválido ou expirado.",
+                "error"
+            )->back();
+            return;
+        }
         if(!filter_var($data['categoryId'], FILTER_VALIDATE_INT)){
             $this->call(
                 400,

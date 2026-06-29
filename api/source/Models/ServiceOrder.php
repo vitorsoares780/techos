@@ -136,7 +136,6 @@ class ServiceOrder
                   JOIN devices as d ON s.device_id = d.id
                   JOIN companies as c ON s.company_id = c.id
                   WHERE s.active = 1
-                  GROUP BY u.name
                   ORDER BY s.creation_time DESC";
         $stmt = Connect::getInstance()->query($query);
         return $stmt->fetchAll();
@@ -172,11 +171,11 @@ class ServiceOrder
                   JOIN companies as c ON s.company_id = c.id
                   WHERE s.active = 1
                   AND s.id = :id";
-            $stmt2 = Connect::getInstance()->prepare($query);
-            $stmt2->bindParam(':id', $this->id);
-            $stmt2->execute();
-            if ($stmt2->rowCount() > 0) {
-                return $stmt2->fetchAll();
+            $stmt = Connect::getInstance()->prepare($query);
+            $stmt->bindParam(':id', $this->id);
+            $stmt->execute();
+            if ($stmt->rowCount() > 0) {
+                return $stmt->fetchAll();
             }
         }
         return false;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Source\Controller\Devices;
+namespace source\Controller\Devices;
 
 use Source\Controller\Api;
 use Source\Models\Devices\Device;
@@ -9,12 +9,30 @@ class Devices extends Api
 {
     public function devicesListAll(): void
     {
+        if (!$this->authToken(2)) {
+            $this->call(
+                401,
+                "unauthorized",
+                "Token de autenticação inválido ou expirado.",
+                "error"
+            )->back();
+            return;
+        }
         $device = new Device();
         $this->call(200, "success", "Lista de dispositivos", "success")->back($device->listAll());
     }
 
     public function devicesListById(array $data): void
     {
+        if (!$this->authToken(2)) {
+            $this->call(
+                401,
+                "unauthorized",
+                "Token de autenticação inválido ou expirado.",
+                "error"
+            )->back();
+            return;
+        }
         if (!isset($data['deviceId'])) {
             $this->call(400, "bad_request", "ID do dispositivo obrigatório", "error")->back();
             return;
@@ -33,14 +51,23 @@ class Devices extends Api
 
     public function deviceInsert(array $data): void
     {
+        if (!$this->authToken(2)) {
+            $this->call(
+                401,
+                "unauthorized",
+                "Token de autenticação inválido ou expirado.",
+                "error"
+            )->back();
+            return;
+        }
         $data = $this->getRequestBody($data);
 
-        if (!isset($data['user_id']) || !isset($data['category_id']) || !isset($data['serial_number']) || !isset($data['model']) || !isset($data['brand'])) {
-            $this->call(400, "bad_request", "Os campos user_id, category_id, serial_number, model e brand são obrigatórios", "error")->back();
+        if (!isset($data['user_id']) || !isset($data['category_id']) || !isset($data['serial_number']) || !isset($data['name'])) {
+            $this->call(400, "bad_request", "Os campos user_id, category_id, serial_number e name são obrigatórios", "error")->back();
             return;
         }
 
-        $device = new Device(null, (int)$data['user_id'], (int)$data['category_id'], $data['serial_number'], $data['model'], $data['brand']);
+        $device = new Device(null, (int)$data['user_id'], (int)$data['category_id'], $data['serial_number'], $data['name']);
         $result = $device->insert();
 
         if (!$result) {
@@ -53,6 +80,15 @@ class Devices extends Api
 
     public function deviceUpdate(array $data): void
     {
+        if (!$this->authToken(2)) {
+            $this->call(
+                401,
+                "unauthorized",
+                "Token de autenticação inválido ou expirado.",
+                "error"
+            )->back();
+            return;
+        }
         $data = $this->getRequestBody($data);
 
         if (!isset($data['deviceId'])) {
@@ -65,8 +101,7 @@ class Devices extends Api
             isset($data['user_id']) ? (int)$data['user_id'] : null,
             isset($data['category_id']) ? (int)$data['category_id'] : null,
             $data['serial_number'] ?? null,
-            $data['model'] ?? null,
-            $data['brand'] ?? null
+            $data['name'] ?? null,
         );
         $result = $device->update();
 
@@ -80,6 +115,15 @@ class Devices extends Api
 
     public function deviceDelete(array $data): void
     {
+        if (!$this->authToken(2)) {
+            $this->call(
+                401,
+                "unauthorized",
+                "Token de autenticação inválido ou expirado.",
+                "error"
+            )->back();
+            return;
+        }
         if (!isset($data['deviceId'])) {
             $this->call(400, "bad_request", "ID do dispositivo obrigatório", "error")->back();
             return;
