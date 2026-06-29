@@ -24,9 +24,9 @@ Tudo que a API devolve segue esse formato:
 
 Algumas rotas exigem token JWT. Faz login no `/users/login`, pega o token que volta e manda no cabecalho `token: SEU_TOKEN`.
 
-**Niveis:** Admin (`type_id = 1`), Usuario comum (`type_id = 2`) e Cliente (`type_id = 3`). Rotas com `-admin` no nome sao so pra admin.
+**Niveis:** Admin, Usuario comum e Cliente. Rotas com `-admin` no nome sao so pra admin.
 
-**Observacao sobre seguranca:** As rotas de Planos nao tem autenticacao implementada. As rotas de OS que sao de listagem exigem nivel 2+, e as de CRUD exigem admin. Dispositivos e Funcionarios exigem admin.
+As rotas de OS que sao de listagem exigem nivel 2+, e as de CRUD exigem admin. Dispositivos e Funcionarios exigem admin.
 
 ---
 
@@ -128,8 +128,6 @@ DELETE /devices/{id}                → Deletar (soft delete)
 
 **Listagem retorna:** `id`, `serial_number`, `name`, `category_name`, `user_name`
 
-**Obs:** A tabela `devices` nao tem colunas `model` nem `brand`. O nome do aparelho e o campo `name`.
-
 ---
 
 ### Categorias de Dispositivos (exige token, admin)
@@ -175,8 +173,6 @@ DELETE /serviceOrders/{id}          → Deletar (soft delete, exige token, admin
 ```
 
 **Status possiveis:** `aberta`, `aguardando_peca`, `em_andamento`, `cancelada`, `concluida`
-
-**Obs:** A listagem retorna `device_model` que vem do campo `name` da tabela `devices` (nao existe coluna `model`).
 
 ---
 
@@ -233,22 +229,3 @@ Se tiver FAQ vinculada a categoria, nao deixa deletar.
 
 ---
 
-### Produtos
-
-```
-GET /products/list              → Lista todos
-GET /products/list/{id}
-```
-
-(CRUD completo nao implementado — so listagem)
-
----
-
-### Categorias de Produtos
-
-```
-GET /products-categories/list       → Lista todas
-GET /products-categories/list/{id}  → Uma especifica
-```
-
-(So listagem, sem CRUD)
