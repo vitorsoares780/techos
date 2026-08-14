@@ -163,9 +163,9 @@ CREATE TABLE IF NOT EXISTS `db-techos`.`users` (
   `photo` VARCHAR(255) NULL DEFAULT NULL,
   `active` TINYINT(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`),
-  INDEX `fk_users_user_types_idx` (`typeId` ASC) VISIBLE,
+  INDEX `fk_users_user_types_idx` (`type_id` ASC) VISIBLE,
   CONSTRAINT `fk_users_user_types`
-    FOREIGN KEY (`typeId`)
+    FOREIGN KEY (`type_id`)
     REFERENCES `db-techos`.`user_types` (`id`))
 ENGINE = InnoDB
 AUTO_INCREMENT = 3
@@ -193,6 +193,8 @@ CREATE TABLE IF NOT EXISTS `db-techos`.`devices` (
   `category_id` INT NOT NULL,
   `serial_number` BIGINT NOT NULL,
   `name` VARCHAR(150) NOT NULL,
+  `model` VARCHAR(150) NULL DEFAULT NULL,
+  `brand` VARCHAR(150) NULL DEFAULT NULL,
   `creation_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `active` TINYINT(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`),
@@ -209,7 +211,7 @@ CREATE TABLE IF NOT EXISTS `db-techos`.`devices` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
-insert into `devices` (user_id, category_id, serial_number, model, brand) values (4, 1, '123456789', 'S21', 'Samsung');
+insert into `devices` (user_id, category_id, serial_number, name, model, brand) values (4, 1, '123456789', 'Galaxy S21', 'S21', 'Samsung');
 
 
 

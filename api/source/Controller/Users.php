@@ -51,6 +51,50 @@ class Users extends Api
         $this->call(201, "success", "Usuário inserido com sucesso", "created")->back($response);
     }
 
+     public function registerAdmin(array $data): void
+    {
+        if (!isset($data['password']) || empty($data['password'])) {
+            $this->call(
+                400,
+                "bad_request",
+                "A senha é obrigatória.",
+                "error"
+            )->back();
+            return;
+        }
+
+        if (!$this->validateNameEmail($data)) {
+            $this->call(
+                400,
+                "bad_request",
+                "Nome e e-mail são obrigatórios. O e-mail deve ser válido.",
+                "error"
+            )->back();
+            return;
+        }
+
+        $user = new User(
+            null,
+            1,
+            $data['name'],
+            $data['email'],
+            $data['password']
+        );
+
+        if (!$user->insert()) {
+            $this->call(500, "internal_server_error", $user->getErrorMessage(), "error")->back();
+            return;
+        }
+
+        $response = [
+            "id" => $user->getId(),
+            "name" => $user->getName(),
+            "email" => $user->getEmail()
+        ];
+
+        $this->call(201, "success", "Usuário admin inserido com sucesso", "created")->back($response);
+    }
+
     public function auth(array $data): void
     {
         if (
@@ -137,7 +181,7 @@ class Users extends Api
 
     public function update(array $data): void
     {
-        if (!$this->authToken(2)) {
+        if (!$this->authToken(1)) {
             $this->call(
                 401,
                 "unauthorized",

@@ -33,7 +33,7 @@ class Companies extends Api
 
     public function companyInsert(array $data): void
     {
-        if (!$this->authToken(2)) {
+        if (!$this->authToken(1)) {
             $this->call(
                 401,
                 "unauthorized",

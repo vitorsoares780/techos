@@ -10,7 +10,7 @@ class ServiceOrders extends Api
 
     public function serviceOrdersListAll()
     {
-        if (!$this->authToken(2)) {
+        if (!$this->authToken(1)) {
             $this->call(
                 401,
                 "unauthorized",
@@ -30,7 +30,7 @@ class ServiceOrders extends Api
 
     public function serviceOrdersListById(array $data): void
     {
-        if (!$this->authToken(2)) {
+        if (!$this->authToken(1)) {
             $this->call(
                 401,
                 "unauthorized",

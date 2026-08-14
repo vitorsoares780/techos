@@ -9,7 +9,7 @@ class Devices extends Api
 {
     public function devicesListAll(): void
     {
-        if (!$this->authToken(2)) {
+        if (!$this->authToken(1)) {
             $this->call(
                 401,
                 "unauthorized",
@@ -24,7 +24,7 @@ class Devices extends Api
 
     public function devicesListById(array $data): void
     {
-        if (!$this->authToken(2)) {
+        if (!$this->authToken(1)) {
             $this->call(
                 401,
                 "unauthorized",
@@ -51,7 +51,7 @@ class Devices extends Api
 
     public function deviceInsert(array $data): void
     {
-        if (!$this->authToken(2)) {
+        if (!$this->authToken(1)) {
             $this->call(
                 401,
                 "unauthorized",
@@ -80,7 +80,7 @@ class Devices extends Api
 
     public function deviceUpdate(array $data): void
     {
-        if (!$this->authToken(2)) {
+        if (!$this->authToken(1)) {
             $this->call(
                 401,
                 "unauthorized",
@@ -115,7 +115,7 @@ class Devices extends Api
 
     public function deviceDelete(array $data): void
     {
-        if (!$this->authToken(2)) {
+        if (!$this->authToken(1)) {
             $this->call(
                 401,
                 "unauthorized",

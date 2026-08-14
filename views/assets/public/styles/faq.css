@@ -1,0 +1,121 @@
+/* ============================================================
+   TechOS — Página de FAQ
+   ============================================================ */
+
+.page-hero {
+  text-align: center;
+  background: var(--color-bg-soft);
+  padding-block: 5rem 4rem;
+}
+
+.page-hero h1 {
+  margin-top: 0.75rem;
+  font-size: clamp(2rem, 4vw, 3rem);
+}
+
+.page-hero p {
+  max-width: 38rem;
+  margin: 1.25rem auto 0;
+  color: var(--color-text-muted);
+  font-size: 1.05rem;
+}
+
+.faq-layout {
+  display: grid;
+  gap: 3rem;
+  padding-block: 4rem;
+  align-items: start;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 960px) {
+  .faq-layout {
+    grid-template-columns: 2fr 1fr;
+  }
+}
+
+.faq-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.faq-item {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--gradient-card);
+  overflow: hidden;
+  transition: var(--transition);
+}
+
+.faq-item:hover {
+  box-shadow: var(--shadow-soft);
+}
+
+.faq-item details {
+  padding: 1.25rem 1.5rem;
+}
+
+.faq-item summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  font-weight: 600;
+  font-family: var(--font-sans);
+  cursor: pointer;
+  list-style: none;
+}
+
+.faq-item summary::-webkit-details-marker {
+  display: none;
+}
+
+.faq-item summary::after {
+  content: "+";
+  display: inline-grid;
+  place-items: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  flex-shrink: 0;
+  border-radius: var(--radius-sm);
+  background: var(--color-primary-soft);
+  color: var(--color-primary);
+  font-size: 1.1rem;
+  transition: var(--transition);
+}
+
+.faq-item details[open] summary::after {
+  content: "−";
+  background: var(--gradient-hero);
+  color: #fff;
+}
+
+.faq-item details p {
+  margin-top: 1rem;
+  color: var(--color-text-muted);
+  font-size: 0.95rem;
+  line-height: 1.65;
+}
+
+.faq-cta .card {
+  position: sticky;
+  top: 6rem;
+}
+
+.faq-cta h2 {
+  font-size: 1.35rem;
+}
+
+.faq-cta p {
+  margin-top: 0.75rem;
+  margin-bottom: 1.5rem;
+  color: var(--color-text-muted);
+  font-size: 0.95rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  .page-hero {
+    background: var(--color-bg-soft);
+  }
+}
