@@ -11,6 +11,14 @@
   font-size: 0.95rem;
 }
 .auth .form { margin-top: 2.5rem; }
+.form-message {
+  min-height: 1.25rem;
+  margin: 0.75rem 0 1rem;
+  font-size: 0.92rem;
+  color: var(--color-text-muted);
+}
+.form-message.success { color: #1b8f5a; }
+.form-message.error { color: #c0392b; }
 .auth-footnote {
   margin-top: 1.5rem;
   text-align: center;

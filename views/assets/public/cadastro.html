@@ -55,20 +55,16 @@
   <main>
     <section class="container">
       <section class="auth">
-        <h1 class="auth-title">Cadastrar empresa</h1>
+        <h1 class="auth-title">Cadastro</h1>
         <p class="auth-subtitle">Comece grátis em poucos minutos.</p>
         <form class="form" data-signup-form novalidate>
           <fieldset class="form-field">
-            <label for="signup-company">Nome da empresa</label>
-            <input id="signup-company" name="company" type="text" required>
-          </fieldset>
-          <fieldset class="form-field">
-            <label for="signup-cnpj">CNPJ</label>
-            <input id="signup-cnpj" name="cnpj" type="text" placeholder="00.000.000/0000-00" required data-cnpj>
-          </fieldset>
-          <fieldset class="form-field">
             <label for="signup-name">Seu nome</label>
             <input id="signup-name" name="fullname" type="text" required>
+          </fieldset>
+          <fieldset class="form-field">
+            <label for="signup-cpf">CPF</label>
+            <input id="signup-cpf" name="cpf" type="text" placeholder="00.000.000-00" required data-cpf>
           </fieldset>
           <fieldset class="form-field">
             <label for="signup-email">E-mail</label>
@@ -78,6 +74,7 @@
             <label for="signup-password">Senha</label>
             <input id="signup-password" name="password" type="password" required>
           </fieldset>
+          <p class="form-message" data-form-message aria-live="polite"></p>
           <button class="btn btn-primary btn-block" type="submit">Criar conta grátis</button>
         </form>
         <p class="auth-footnote">Já tem conta? <a href="login.html">Entrar</a></p>

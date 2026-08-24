@@ -9,7 +9,14 @@ class Users extends Api
 {
     public function register(array $data): void
     {
-        if (!isset($data['password']) || empty($data['password'])) {
+        $data = $this->getRequestBody($data);
+
+        $data['name'] = trim((string) ($data['name'] ?? $data['fullname'] ?? ''));
+        $data['email'] = trim((string) ($data['email'] ?? ''));
+        $data['password'] = (string) ($data['password'] ?? '');
+        $data['cpf'] = trim((string) ($data['cpf'] ?? ''));
+
+        if (empty($data['password'])) {
             $this->call(
                 400,
                 "bad_request",
@@ -32,9 +39,11 @@ class Users extends Api
         $user = new User(
             null,
             3,
+            $data['cpf'],
             $data['name'],
             $data['email'],
-            $data['password']
+            $data['password'],
+            null
         );
 
         if (!$user->insert()) {
@@ -51,9 +60,16 @@ class Users extends Api
         $this->call(201, "success", "Usuário inserido com sucesso", "created")->back($response);
     }
 
-     public function registerAdmin(array $data): void
+    public function registerAdmin(array $data): void
     {
-        if (!isset($data['password']) || empty($data['password'])) {
+        $data = $this->getRequestBody($data);
+
+        $data['name'] = trim((string) ($data['name'] ?? $data['fullname'] ?? ''));
+        $data['email'] = trim((string) ($data['email'] ?? ''));
+        $data['password'] = (string) ($data['password'] ?? '');
+        $data['cpf'] = trim((string) ($data['cpf'] ?? ''));
+
+        if (empty($data['password'])) {
             $this->call(
                 400,
                 "bad_request",
@@ -76,9 +92,11 @@ class Users extends Api
         $user = new User(
             null,
             1,
+            $data['cpf'],
             $data['name'],
             $data['email'],
-            $data['password']
+            $data['password'],
+            null,
         );
 
         if (!$user->insert()) {
@@ -97,6 +115,7 @@ class Users extends Api
 
     public function auth(array $data): void
     {
+        $data = $this->getRequestBody($data);
         if (
             !isset($data['email'], $data['password']) ||
             empty($data['email']) || empty($data['password']) ||
@@ -139,6 +158,8 @@ class Users extends Api
 
     public function authAdmin(array $data): void
     {
+        $data = $this->getRequestBody($data);
+        
         if (
             !isset($data['email'], $data['password']) ||
             empty($data['email']) || empty($data['password']) ||
