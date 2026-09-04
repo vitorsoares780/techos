@@ -18,7 +18,7 @@
     `;
   } else {
     faqs.data.forEach(faq => {
-      faqList.innerHTML = `
+      faqList.innerHTML += `
       <article class="faq-item">
             <details>
               <summary>${faq.question}</summary>

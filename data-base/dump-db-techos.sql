@@ -170,7 +170,10 @@ CREATE TABLE IF NOT EXISTS `db-techos`.`users` (
 ENGINE = InnoDB
 AUTO_INCREMENT = 3
 DEFAULT CHARACTER SET = utf8mb3;
-insert into `users` (type_id, name, email, password) values (3,'mateus', 'mateus@gmail.com', '123456');
+
+ALTER TABLE `db-techos`.`users` 
+ADD COLUMN `cpf` VARCHAR(20) NOT NULL AFTER `typeId`;
+-- insert into `users` (type_id, name, email, password) values (3,'mateus', 'mateus@gmail.com', '123456');
 
 
 -- -----------------------------------------------------

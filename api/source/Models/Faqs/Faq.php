@@ -55,10 +55,12 @@ class Faq
 
     public function listAll(): array
     {
-        $query = "SELECT f.id, f.question, f.answer, c.name as 'category_name'
+        $query = "SELECT f.id, f.question, f.answer 
+                  -- c.name as 'category_name'
                   FROM faqs as f
-                  JOIN faqs_categories as c ON f.faqs_category_id = c.id
-                  GROUP BY c.name";
+                  -- JOIN faqs_categories as c ON f.faqs_category_id = c.id
+                  -- GROUP BY c.name
+                  ORDER BY f.faqs_category_id";
         $stmt = Connect::getInstance()->query($query);
         return $stmt->fetchAll();
     }
