@@ -200,6 +200,68 @@ class Users extends Api
         )->back($response);
     }
 
+    public function usersListAll()
+    {
+        if (!$this->authToken(1)) {
+            $this->call(
+                401,
+                "unauthorized",
+                "Token de autenticação inválido ou expirado.",
+                "error"
+            )->back();
+            return;
+        }
+        $user = new User();
+        $this->call(
+            200,
+            "success",
+            "Lista de Usuários",
+            "success",
+        )->back($user->listAll());
+    }
+
+    public function usersListById(array $data): void
+    {
+        if (!$this->authToken(1)) {
+            $this->call(
+                401,
+                "unauthorized",
+                "Token de autenticação inválido ou expirado.",
+                "error"
+            )->back();
+            return;
+        }
+        if (!filter_var($data['userId'], FILTER_VALIDATE_INT)) {
+            $this->call(
+                400,
+                "bad_request",
+                "ID do usuário é obrigatório e deve ser um número inteiro",
+                "error"
+            )->back();
+            return;
+        }
+
+        $user = new user();
+        $user = $user->listById($data['userId']);
+
+        if ($user == false) {
+            $this->call(
+                404,
+                "not_found",
+                "Usuário não encontrado",
+                "error"
+            )->back();
+            return;
+        }
+
+        $this->call(
+            200,
+            "success",
+            "Usuário encontrado",
+            "success"
+        )->back($user);
+    }
+
     public function update(array $data): void
     {
         if (!$this->authToken(1)) {

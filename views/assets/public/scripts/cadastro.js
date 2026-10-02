@@ -1,5 +1,9 @@
+import User from "../../_common/classes/User.js";
+import { toastPrincipal } from "../../_common/classes/Toast.js";
+import { loginFormController } from "../../_common/classes/FormController.js";
+
 /* ============================================================
-   TechOS — Tela de Cadastro de empresa
+   TechOS — Tela de Cadastro de usuário
    ============================================================ */
 (function () {
   "use strict";
@@ -8,6 +12,8 @@
   const cpfField = document.querySelector("[data-cpf]");
   const formMessage = document.querySelector("[data-form-message]");
   const submitButton = form?.querySelector("button[type='submit']");
+
+  const userService = new User();
 
   function setMessage(message, isError = false) {
     if (!formMessage) {
@@ -37,26 +43,45 @@
     return;
   }
 
+  loginFormController.init(form);
+
   form.addEventListener("submit", async function (event) {
     event.preventDefault();
 
-    const fullname = (new FormData(form).get("fullname") || "").toString().trim();
-    const email = (new FormData(form).get("email") || "").toString().trim();
-    const password = (new FormData(form).get("password") || "").toString();
-    const cpf = (new FormData(form).get("cpf") || "").toString().trim();
+    const validation = loginFormController.validateRequired([
+      "name",
+      "email",
+      "password"
+    ]);
 
-    if (!fullname || !email || !password) {
+    if (!validation.valid) {
       setMessage("Preencha nome, e-mail e senha para continuar.", true);
+      toastPrincipal.warning({
+        message: "Preencha nome, e-mail e senha para continuar."
+      });
       return;
     }
 
+    const data = loginFormController.getData();
+
+    const name = String(data.name || "").trim();
+    const email = String(data.email || "").trim();
+    const password = String(data.password || "");
+    const cpf = String(data.cpf || "").trim();
+
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       setMessage("Informe um e-mail válido.", true);
+      toastPrincipal.warning({
+        message: "Informe um e-mail válido."
+      });
       return;
     }
 
     if (cpf && cpf.replace(/\D/g, "").length < 11) {
       setMessage("Informe um CPF válido.", true);
+      toastPrincipal.warning({
+        message: "Informe um CPF válido."
+      });
       return;
     }
 
@@ -64,41 +89,42 @@
     setMessage("Enviando cadastro...");
 
     try {
-      const response = await fetch("../../../api/users/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Accept": "application/json"
-        },
-        body: JSON.stringify({
-          name: fullname,
-          email,
-          password,
-          cpf
-        })
+      const result = await userService.register({
+        name: name,
+        email,
+        password,
+        cpf
       });
 
-      const responseText = await response.text();
-      let result = {};
-
-      try {
-        result = JSON.parse(responseText);
-      } catch (error) {
-        throw new Error("Resposta inválida do servidor.");
+      if (!result || result.status !== "success") {
+        throw new Error(
+          result?.message || "Não foi possível concluir o cadastro."
+        );
       }
 
-      if (!response.ok || result.status !== "success") {
-        throw new Error(result.message || "Não foi possível concluir o cadastro.");
-      }
+      setMessage(
+        "Cadastro realizado com sucesso! Redirecionando para o login...",
+        false
+      );
 
-      setMessage("Cadastro realizado com sucesso! Redirecionando para o login...", false);
+      toastPrincipal.success({
+        message: result.message || "Cadastro realizado com sucesso!"
+      });
+
       form.reset();
 
       window.setTimeout(() => {
         window.location.href = "login.html";
       }, 1200);
     } catch (error) {
-      setMessage(error.message, true);
+      const message =
+        error.message || "Não foi possível concluir o cadastro.";
+
+      setMessage(message, true);
+
+      toastPrincipal.error({
+        message
+      });
     } finally {
       submitButton.disabled = false;
     }

@@ -1,147 +1,78 @@
-// ============================================================================
-// ordem-nova.js - Script para a página de Nova Ordem de Serviço (App/Cliente)
-// ============================================================================
+import ServiceOrder from "../../_common/classes/ServiceOrder.js";
+import { toastPrincipal } from "../../_common/classes/Toast.js";
+import { loginFormController } from "../../_common/classes/FormController.js";
 
-document.addEventListener('DOMContentLoaded', function () {
-    console.log('Página Nova OS (App) carregada');
+const serviceOrder = new ServiceOrder();
 
-    const form = document.getElementById('formNovaOS');
-    const btnSubmit = document.getElementById('btnSubmit');
-    const btnCancel = document.getElementById('btnCancel');
-
-    // Carregar dispositivos do cliente logado
-    carregarMeusDispositivos();
-
-    // Event listeners
-    if (form) {
-        form.addEventListener('submit', handleSubmit);
-    }
-    if (btnCancel) {
-        btnCancel.addEventListener('click', () => window.location.href = 'index.html');
-    }
-});
-
-// ============================================================================
-// Carregar dispositivos do cliente
-// ============================================================================
-
-async function carregarMeusDispositivos() {
-    try {
-        const token = localStorage.getItem('authToken');
-        const userId = localStorage.getItem('userId'); // Assumindo que o userId está salvo no login
-
-        const response = await fetch(`${window.API_BASE_URL}/devices/list`, {
-            headers: { 'Authorization': `Bearer ${token}` }
-        });
-        const data = await response.json();
-
-        if (data.success && data.data) {
-            const select = document.getElementById('deviceId');
-            // Filtrar apenas dispositivos do usuário logado
-            const meusDispositivos = data.data.filter(d => d.user_id == userId);
-
-            meusDispositivos.forEach(device => {
-                const option = document.createElement('option');
-                option.value = device.id;
-                option.textContent = `${device.brand} ${device.model} (${device.serialNumber})`;
-                select.appendChild(option);
-            });
-
-            // Se só tem um dispositivo, selecionar automaticamente
-            if (meusDispositivos.length === 1) {
-                select.value = meusDispositivos[0].id;
-            }
-        }
-    } catch (error) {
-        console.error('Erro ao carregar dispositivos:', error);
-    }
+const token = localStorage.getItem("token");
+if (token) {
+    serviceOrder.setAuthToken(token);
 }
 
-// ============================================================================
-// Handle Submit
-// ============================================================================
+const form = document.querySelector("[data-os-form]");
+const submitButton = form?.querySelector("button[type='submit']");
 
 async function handleSubmit(event) {
     event.preventDefault();
 
-    const btnSubmit = document.getElementById('btnSubmit');
-    const originalText = btnSubmit.textContent;
-    btnSubmit.disabled = true;
-    btnSubmit.textContent = 'Enviando...';
+    loginFormController.init(form);
 
-    // Coletar dados do formulário
-    const formData = new FormData(event.target);
-    const osData = {};
+    const validation = loginFormController.validateRequired(["defeito"]);
 
-    for (const [key, value] of formData.entries()) {
-        if (value !== '') {
-            osData[key] = value;
-        }
+    if (!validation.valid) {
+        toastPrincipal.warning({
+            message: "Informe o defeito do equipamento."
+        });
+        form.elements[validation.field]?.focus();
+        return;
     }
 
-    // Adicionar user_id do usuário logado
-    const userId = localStorage.getItem('userId');
-    if (userId) {
-        osData.userId = userId;
+    const userData = JSON.parse(localStorage.getItem("user") || "null");
+    const userId = userData?.id || localStorage.getItem("userId");
+
+    if (!userId) {
+        toastPrincipal.error({
+            message: "Usuário logado não encontrado."
+        });
+        return;
     }
 
-    // Status padrão para nova OS do cliente
-    osData.status = 'aguardando';
+    const data = loginFormController.getData();
+
+    const payload = {
+        user_id: Number(userId),
+        defect: String(data.defeito).trim(),
+        status: "aguardando"
+    };
+
+    submitButton.disabled = true;
+    submitButton.textContent = "Enviando...";
 
     try {
-        const token = localStorage.getItem('authToken');
-        const response = await fetch(`${window.API_BASE_URL}/serviceOrders`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify(osData)
-        });
-        const result = await response.json();
+        const response = await serviceOrder.insert(payload);
 
-        if (result.success) {
-            showSuccess('Ordem de Serviço criada com sucesso! Entraremos em contato em breve.');
-            setTimeout(() => {
-                window.location.href = 'index.html';
-            }, 2000);
-        } else {
-            showError(result.message || 'Erro ao criar OS');
-        }
+        toastPrincipal.success(
+            response?.message
+                ? response
+                : { message: "Ordem de serviço criada com sucesso!" }
+        );
+
+        form.reset();
+
+        setTimeout(() => {
+            window.location.href = "ordens.html";
+        }, 1200);
     } catch (error) {
-        console.error('Erro ao criar OS:', error);
-        showError('Erro ao criar OS: ' + error.message);
+        console.error("Erro ao criar ordem:", error);
+        toastPrincipal.error({
+            message: error.message || "Erro ao criar a ordem de serviço."
+        });
     } finally {
-        btnSubmit.disabled = false;
-        btnSubmit.textContent = originalText;
+        submitButton.disabled = false;
+        submitButton.textContent = "Solicitar ordem de serviço";
     }
 }
 
-// ============================================================================
-// Helpers
-// ============================================================================
-
-function showError(message) {
-    const alertDiv = document.createElement('div');
-    alertDiv.className = 'alert alert-danger alert-dismissible fade show mt-3';
-    alertDiv.role = 'alert';
-    alertDiv.innerHTML = `
-        ${message}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    `;
-    const container = document.querySelector('.card-body') || document.body;
-    container.insertBefore(alertDiv, container.firstChild);
-    setTimeout(() => alertDiv.remove(), 5000);
-}
-
-function showSuccess(message) {
-    const alertDiv = document.createElement('div');
-    alertDiv.className = 'alert alert-success alert-dismissible fade show mt-3';
-    alertDiv.role = 'alert';
-    alertDiv.innerHTML = `
-        ${message}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    `;
-    const container = document.querySelector('.card-body') || document.body;
-    container.insertBefore(alertDiv, container.firstChild);
+if (form) {
+    form.addEventListener("submit", handleSubmit);
 }

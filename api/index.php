@@ -34,9 +34,14 @@ $route->namespace("source\Controller");
 
 // ----------- USERS ------------------
 $route->group("/users");
+
+$route->get("/list", "Users:usersListAll");
+$route->get("/list/{userId}", "Users:usersListById");
+
 $route->post("/register","Users:register"); // Registrar usuário comum
 $route->post("/login","Users:auth"); // login de usuário comum
 $route->put("/update","Users:update"); // update de usuário comum
+
 $route->post("/register-admin","Users:registerAdmin"); // Registrar usuário admin NÃO IMPLEMENTADO
 $route->post("/login-admin","Users:authAdmin"); // login de usuário admin
 $route->put("/update-admin","Users:updateAdmin"); // update de usuário admin
@@ -118,7 +123,7 @@ $route->delete("/serviceOrders/{serviceOrderId}", "ServiceOrders:serviceOrderDel
 
 // localhost/acme-3am/api/hello
 $route->get("/hello", "Api:hello");
-$route->get("/users/list", "Users:usersList");
+//$route->get("/users/list", "Users:usersList");
 
 $route->dispatch();
 

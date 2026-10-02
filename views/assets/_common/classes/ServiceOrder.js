@@ -1,4 +1,4 @@
-import HttpClientBase from "./HttpClientBase";
+import HttpClientBase from "./HttpClientBase.js";
 
 export default class ServiceOrder extends HttpClientBase {
     #id;
@@ -10,18 +10,39 @@ export default class ServiceOrder extends HttpClientBase {
     #price;
     #photo;
     #creation_time;
-    #active;    
+    #active;
 
-    constructor({ id = null, user_id = null, device_id = null, company_id = null, defect = "", status = "", price = 0, photo = "", creation_time = null, active = 0 } = {}) {
+    constructor({
+        id = null,
+        user_id = null,
+        device_id = null,
+        company_id = null,
+        defect = null,
+        status = "",
+        price = 0,
+        photo = "",
+        creation_time = null,
+        active = 0
+    } = {}) {
+        super();
+
         this.id = id;
         this.user_id = user_id;
         this.device_id = device_id;
         this.company_id = company_id;
-        this.defect = defect;
+
+        if (defect !== null) {
+            this.defect = defect;
+        }
+
         this.status = status;
         this.price = price;
         this.photo = photo;
-        this.creation_time = creation_time;
+
+        if (creation_time !== null) {
+            this.creation_time = creation_time;
+        }
+
         this.active = active;
     }
 
@@ -65,21 +86,16 @@ export default class ServiceOrder extends HttpClientBase {
         if (typeof value !== "string" || value.trim() === "") {
             throw new TypeError("O defeito é obrigatório");
         }
+
         this.#defect = value.trim();
     }
+
     get status() {
         return this.#status;
     }
 
     set status(value) {
-        this.#status = value;
-    }
-    get photo() {
-        return this.#photo;
-    }
-
-    set photo(value) {
-        this.#photo = value;
+        this.#status = String(value || "").trim();
     }
 
     get price() {
@@ -88,49 +104,74 @@ export default class ServiceOrder extends HttpClientBase {
 
     set price(value) {
         const number = Number(value);
+
         if (!Number.isFinite(number) || number < 0) {
             throw new RangeError("O preço deve ser um número não negativo");
         }
+
         this.#price = number;
     }
+
+    get photo() {
+        return this.#photo;
+    }
+
+    set photo(value) {
+        this.#photo = value || "";
+    }
+
     get creation_time() {
         return this.#creation_time;
     }
+
     set creation_time(value) {
         const date = new Date(value);
-        if (!(date instanceof Date) || isNaN(date.getTime())) {
+
+        if (Number.isNaN(date.getTime())) {
             throw new RangeError("Data inválida");
         }
+
         this.#creation_time = date;
     }
+
     get active() {
         return this.#active;
     }
+
     set active(value) {
         const number = Number(value);
+
         if (number !== 0 && number !== 1) {
             throw new RangeError("O valor de ativo deve ser 0 ou 1");
         }
-        this.#active = value === null ? null : Number(value);
+
+        this.#active = number;
     }
 
     toJSON() {
-        return { id: this.id, user_id: this.user_id, device_id: this.device_id, company_id: this.company_id, defect: this.defect, status: this.status, price: this.price, photo: this.photo, creation_time: this.creation_time, active: this.active };
+        return {
+            id: this.id,
+            user_id: this.user_id,
+            device_id: this.device_id,
+            company_id: this.company_id,
+            defect: this.defect,
+            status: this.status,
+            price: this.price,
+            photo: this.photo,
+            creation_time: this.creation_time,
+            active: this.active
+        };
     }
-      async listAll() {
+
+    async listAll() {
         return this.get("/serviceOrders/list");
     }
 
     async listById(id) {
-        return this.get("/serviceOrders/list/:serviceOrderId", { serviceOrderId: id });
+        return this.get("/serviceOrders/list/:serviceOrderId", {
+            serviceOrderId: id
+        });
     }
-
-    // async listPaginator(page = 1, perPage = 10) {
-    //     return this.get("/serviceOrders/list/paginator/:page/:per_page", {
-    //         page,
-    //         per_page: perPage
-    //     });
-    // }
 
     async insert(data) {
         return this.post("/serviceOrders/", data);

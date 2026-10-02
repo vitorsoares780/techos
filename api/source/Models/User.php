@@ -133,6 +133,29 @@ class User extends Model
         return $field;
     }
 
+    public function listAll(): array
+    {
+        $query = "SELECT id, cpf, name, email
+                  FROM users
+                  ORDER BY id DESC";
+        $stmt = Connect::getInstance()->query($query);
+        return $stmt->fetchAll();
+    }
+
+    public function listById(int $id): object|bool
+    {
+        $query = "SELECT id, cpf, name, email
+                  FROM users
+                  WHERE id = :id";
+        $stmt = Connect::getInstance()->prepare($query);
+        $stmt->bindValue(':id', $id);
+        $stmt->execute();
+        if ($stmt->rowCount() > 0) {
+            return $stmt->fetch();
+        }
+        return false;
+    }
+
     public function login (string $email, string $password, int $typeId = 3): bool
     {
         $query = "SELECT * FROM {$this->table} WHERE email = :email AND typeId = :typeId";

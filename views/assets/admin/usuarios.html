@@ -12,6 +12,7 @@
   <link rel="stylesheet"
     href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@600;700;800&display=swap">
   <link rel="stylesheet" href="../_common/styles/base.css">
+  <link rel="stylesheet" href="../_common/styles/toast.css">
   <link rel="stylesheet" href="styles/admin.css">
 </head>
 
@@ -87,7 +88,7 @@
       </section>
 
       <article class="panel">
-        <!-- TODO: substituir por chamadas reais à API GET /api/admin/usuarios -->
+        
         <form class="toolbar" data-filter-form>
           <input class="grow" type="search" name="q" placeholder="Buscar por nome ou e-mail…">
           <select name="perfil" aria-label="Perfil">
@@ -104,7 +105,7 @@
         </form>
 
         <section class="table-wrap">
-          <!-- TODO: substituir por dados reais da API -->
+          
           <table class="data">
             <thead>
               <tr>
@@ -119,46 +120,9 @@
             </thead>
             <tbody>
               <tr>
-                <td>
-                  <section style="display:flex;align-items:center;gap:0.6rem">
-                    <span class="avatar" style="width:2rem;height:2rem;font-size:0.8rem;flex-shrink:0">VS</span>
-                    VS Tech
-                  </section>
+                <td colspan="7" style="text-align:center;padding:2rem;">
+                  Carregando usuários...
                 </td>
-                <td>admin@vstech.com.br</td>
-                <td><span class="pill admin">Administrador</span></td>
-                <td><span class="pill ativo">Ativo</span></td>
-                <td>agora</td>
-                <td>—</td>
-                <td><span class="row-actions"><button type="button">Editar</button></span></td>
-              </tr>
-              <tr>
-                <td>
-                  <section style="display:flex;align-items:center;gap:0.6rem">
-                    <span class="avatar" style="width:2rem;height:2rem;font-size:0.8rem;flex-shrink:0">JP</span>
-                    João Paulo
-                  </section>
-                </td>
-                <td>joao.paulo@vstech.com.br</td>
-                <td><span class="pill tecnico">Técnico</span></td>
-                <td><span class="pill ativo">Ativo</span></td>
-                <td>há 2 h</td>
-                <td>9</td>
-                <td><span class="row-actions"><button type="button">Editar</button><button type="button" class="danger">Desativar</button></span></td>
-              </tr>
-              <tr>
-                <td>
-                  <section style="display:flex;align-items:center;gap:0.6rem">
-                    <span class="avatar" style="width:2rem;height:2rem;font-size:0.8rem;flex-shrink:0">MF</span>
-                    Maria Fernanda
-                  </section>
-                </td>
-                <td>maria.f@vstech.com.br</td>
-                <td><span class="pill tecnico">Técnico</span></td>
-                <td><span class="pill inativo">Inativo</span></td>
-                <td>há 3 dias</td>
-                <td>0</td>
-                <td><span class="row-actions"><button type="button">Editar</button><button type="button">Reativar</button></span></td>
               </tr>
             </tbody>
           </table>
@@ -205,7 +169,7 @@
   </section>
 
   <script src="scripts/admin.js"></script>
-  <script src="scripts/usuarios.js"></script>
+  <script type="module" src="scripts/usuarios.js"></script>
   <script src="scripts/notification-badge.js"></script>
 </body>
 
