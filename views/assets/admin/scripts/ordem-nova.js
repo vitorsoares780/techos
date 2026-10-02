@@ -1,112 +1,235 @@
-(function () {
-  "use strict";
+// ============================================================================
+// ordem-nova.js - Script para a página de Nova Ordem de Serviço (Admin)
+// ============================================================================
 
-  const modalCliente = document.querySelector('[data-modal-novo-cliente]');
-  const btnNovoCliente = document.querySelector('[data-novo-cliente]');
-  const closeClienteButtons = document.querySelectorAll('[data-fechar-modal]');
-  const saveClienteBtn = document.querySelector('[data-salvar-cliente]');
+document.addEventListener('DOMContentLoaded', function () {
+    console.log('Página Nova OS (Admin) carregada');
 
-  const modalItem = document.querySelector('[data-modal-item]');
-  const btnAddItem = document.querySelector('[data-add-item]');
-  const closeItemButtons = document.querySelectorAll('[data-fechar-modal-item]');
-  const saveItemBtn = document.querySelector('[data-salvar-item]');
-  const itensTable = document.querySelector('[data-itens-table] tbody');
-  const itemEmpty = document.querySelector('[data-item-vazio]');
-  const totalField = document.querySelector('[data-total]');
+    const form = document.getElementById('formNovaOS');
+    const btnSubmit = document.getElementById('btnSubmit');
+    const btnCancel = document.getElementById('btnCancel');
 
-  function toggleModal(modal, open) {
-    if (!modal) return;
-    modal.classList.toggle('is-open', open);
-  }
+    // Carregar dados para selects
+    carregarUsuarios();
+    carregarDispositivos();
+    carregarEmpresas();
+    carregarPlanos();
 
-  function formatMoney(value) {
-    return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value);
-  }
+    // Event listeners
+    if (form) {
+        form.addEventListener('submit', handleSubmit);
+    }
+    if (btnCancel) {
+        btnCancel.addEventListener('click', () => window.location.href = 'ordens-servico.html');
+    }
+});
 
-  function updateTotal() {
-    if (!itensTable || !totalField) return;
-    let total = 0;
-    itensTable.querySelectorAll('tr[data-item]').forEach(function (row) {
-      const subtotal = Number(row.dataset.subtotal || '0');
-      total += subtotal;
-    });
-    totalField.textContent = formatMoney(total);
-  }
+// ============================================================================
+// Carregar dados para os selects
+// ============================================================================
 
-  if (btnNovoCliente) {
-    btnNovoCliente.addEventListener('click', function () {
-      toggleModal(modalCliente, true);
-    });
-  }
+async function carregarUsuarios() {
+    try {
+        const token = localStorage.getItem('authToken');
+        const response = await fetch(`${window.API_BASE_URL}/users/list`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const data = await response.json();
+        if (data.success && data.data) {
+            const select = document.getElementById('userId');
+            data.data.forEach(user => {
+                const option = document.createElement('option');
+                option.value = user.id;
+                option.textContent = `${user.name} (${user.email})`;
+                select.appendChild(option);
+            });
+        }
+    } catch (error) {
+        console.error('Erro ao carregar usuários:', error);
+    }
+}
 
-  closeClienteButtons.forEach(function (button) {
-    button.addEventListener('click', function () {
-      toggleModal(modalCliente, false);
-    });
-  });
+async function carregarDispositivos() {
+    try {
+        const token = localStorage.getItem('authToken');
+        const response = await fetch(`${window.API_BASE_URL}/devices/list`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const data = await response.json();
+        if (data.success && data.data) {
+            const select = document.getElementById('deviceId');
+            data.data.forEach(device => {
+                const option = document.createElement('option');
+                option.value = device.id;
+                option.textContent = `${device.brand} ${device.model} - ${device.serialNumber}`;
+                select.appendChild(option);
+            });
+        }
+    } catch (error) {
+        console.error('Erro ao carregar dispositivos:', error);
+    }
+}
 
-  if (saveClienteBtn) {
-    saveClienteBtn.addEventListener('click', function () {
-      // TODO: cadastrar cliente real via API
-      console.info('Salvar novo cliente');
-      toggleModal(modalCliente, false);
-    });
-  }
+async function carregarEmpresas() {
+    try {
+        const token = localStorage.getItem('authToken');
+        const response = await fetch(`${window.API_BASE_URL}/companies/list`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const data = await response.json();
+        if (data.success && data.data) {
+            const select = document.getElementById('companyId');
+            data.data.forEach(company => {
+                const option = document.createElement('option');
+                option.value = company.id;
+                option.textContent = company.name;
+                select.appendChild(option);
+            });
+        }
+    } catch (error) {
+        console.error('Erro ao carregar empresas:', error);
+    }
+}
 
-  if (btnAddItem) {
-    btnAddItem.addEventListener('click', function () {
-      toggleModal(modalItem, true);
-    });
-  }
+async function carregarPlanos() {
+    try {
+        const token = localStorage.getItem('authToken');
+        const response = await fetch(`${window.API_BASE_URL}/plans/list`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const data = await response.json();
+        if (data.success && data.data) {
+            const select = document.getElementById('planId');
+            data.data.forEach(plan => {
+                const option = document.createElement('option');
+                option.value = plan.id;
+                option.textContent = `${plan.name} - R$ ${plan.price}`;
+                select.appendChild(option);
+            });
+        }
+    } catch (error) {
+        console.error('Erro ao carregar planos:', error);
+    }
+}
 
-  closeItemButtons.forEach(function (button) {
-    button.addEventListener('click', function () {
-      toggleModal(modalItem, false);
-    });
-  });
+// ============================================================================
+// Handle Submit
+// ============================================================================
 
-  if (saveItemBtn) {
-    saveItemBtn.addEventListener('click', function () {
-      const desc = document.querySelector('#item-desc');
-      const qtd = document.querySelector('#item-qtd');
-      const valor = document.querySelector('#item-valor');
-      if (!desc || !qtd || !valor || !itensTable) return;
+async function handleSubmit(event) {
+    event.preventDefault();
 
-      const amount = Number(valor.value.replace(',', '.')) || 0;
-      const quantity = Number(qtd.value) || 1;
-      const subtotal = amount * quantity;
+    const btnSubmit = document.getElementById('btnSubmit');
+    const originalText = btnSubmit.textContent;
+    btnSubmit.disabled = true;
+    btnSubmit.textContent = 'Salvando...';
 
-      const row = document.createElement('tr');
-      row.dataset.item = 'true';
-      row.dataset.subtotal = String(subtotal);
-      row.innerHTML = `
-        <td>${desc.value}</td>
-        <td>${quantity}</td>
-        <td>${formatMoney(amount)}</td>
-        <td>${formatMoney(subtotal)}</td>
-        <td><span class="row-actions"><button type="button" class="danger" data-remove-item>✕</button></span></td>
-      `;
-      if (itemEmpty) {
-        itemEmpty.remove();
-      }
-      itensTable.appendChild(row);
-      updateTotal();
-      toggleModal(modalItem, false);
-      desc.value = '';
-      qtd.value = '1';
-      valor.value = '';
-    });
-  }
+    // Coletar dados do formulário
+    const formData = new FormData(event.target);
+    const data = {};
 
-  if (itensTable) {
-    itensTable.addEventListener('click', function (event) {
-      const button = event.target.closest('[data-remove-item]');
-      if (!button) return;
-      const row = button.closest('tr');
-      if (row) {
-        row.remove();
-        updateTotal();
-      }
-    });
-  }
-})();
+    // Separar dados da OS e dados do dispositivo
+    const osData = {};
+    const deviceData = {};
+
+    for (const [key, value] of formData.entries()) {
+        if (value === '') continue;
+
+        // Campos do dispositivo
+        if (['brand', 'model', 'serialNumber', 'categoryId', 'color', 'accessories', 'imei1', 'imei2', 'deviceObservations'].includes(key)) {
+            deviceData[key] = value;
+        }
+        // Campos da OS
+        else {
+            osData[key] = value;
+        }
+    }
+
+    // Se há dados do dispositivo, criar dispositivo primeiro
+    let deviceId = osData.deviceId;
+
+    if (Object.keys(deviceData).length > 0) {
+        try {
+            const token = localStorage.getItem('authToken');
+            const response = await fetch(`${window.API_BASE_URL}/devices`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify(deviceData)
+            });
+            const result = await response.json();
+            if (result.success && result.data) {
+                deviceId = result.data.id || result.data[0]?.id;
+                osData.deviceId = deviceId;
+            } else {
+                throw new Error(result.message || 'Erro ao criar dispositivo');
+            }
+        } catch (error) {
+            console.error('Erro ao criar dispositivo:', error);
+            showError('Erro ao criar dispositivo: ' + error.message);
+            btnSubmit.disabled = false;
+            btnSubmit.textContent = originalText;
+            return;
+        }
+    }
+
+    // Criar a OS
+    try {
+        const token = localStorage.getItem('authToken');
+        const response = await fetch(`${window.API_BASE_URL}/serviceOrders`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify(osData)
+        });
+        const result = await response.json();
+
+        if (result.success) {
+            showSuccess('Ordem de Serviço criada com sucesso!');
+            setTimeout(() => {
+                window.location.href = 'ordens-servico.html';
+            }, 1500);
+        } else {
+            showError(result.message || 'Erro ao criar OS');
+        }
+    } catch (error) {
+        console.error('Erro ao criar OS:', error);
+        showError('Erro ao criar OS: ' + error.message);
+    } finally {
+        btnSubmit.disabled = false;
+        btnSubmit.textContent = originalText;
+    }
+}
+
+// ============================================================================
+// Helpers
+// ============================================================================
+
+function showError(message) {
+    const alertDiv = document.createElement('div');
+    alertDiv.className = 'alert alert-danger alert-dismissible fade show mt-3';
+    alertDiv.role = 'alert';
+    alertDiv.innerHTML = `
+        ${message}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    `;
+    const container = document.querySelector('.card-body') || document.body;
+    container.insertBefore(alertDiv, container.firstChild);
+    setTimeout(() => alertDiv.remove(), 5000);
+}
+
+function showSuccess(message) {
+    const alertDiv = document.createElement('div');
+    alertDiv.className = 'alert alert-success alert-dismissible fade show mt-3';
+    alertDiv.role = 'alert';
+    alertDiv.innerHTML = `
+        ${message}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    `;
+    const container = document.querySelector('.card-body') || document.body;
+    container.insertBefore(alertDiv, container.firstChild);
+}

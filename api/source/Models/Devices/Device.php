@@ -11,6 +11,8 @@ class Device
     private ?int $categoryId;
     private ?string $serialNumber;
     private ?string $name;
+    private ?string $model;
+    private ?string $brand;
     private ?string $creationTime;
     private ?int $active;
 
@@ -20,6 +22,8 @@ class Device
         ?int $categoryId = null,
         ?string $serialNumber = null,
         ?string $name = null,
+        ?string $model = null,
+        ?string $brand = null,
         ?string $creationTime = null,
         ?int $active = null
     ) {
@@ -28,6 +32,8 @@ class Device
         $this->categoryId = $categoryId;
         $this->serialNumber = $serialNumber;
         $this->name = $name;
+        $this->model = $model;
+        $this->brand = $brand;
         $this->creationTime = date('d/m/Y H:i:s', $creationTime);
         $this->active = $active;
     }
@@ -50,6 +56,14 @@ class Device
     public function getname(): string
     {
         return $this->name;
+    }
+    public function getModel(): string
+    {
+        return $this->model;
+    }
+    public function getBrand(): string
+    {
+        return $this->brand;
     }
     public function getCreationTime(): string
     {
@@ -78,6 +92,14 @@ class Device
     public function setname(string $name)
     {
         $this->name = $name;
+    }
+    public function setModel(string $model)
+    {
+        $this->model = $model;
+    }
+    public function setBrand(string $brand)
+    {
+        $this->brand = $brand;
     }
     public function setCreationTime(string $creationTime)
     {
@@ -118,13 +140,16 @@ class Device
 
     public function insert(): array|bool
     {
-        $query = "INSERT INTO devices (user_id, category_id, serial_number, name) VALUES (:user_id, :cat_id, :serial_number, :name)";
+        $query = "INSERT INTO devices (user_id, category_id, serial_number, name, model, brand)
+                  VALUES (:user_id, :cat_id, :serial_number, :name, :model, :brand)";
         $stmt = Connect::getInstance()->prepare($query);
         $stmt->execute([
             ":user_id" => $this->userId,
             ":cat_id" => $this->categoryId,
             ":serial_number" => $this->serialNumber,
-            ":name" => $this->name
+            ":name" => $this->name,
+            ":model" => $this->model,
+            ":brand" => $this->brand
         ]);
         if ($stmt->rowCount() > 0) {
             $this->id = Connect::getInstance()->lastInsertId();
@@ -158,14 +183,18 @@ class Device
         $catId = $this->categoryId ?? $current->category_id;
         $serial = $this->serialNumber ?? $current->serial_number;
         $name = $this->name ?? $current->name;
+        $model = $this->model ?? $current->model;
+        $brand = $this->brand ?? $current->brand;
 
-        $query = "UPDATE devices SET user_id = :user_id, category_id = :cat_id, serial_number = :serial_number, name = :name WHERE id = :id";
+        $query = "UPDATE devices SET user_id = :user_id, category_id = :cat_id, serial_number = :serial_number, name = :name, model = :model, brand = :brand WHERE id = :id";
         $stmt = Connect::getInstance()->prepare($query);
         $stmt->execute([
             ":user_id" => $userId,
             ":cat_id" => $catId,
             ":serial_number" => $serial,
             ":name" => $name,
+            ":model" => $model,
+            ":brand" => $brand,
             ":id" => $this->id
         ]);
         if ($stmt->rowCount() > 0) {

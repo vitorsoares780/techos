@@ -10,7 +10,7 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,N
 CREATE SCHEMA IF NOT EXISTS `db-techos` DEFAULT CHARACTER SET utf8mb3 ;
 USE `db-techos` ;
 
- -- drop database `db-techos`;
+--  drop database `db-techos`;
 -- -----------------------------------------------------
 -- Table `db-techos`.`faqs_categories`
 -- -----------------------------------------------------
@@ -172,7 +172,7 @@ AUTO_INCREMENT = 3
 DEFAULT CHARACTER SET = utf8mb3;
 
 ALTER TABLE `db-techos`.`users` 
-ADD COLUMN `cpf` VARCHAR(20) NOT NULL AFTER `typeId`;
+ADD COLUMN `cpf` VARCHAR(20) NOT NULL AFTER `type_id`;
 -- insert into `users` (type_id, name, email, password) values (3,'mateus', 'mateus@gmail.com', '123456');
 
 

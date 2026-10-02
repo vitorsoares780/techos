@@ -160,9 +160,17 @@ class ServiceOrder
 
     public function insert(): array|bool
     {
-        $query = "INSERT INTO service_orders (user_id, device_id, company_id, defect, status, price, photo) 
-                  VALUES ($this->userId, $this->deviceId, $this->companyId, $this->defect, $this->status, $this->price, $this->photo)";
-        $stmt = Connect::getInstance()->query($query);
+        $query = "INSERT INTO service_orders (user_id, device_id, company_id, defect, status, price, photo)
+                  VALUES (:userId, :deviceId, :companyId, :defect, :status, :price, :photo)";
+        $stmt = Connect::getInstance()->prepare($query);
+        $stmt->bindValue(':userId', $this->userId);
+        $stmt->bindValue(':deviceId', $this->deviceId);
+        $stmt->bindValue(':companyId', $this->companyId);
+        $stmt->bindValue(':defect', $this->defect);
+        $stmt->bindValue(':status', $this->status);
+        $stmt->bindValue(':price', $this->price);
+        $stmt->bindValue(':photo', $this->photo);
+        $stmt->execute();
         if ($stmt->rowCount() > 0) {
             $this->id = Connect::getInstance()->lastInsertId();
             $query = "SELECT s.* FROM service_orders as s
