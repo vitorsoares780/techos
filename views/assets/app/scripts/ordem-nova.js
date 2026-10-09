@@ -9,13 +9,15 @@ if (token) {
     serviceOrder.setAuthToken(token);
 }
 
-const form = document.querySelector("[data-os-form]");
-const submitButton = form?.querySelector("button[type='submit']");
+const formDevice = document.querySelector("[data-device-form]");
+const formOs = document.querySelector("[data-os-form]");
+const submitButtonDevice = formDevice?.querySelector("button[type='submit']");
+const submitButtonOs = formOs?.querySelector("button[type='submit']");
 
 async function handleSubmit(event) {
     event.preventDefault();
 
-    loginFormController.init(form);
+    loginFormController.init(formOs);
 
     const validation = loginFormController.validateRequired(["defeito"]);
 
@@ -23,7 +25,7 @@ async function handleSubmit(event) {
         toastPrincipal.warning({
             message: "Informe o defeito do equipamento."
         });
-        form.elements[validation.field]?.focus();
+        formOs.elements[validation.field]?.focus();
         return;
     }
 
@@ -41,15 +43,19 @@ async function handleSubmit(event) {
 
     const payload = {
         user_id: Number(userId),
+        device_id: 1,
         defect: String(data.defeito).trim(),
-        status: "aguardando"
+        diagnosis: String(data.diagnostico).trim(),
+        status: "",
+        price: Number(data.preco)
     };
 
-    submitButton.disabled = true;
-    submitButton.textContent = "Enviando...";
+    submitButtonOs.disabled = true;
+    submitButtonOs.textContent = "Enviando...";
 
     try {
         const response = await serviceOrder.insert(payload);
+        console.log(response)
 
         toastPrincipal.success(
             response?.message
@@ -57,7 +63,7 @@ async function handleSubmit(event) {
                 : { message: "Ordem de serviço criada com sucesso!" }
         );
 
-        form.reset();
+        formOs.reset();
 
         setTimeout(() => {
             window.location.href = "ordens.html";
@@ -68,11 +74,11 @@ async function handleSubmit(event) {
             message: error.message || "Erro ao criar a ordem de serviço."
         });
     } finally {
-        submitButton.disabled = false;
-        submitButton.textContent = "Solicitar ordem de serviço";
+        submitButtonOs.disabled = false;
+        submitButtonOs.textContent = "Solicitar ordem de serviço";
     }
 }
 
-if (form) {
-    form.addEventListener("submit", handleSubmit);
+if (formOs) {
+    formOs.addEventListener("submit", handleSubmit);
 }

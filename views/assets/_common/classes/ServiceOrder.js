@@ -4,8 +4,8 @@ export default class ServiceOrder extends HttpClientBase {
     #id;
     #user_id;
     #device_id;
-    #company_id;
     #defect;
+    #diagnosis;
     #status;
     #price;
     #photo;
@@ -16,8 +16,8 @@ export default class ServiceOrder extends HttpClientBase {
         id = null,
         user_id = null,
         device_id = null,
-        company_id = null,
         defect = null,
+        diagnosis = null,
         status = "",
         price = 0,
         photo = "",
@@ -29,10 +29,12 @@ export default class ServiceOrder extends HttpClientBase {
         this.id = id;
         this.user_id = user_id;
         this.device_id = device_id;
-        this.company_id = company_id;
 
         if (defect !== null) {
             this.defect = defect;
+        }
+        if (diagnosis !== null) {
+            this.diagnosis = diagnosis;
         }
 
         this.status = status;
@@ -70,14 +72,6 @@ export default class ServiceOrder extends HttpClientBase {
         this.#device_id = value === null ? null : Number(value);
     }
 
-    get company_id() {
-        return this.#company_id;
-    }
-
-    set company_id(value) {
-        this.#company_id = value === null ? null : Number(value);
-    }
-
     get defect() {
         return this.#defect;
     }
@@ -88,6 +82,18 @@ export default class ServiceOrder extends HttpClientBase {
         }
 
         this.#defect = value.trim();
+    }
+
+    get diagnosis() {
+        return this.#diagnosis;
+    }
+
+    set diagnosis(value) {
+        if (typeof value !== "string" || value.trim() === "") {
+            throw new TypeError("O diagnóstico é obrigatório");
+        }
+
+        this.#diagnosis = value.trim();
     }
 
     get status() {

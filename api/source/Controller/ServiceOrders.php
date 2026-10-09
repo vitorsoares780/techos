@@ -10,7 +10,7 @@ class ServiceOrders extends Api
 
     public function serviceOrdersListAll()
     {
-        if (!$this->authToken(1)) {
+        if (!$this->authToken(3) && !$this->authToken(2) && !$this->authToken(1)) {
             $this->call(
                 401,
                 "unauthorized",
@@ -30,7 +30,7 @@ class ServiceOrders extends Api
 
     public function serviceOrdersListById(array $data): void
     {
-        if (!$this->authToken(1)) {
+        if (!$this->authToken(3) && !$this->authToken(2) && !$this->authToken(1)) {
             $this->call(
                 401,
                 "unauthorized",
@@ -72,7 +72,7 @@ class ServiceOrders extends Api
 
     public function serviceOrderInsert(array $data): void
     {
-        if (!$this->authToken(1)) {
+        if (!$this->authToken(2) && !$this->authToken(1)) {
             $this->call(
                 401,
                 "unauthorized",
@@ -83,8 +83,8 @@ class ServiceOrders extends Api
         }
         $user_id = $data['user_id'];
         $device_id = $data['device_id'];
-        $company_id = $data['company_id'];
         $defect = $data['defect'];
+        $diagnosis = $data['diagnosis'];
         $status = $data['status'];
         $price = $data['price'];
         $photo = $data['photo'];
@@ -92,8 +92,8 @@ class ServiceOrders extends Api
         if (
             empty($user_id) || $user_id == null ||
             empty($device_id) || $device_id == null ||
-            empty($company_id) || $company_id == null ||
             empty($defect) || $defect == null ||
+            empty($diagnosis) || $diagnosis == null ||
             empty($status) || $status == null ||
             empty($price) || $price == null ||
             empty($photo) || $photo == null
@@ -107,7 +107,7 @@ class ServiceOrders extends Api
             return;
         }
 
-        $serviceOrder = new ServiceOrder(null, $user_id, $device_id, $company_id, $defect, $status, $price, $photo);
+        $serviceOrder = new ServiceOrder(null, $user_id, $device_id, $defect, $diagnosis, $status, $price, $photo);
 
         $response = $serviceOrder->insert();
 

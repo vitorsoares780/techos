@@ -133,14 +133,14 @@ class User extends Model
         return $field;
     }
 
-    public function listAll(): array
-    {
-        $query = "SELECT id, cpf, name, email
-                  FROM users
-                  ORDER BY id DESC";
-        $stmt = Connect::getInstance()->query($query);
-        return $stmt->fetchAll();
-    }
+    // public function listAll(): array
+    // {
+    //     $query = "SELECT id, cpf, name, email
+    //               FROM users
+    //               ORDER BY id DESC";
+    //     $stmt = Connect::getInstance()->query($query);
+    //     return $stmt->fetchAll();
+    // }
 
     public function listById(int $id): object|bool
     {

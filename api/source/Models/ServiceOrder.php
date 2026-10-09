@@ -126,7 +126,6 @@ class ServiceOrder
         $query = "SELECT s.id, 
                          u.name as 'user_name', 
                          d.name as 'device_model', 
-                         c.name as 'company_name', 
                          s.defect, 
                          s.status, 
                          s.price,
@@ -134,8 +133,6 @@ class ServiceOrder
                   FROM service_orders as s
                   JOIN users as u ON s.user_id = u.id
                   JOIN devices as d ON s.device_id = d.id
-                  JOIN companies as c ON s.company_id = c.id
-                  WHERE s.active = 1
                   ORDER BY s.creation_time DESC";
         $stmt = Connect::getInstance()->query($query);
         return $stmt->fetchAll();

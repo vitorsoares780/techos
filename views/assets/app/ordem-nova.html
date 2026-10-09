@@ -54,8 +54,10 @@
       <section class="sidebar-section">
         <h4>Conta</h4>
         <ul>
-          <li><a class="sidebar-link" href="perfil.html"><span class="ico" aria-hidden="true">👤</span>Perfil e Configurações</a></li>
-          <li><a class="sidebar-link" href="../../public/login.html" data-logout><span class="ico" aria-hidden="true">🚪</span>Sair</a>
+          <li><a class="sidebar-link" href="perfil.html"><span class="ico" aria-hidden="true">👤</span>Perfil e
+              Configurações</a></li>
+          <li><a class="sidebar-link" href="../../public/login.html" data-logout><span class="ico"
+                aria-hidden="true">🚪</span>Sair</a>
           </li>
         </ul>
       </section>
@@ -71,7 +73,7 @@
         </section>
       </section>
 
-      <form class="panel" data-os-form novalidate>
+      <form class="panel" data-device-form novalidate>
 
         <fieldset style="border:0;padding:0;margin:0 0 1.5rem">
           <legend style="font-weight:600;margin-bottom:0.75rem">Equipamento</legend>
@@ -98,15 +100,34 @@
             <section class="form-field"><label for="os-serial">Nº de série</label><input id="os-serial" name="serial">
             </section>
 
-            </section>
+          </section>
         </fieldset>
 
+      </form>
+
+      <form class="panel" data-os-form novalidate>
+
         <fieldset style="border:0;padding:0;margin:0 0 1.5rem">
-          <legend style="font-weight:600;margin-bottom:0.75rem">Defeito</legend>
+          <legend style="font-weight:600;margin-bottom:0.75rem">Serviço</legend>
           <section class="form-grid">
             <section class="form-field full">
+
+              <label for="os-device">Aparelho</label>
+              <select id="os-device" name="device">
+                <option value="">Selecione..</option>
+              </select>
+
               <label for="os-defeito">Defeito relatado</label>
-              <textarea id="os-defeito" name="defeito" rows="4" required placeholder="Descreva detalhadamente o problema do seu equipamento…"></textarea>
+              <textarea id="os-defeito" name="defeito" rows="3" required
+                placeholder="Descreva detalhadamente o problema do seu equipamento…"></textarea>
+
+              <label for="os-diagnostico">Diagnóstico</label>
+              <textarea id="os-diagnostico" name="diagnostico" rows="3" required
+                placeholder="Descreva o diagnóstico inicial para o equipamento…"></textarea>
+
+              <label for="os-preco">Preço</label>
+              <input type="number" id="os-preco" name="preco" required
+                placeholder="Valor estimado do serviço.."></textarea>
             </section>
           </section>
         </fieldset>
