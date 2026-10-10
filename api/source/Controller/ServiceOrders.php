@@ -81,8 +81,12 @@ class ServiceOrders extends Api
             )->back();
             return;
         }
+
+        $data = $this->getRequestBody($data);
+
         $user_id = $data['user_id'];
         $device_id = $data['device_id'];
+        $company_id = $data['company_id'];
         $defect = $data['defect'];
         $diagnosis = $data['diagnosis'];
         $status = $data['status'];
@@ -92,6 +96,7 @@ class ServiceOrders extends Api
         if (
             empty($user_id) || $user_id == null ||
             empty($device_id) || $device_id == null ||
+            empty($company_id) || $company_id == null ||
             empty($defect) || $defect == null ||
             empty($diagnosis) || $diagnosis == null ||
             empty($status) || $status == null ||
@@ -107,7 +112,7 @@ class ServiceOrders extends Api
             return;
         }
 
-        $serviceOrder = new ServiceOrder(null, $user_id, $device_id, $defect, $diagnosis, $status, $price, $photo);
+        $serviceOrder = new ServiceOrder(null, $user_id, $device_id, $company_id, $defect, $diagnosis, $status, $price, $photo);
 
         $response = $serviceOrder->insert();
 

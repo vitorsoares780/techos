@@ -11,6 +11,7 @@ class ServiceOrder
     private ?int $deviceId;
     private ?int $companyId;
     private ?string $defect;
+    private ?string $diagnosis;
     private ?string $status;
     private ?float $price;
     private ?string $photo;
@@ -23,6 +24,7 @@ class ServiceOrder
         ?int $deviceId = null,
         ?int $companyId = null,
         ?string $defect = null,
+        ?string $diagnosis = null,
         ?string $status = null,
         ?float $price = null,
         ?string $photo = null,
@@ -34,6 +36,7 @@ class ServiceOrder
         $this->deviceId = $deviceId;
         $this->companyId = $companyId;
         $this->defect = $defect;
+        $this->diagnosis = $diagnosis;
         $this->status = $status;
         $this->price = $price;
         $this->photo = $photo;
@@ -59,6 +62,10 @@ class ServiceOrder
     public function getDefect(): string
     {
         return $this->defect;
+    }
+    public function getDiagnosis(): string
+    {
+        return $this->diagnosis;
     }
     public function getStatus(): string
     {
@@ -100,6 +107,10 @@ class ServiceOrder
     {
         $this->defect = $defect;
     }
+    public function setDiagnosis(string $diagnosis)
+    {
+        $this->diagnosis = $diagnosis;
+    }
     public function setStatus(string $status)
     {
         $this->status = $status;
@@ -129,10 +140,12 @@ class ServiceOrder
                          s.defect, 
                          s.status, 
                          s.price,
-                         s.photo
+                         s.photo,
+                         s.creation_time
                   FROM service_orders as s
                   JOIN users as u ON s.user_id = u.id
                   JOIN devices as d ON s.device_id = d.id
+                  WHERE s.active = 1
                   ORDER BY s.creation_time DESC";
         $stmt = Connect::getInstance()->query($query);
         return $stmt->fetchAll();
@@ -157,13 +170,14 @@ class ServiceOrder
 
     public function insert(): array|bool
     {
-        $query = "INSERT INTO service_orders (user_id, device_id, company_id, defect, status, price, photo)
-                  VALUES (:userId, :deviceId, :companyId, :defect, :status, :price, :photo)";
+        $query = "INSERT INTO service_orders (user_id, device_id, company_id, defect, diagnosis, status, price, photo)
+                  VALUES (:userId, :deviceId, :companyId, :defect, :diagnosis, :status, :price, :photo)";
         $stmt = Connect::getInstance()->prepare($query);
         $stmt->bindValue(':userId', $this->userId);
         $stmt->bindValue(':deviceId', $this->deviceId);
         $stmt->bindValue(':companyId', $this->companyId);
         $stmt->bindValue(':defect', $this->defect);
+        $stmt->bindValue(':diagnosis', $this->diagnosis);
         $stmt->bindValue(':status', $this->status);
         $stmt->bindValue(':price', $this->price);
         $stmt->bindValue(':photo', $this->photo);

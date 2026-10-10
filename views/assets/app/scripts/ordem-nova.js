@@ -9,21 +9,31 @@ if (token) {
     serviceOrder.setAuthToken(token);
 }
 
-const formDevice = document.querySelector("[data-device-form]");
 const formOs = document.querySelector("[data-os-form]");
-const submitButtonDevice = formDevice?.querySelector("button[type='submit']");
 const submitButtonOs = formOs?.querySelector("button[type='submit']");
+const deviceSelect = formOs?.elements.device_id;
+
+function assertSuccess(response) {
+    if (response?.type === "error" || response?.code >= 400) {
+        throw new Error(response.message || "Não foi possível criar a ordem de serviço.");
+    }
+}
 
 async function handleSubmit(event) {
     event.preventDefault();
 
     loginFormController.init(formOs);
 
-    const validation = loginFormController.validateRequired(["defeito"]);
+    const validation = loginFormController.validateRequired([
+        "device_id",
+        "defeito",
+        "diagnostico",
+        "preco"
+    ]);
 
     if (!validation.valid) {
         toastPrincipal.warning({
-            message: "Informe o defeito do equipamento."
+            message: "Selecione o aparelho e preencha os dados do serviço."
         });
         formOs.elements[validation.field]?.focus();
         return;
@@ -43,27 +53,35 @@ async function handleSubmit(event) {
 
     const payload = {
         user_id: Number(userId),
-        device_id: 1,
+        device_id: Number(data.device_id),
+        company_id: 1, //ALTERAR FUTURAMENTE
         defect: String(data.defeito).trim(),
         diagnosis: String(data.diagnostico).trim(),
-        status: "",
-        price: Number(data.preco)
+        status: "aberta",
+        price: Number(data.preco),
+        photo: formOs.elements.fotos.files[0]?.name || "sem-foto"
     };
+
+    if (!Number.isFinite(payload.price) || payload.price <= 0) {
+        toastPrincipal.warning({ message: "Informe um preço maior que zero." });
+        formOs.elements.preco.focus();
+        return;
+    }
 
     submitButtonOs.disabled = true;
     submitButtonOs.textContent = "Enviando...";
 
     try {
+        console.log(payload)
         const response = await serviceOrder.insert(payload);
-        console.log(response)
+        assertSuccess(response);
 
-        toastPrincipal.success(
-            response?.message
-                ? response
-                : { message: "Ordem de serviço criada com sucesso!" }
-        );
+        toastPrincipal.success({
+            message: response?.message || "Ordem de serviço criada com sucesso!"
+        });
 
         formOs.reset();
+        if (deviceSelect) deviceSelect.value = "";
 
         setTimeout(() => {
             window.location.href = "ordens.html";

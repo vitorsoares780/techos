@@ -192,7 +192,7 @@ export default class ServiceOrder extends HttpClientBase {
     }
 
     async insert(data) {
-        return this.post("/serviceOrders/", data);
+        return this.post("/serviceOrders", data);
     }
 
     async update(id, data) {

@@ -81,14 +81,9 @@
           <section class="form-grid">
 
             <section class="form-field">
-              <label for="os-tipo">Tipo</label>
-              <select id="os-tipo" name="tipo">
-                <option>Notebook</option>
-                <option>Celular</option>
-                <option>Desktop</option>
-                <option>Impressora</option>
-                <option>Console</option>
-                <option>Outro</option>
+              <label for="os-categoria">Categoria</label>
+              <select id="os-categoria" name="category_id" data-device-categories required>
+                <option value="">Carregando categorias...</option>
               </select>
             </section>
 
@@ -97,11 +92,16 @@
             <section class="form-field"><label for="os-modelo">Modelo</label><input id="os-modelo" name="modelo">
             </section>
 
-            <section class="form-field"><label for="os-serial">Nº de série</label><input id="os-serial" name="serial">
+            <section class="form-field"><label for="os-serial">Nº de série</label><input id="os-serial" name="serial" type="number" min="1" step="1" required>
             </section>
 
           </section>
         </fieldset>
+
+        <section class="form-actions">
+          <button type="submit" class="btn btn-ghost">Cadastrar aparelho</button>
+          <p data-device-feedback aria-live="polite"></p>
+        </section>
 
       </form>
 
@@ -113,8 +113,8 @@
             <section class="form-field full">
 
               <label for="os-device">Aparelho</label>
-              <select id="os-device" name="device">
-                <option value="">Selecione..</option>
+              <select id="os-device" name="device_id" data-order-device required>
+                <option value="">Carregando aparelhos...</option>
               </select>
 
               <label for="os-defeito">Defeito relatado</label>
@@ -126,8 +126,8 @@
                 placeholder="Descreva o diagnóstico inicial para o equipamento…"></textarea>
 
               <label for="os-preco">Preço</label>
-              <input type="number" id="os-preco" name="preco" required
-                placeholder="Valor estimado do serviço.."></textarea>
+              <input type="number" id="os-preco" name="preco" min="0.01" step="0.01" required
+                placeholder="Valor estimado do serviço..">
             </section>
           </section>
         </fieldset>
@@ -152,6 +152,7 @@
     </main>
   </section>
   <script src="scripts/app.js"></script>
+  <script type="module" src="scripts/device-nova.js"></script>
   <script type="module" src="scripts/ordem-nova.js"></script>
   <script src="scripts/logout.js"></script>
   <script src="scripts/notification-badge.js"></script>

@@ -26,11 +26,19 @@ function getOrders(response) {
     return [];
 }
 
+function getOrder(response) {
+    if (Array.isArray(response?.data)) {
+        return response.data[0] || null;
+    }
+
+    return response?.data || null;
+}
+
 function getDevice(order) {
     const device = order.device || order.Device || order.equipment;
 
     if (device) {
-        const name = device.name || device.type || "";
+        const name = device.name || device.type || order.device_model || "";
         const brand = device.brand || "";
         const model = device.model || "";
         const serial = device.serial_number || device.serialNumber || "";
@@ -41,11 +49,11 @@ function getDevice(order) {
             .trim() || `Dispositivo #${order.device_id ?? "—"}`;
     }
 
-    return order.device_name || order.equipment || `Dispositivo #${order.device_id ?? "—"}`;
+    return order.device_model || order.device_name || order.equipment || `Dispositivo #${order.device_id ?? "—"}`;
 }
 
 function getStatusClass(status) {
-    const normalized = String(status || "").toLowerCase();
+    const normalized = String(status || "").toLowerCase().replaceAll("_", " ");
 
     const map = {
         aberta: "aberta",
@@ -54,6 +62,7 @@ function getStatusClass(status) {
         "em andamento": "andamento",
         aguardando: "aguardando",
         "aguardando peça": "aguardando",
+        "aguardando peca": "aguardando",
         concluida: "concluida",
         concluída: "concluida",
         cancelada: "cancelada"
@@ -63,7 +72,7 @@ function getStatusClass(status) {
 }
 
 function getStatusLabel(status) {
-    const normalized = String(status || "").toLowerCase();
+    const normalized = String(status || "").toLowerCase().replaceAll("_", " ");
 
     const map = {
         aberta: "Aberta",
@@ -72,6 +81,7 @@ function getStatusLabel(status) {
         "em andamento": "Em andamento",
         aguardando: "Aguardando peça",
         "aguardando peça": "Aguardando peça",
+        "aguardando peca": "Aguardando peça",
         concluida: "Concluída",
         concluída: "Concluída",
         cancelada: "Cancelada"
@@ -130,7 +140,7 @@ function renderOrders(list) {
             <td>${escapeHtml(formatDate(order.creation_time || order.created_at))}</td>
             <td>
                 <span class="row-actions">
-                    <a href="ordem-detalhe.html?id=${encodeURIComponent(order.id)}">Abrir</a>
+                    <a href="ordem-detalhe.html?id=${encodeURIComponent(order.id)}&device=${encodeURIComponent(device)}">Abrir</a>
                     <button type="button" data-order-delete="${escapeHtml(order.id)}">Excluir</button>
                 </span>
             </td>
@@ -184,7 +194,25 @@ async function loadOrders() {
 
     try {
         const response = await serviceOrder.listAll();
+        if (response?.type === "error" || response?.code >= 400) {
+            throw new Error(response.message || "Não foi possível carregar as ordens.");
+        }
         orders = getOrders(response);
+
+        await Promise.all(orders.map(async order => {
+            if (order.creation_time || order.created_at || !order.id) {
+                return;
+            }
+
+            try {
+                const detailResponse = await serviceOrder.listById(order.id);
+                const detail = getOrder(detailResponse);
+                order.creation_time = detail?.creation_time || detail?.created_at || null;
+            } catch (error) {
+                console.warn(`Não foi possível carregar a data da OS #${order.id}:`, error);
+            }
+        }));
+
         applyFilters();
     } catch (error) {
         console.error("Erro ao carregar ordens:", error);
@@ -206,6 +234,9 @@ async function deleteOrder(id) {
 
     try {
         const response = await serviceOrder.remove(id);
+        if (response?.type === "error" || response?.code >= 400) {
+            throw new Error(response.message || "Não foi possível excluir a ordem de serviço.");
+        }
 
         toastPrincipal.success(
             response?.message
@@ -223,6 +254,7 @@ async function deleteOrder(id) {
 }
 
 if (form) {
+    form.addEventListener("submit", event => event.preventDefault());
     form.addEventListener("input", applyFilters);
     form.addEventListener("change", applyFilters);
 }

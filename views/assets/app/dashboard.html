@@ -73,17 +73,17 @@
       <section class="kpi-grid">
         <article class="kpi">
           <p class="label">Abertas</p>
-          <p class="value">2</p>
+          <p class="value" data-os-open>0</p>
           <p class="trend">Aguardando análise</p>
         </article>
         <article class="kpi">
           <p class="label">Em andamento</p>
-          <p class="value">1</p>
+          <p class="value" data-os-progress>0</p>
           <p class="trend">Em manutenção</p>
         </article>
         <article class="kpi">
           <p class="label">Concluídas</p>
-          <p class="value">5</p>
+          <p class="value" data-os-completed>0</p>
           <p class="trend">Últimos 30 dias</p>
         </article>
       </section>
@@ -100,34 +100,11 @@
                 <th>Nº</th>
                 <th>Equipamento</th>
                 <th>Status</th>
-                <th>Atualizado</th>
+                <th>Abertura</th>
               </tr>
             </thead>
-            <tbody>
-              <tr>
-                <td><a href="ordem-detalhe.html">#1042</a></td>
-                <td>Notebook Dell G15</td>
-                <td><span class="pill andamento">Em andamento</span></td>
-                <td>há 12 min</td>
-              </tr>
-              <tr>
-                <td><a href="ordem-detalhe.html">#1037</a></td>
-                <td>iPhone 13</td>
-                <td><span class="pill aberta">Aberta</span></td>
-                <td>há 2 dias</td>
-              </tr>
-              <tr>
-                <td><a href="ordem-detalhe.html">#1021</a></td>
-                <td>PS5</td>
-                <td><span class="pill concluida">Concluída</span></td>
-                <td>há 2 sem</td>
-              </tr>
-              <tr>
-                <td><a href="ordem-detalhe.html">#1015</a></td>
-                <td>iPad Air</td>
-                <td><span class="pill concluida">Concluída</span></td>
-                <td>há 1 mês</td>
-              </tr>
+            <tbody data-dashboard-orders>
+              <tr><td colspan="4">Carregando ordens...</td></tr>
             </tbody>
           </table>
         </section>
@@ -135,7 +112,7 @@
     </main>
   </section>
   <script src="scripts/app.js"></script>
-  <script src="scripts/dashboard.js"></script>
+  <script type="module" src="scripts/dashboard.js"></script>
   <script src="scripts/notification-badge.js"></script>
   <script src="scripts/logout.js"></script>
 </body>

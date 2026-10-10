@@ -63,8 +63,8 @@
       <section class="page-head">
         <section>
           <p style="font-size:0.85rem;color:var(--color-text-muted)"><a href="ordens.html">← Ordens</a></p>
-          <h1>OS #1042 · Notebook Dell G15</h1>
-          <p>Aberta em 14/06/2026 · <strong>Em andamento</strong></p>
+          <h1 data-detail-title>Carregando ordem...</h1>
+          <p data-detail-meta>Carregando informações...</p>
         </section>
         <section class="page-actions">
           <a class="btn btn-ghost" href="ordens.html">← Voltar para ordens</a>
@@ -76,7 +76,7 @@
           <article class="panel">
             <header class="panel-head">
               <h2>Status</h2>
-              <span class="pill andamento">Em andamento</span>
+              <span class="pill" data-detail-status>—</span>
             </header>
           </article>
 
@@ -84,109 +84,31 @@
             <header class="panel-head">
               <h2>Defeito e diagnóstico</h2>
             </header>
-            <p><strong>Defeito relatado:</strong> Notebook não liga, faz barulho de ventoinha apenas.</p>
-            <p style="margin-top:0.75rem"><strong>Diagnóstico:</strong> Falha na placa de alimentação, capacitor C12
-              estourado. Necessária troca.</p>
+            <p><strong>Defeito relatado:</strong> <span data-detail-defect>—</span></p>
+            <p style="margin-top:0.75rem"><strong>Diagnóstico:</strong> <span data-detail-diagnosis>—</span></p>
           </article>
 
           <article class="panel">
             <header class="panel-head">
-              <h2>Itens e serviços</h2>
+              <h2>Valor registrado</h2>
             </header>
-            <section class="table-wrap">
-              <table class="data">
-                <thead>
-                  <tr>
-                    <th>Descrição</th>
-                    <th>Qtd</th>
-                    <th>Valor unit.</th>
-                    <th>Subtotal</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>Mão de obra — placa de alimentação</td>
-                    <td>1</td>
-                    <td>R$ 250,00</td>
-                    <td>R$ 250,00</td>
-                  </tr>
-                  <tr>
-                    <td>Capacitor 470µF 25V</td>
-                    <td>2</td>
-                    <td>R$ 15,00</td>
-                    <td>R$ 30,00</td>
-                  </tr>
-                  <tr>
-                    <td>Pasta térmica Arctic MX-4</td>
-                    <td>1</td>
-                    <td>R$ 40,00</td>
-                    <td>R$ 40,00</td>
-                  </tr>
-                  <tr>
-                    <td>Limpeza interna</td>
-                    <td>1</td>
-                    <td>R$ 100,00</td>
-                    <td>R$ 100,00</td>
-                  </tr>
-                </tbody>
-                <tfoot>
-                  <tr>
-                    <th colspan="3" style="text-align:right">Total</th>
-                    <th>R$ 420,00</th>
-                  </tr>
-                </tfoot>
-              </table>
-            </section>
-          </article>
-
-          <article class="panel">
-            <header class="panel-head">
-              <h2>Linha do tempo</h2>
-            </header>
-            <ol class="timeline">
-              <li class="timeline-item"><time>14/05 08:10</time>
-                <h4>OS aberta</h4>
-                <p>Pela AssistTech</p>
-              </li>
-              <li class="timeline-item"><time>14/05 10:32</time>
-                <h4>Diagnóstico registrado</h4>
-                <p>Ricardo Alves — falha na placa de alimentação</p>
-              </li>
-              <li class="timeline-item"><time>14/05 15:20</time>
-                <h4>Orçamento aprovado pelo cliente via WhatsApp</h4>
-                <p>R$ 420,00</p>
-              </li>
-              <li class="timeline-item"><time>15/05 09:42</time>
-                <h4>Em andamento</h4>
-                <p>Substituição de capacitores</p>
-              </li>
-            </ol>
+            <p data-detail-price>—</p>
           </article>
         </section>
 
         <section style="display:flex;flex-direction:column;gap:1.25rem">
           <article class="panel">
             <header class="panel-head">
-              <h2>Cliente</h2>
-            </header>
-            <p><strong>Carlos Andrade</strong></p>
-            <p style="font-size:0.9rem;color:var(--color-text-muted)">carlos@email.com</p>
-            <p style="font-size:0.9rem;color:var(--color-text-muted)">(11) 98765-4321</p>
-          </article>
-          <article class="panel">
-            <header class="panel-head">
               <h2>Equipamento</h2>
             </header>
-            <p><strong>Notebook Dell G15 5530</strong></p>
-            <p style="font-size:0.9rem;color:var(--color-text-muted)">SN: DLG15-7782-29A</p>
-            <p style="font-size:0.9rem;color:var(--color-text-muted)">Acessórios: carregador 240W, mochila</p>
+            <p><strong data-detail-device>—</strong></p>
           </article>
                   </section>
       </section>
     </main>
   </section>
   <script src="scripts/app.js"></script>
-  <script src="scripts/ordem-detalhe.js"></script>
+  <script type="module" src="scripts/ordem-detalhe.js"></script>
   <script src="scripts/logout.js"></script>
   <script src="scripts/notification-badge.js"></script>
 </body>

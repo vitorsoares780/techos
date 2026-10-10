@@ -22,6 +22,8 @@ export default class Device extends HttpClientBase {
         creation_time = null,
         active = 0
     } = {}) {
+        super();
+
         this.id = id;
         this.user_id = user_id;
         this.category_id = category_id;
@@ -61,17 +63,18 @@ export default class Device extends HttpClientBase {
 
     set serial_number(value) {
         if (typeof value !== "string" || value.trim() === "") {
-            throw new TypeError("O número de série é obrigatório");
+            return "O número de série é obrigatório";
         }
         this.#serial_number = value.trim();
     }
+
     get name() {
         return this.#name;
     }
 
     set name(value) {
         if (typeof value !== "string" || value.trim() === "") {
-            throw new TypeError("O nome é obrigatório");
+            return ("O nome é obrigatório");
         }
         this.#name = value.trim();
     }
@@ -81,7 +84,7 @@ export default class Device extends HttpClientBase {
 
     set model(value) {
         if (typeof value !== "string" || value.trim() === "") {
-            throw new TypeError("O modelo é obrigatório");
+            return ("O modelo é obrigatório");
         }
         this.#model = value.trim();
     }
@@ -91,7 +94,7 @@ export default class Device extends HttpClientBase {
 
     set brand(value) {
         if (typeof value !== "string" || value.trim() === "") {
-            throw new TypeError("A marca é obrigatória");
+            return ("A marca é obrigatória");
         }
         this.#brand = value.trim();
     }
