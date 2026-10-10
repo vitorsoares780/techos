@@ -1,33 +1,52 @@
 (function () {
   "use strict";
 
-  const userData = localStorage.getItem("user");
-  if (!userData) return;
+  const chip = document.querySelector("[data-user-chip]");
+  if (!chip) return;
 
-  try {
-    const user = JSON.parse(userData);
-    const chip = document.querySelector(".user-chip");
-    if (!chip) return;
-
-    const avatar = chip.querySelector(".avatar");
-    const nameSpan = chip.querySelector("span:last-child");
-
-    if (nameSpan) {
-      nameSpan.textContent = user.name || "Usuário";
-    }
-
-    if (avatar) {
-      if (user.photo) {
-        avatar.innerHTML = `<img src="${user.photo}" alt="${user.name}" style="width:100%;height:100%;border-radius:50%;object-fit:cover;">`;
-        avatar.style.background = "none";
-      } else {
-        const initials = user.name
-          ? user.name.split(" ").map(w => w[0]).join("").substring(0, 2).toUpperCase()
-          : "U";
-        avatar.textContent = initials;
+  const avatar = chip.querySelector("[data-user-avatar]");
+  const nameElement = chip.querySelector("[data-user-name]");
+  function readStoredUser() {
+    try {
+      const storedUser = JSON.parse(localStorage.getItem("user") || "{}");
+      if (storedUser && typeof storedUser === "object" && !Array.isArray(storedUser)) {
+        return storedUser;
       }
+    } catch (error) {
+      console.warn("Erro ao carregar dados do usuário:", error);
     }
-  } catch (e) {
-    console.warn("Erro ao carregar dados do usuário:", e);
+    return {};
   }
+
+  function renderUser(user) {
+    const name = typeof user.name === "string" && user.name.trim()
+      ? user.name.trim()
+      : "Usuário";
+    const initial = Array.from(name)[0].toLocaleUpperCase("pt-BR");
+
+    if (nameElement) nameElement.textContent = name;
+    if (!avatar) return;
+
+    const showInitial = () => {
+      avatar.replaceChildren(document.createTextNode(initial));
+      avatar.style.background = "";
+    };
+
+    if (typeof user.photo !== "string" || !user.photo.trim()) {
+      showInitial();
+      return;
+    }
+
+    const image = document.createElement("img");
+    image.src = user.photo;
+    image.alt = "";
+    image.addEventListener("error", showInitial, { once: true });
+    avatar.replaceChildren(image);
+    avatar.style.background = "none";
+  }
+
+  renderUser(readStoredUser());
+  window.addEventListener("user:updated", event => {
+    renderUser(event.detail || readStoredUser());
+  });
 })();

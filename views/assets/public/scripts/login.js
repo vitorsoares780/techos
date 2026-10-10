@@ -1,5 +1,6 @@
 import { toastPrincipal } from "../../_common/classes/Toast.js";
 import { loginFormController } from "../../_common/classes/FormController.js";
+import User from "../../_common/classes/User.js";
 
 /* ============================================================
    TechOS — Tela de Login
@@ -9,6 +10,7 @@ import { loginFormController } from "../../_common/classes/FormController.js";
 
   const form = document.querySelector("[data-login-form]");
   const errorMessage = document.querySelector("[data-form-message]");
+  const userService = new User();
 
   function setMessage(message, isError = false) {
     if (!errorMessage) {
@@ -67,26 +69,18 @@ import { loginFormController } from "../../_common/classes/FormController.js";
     setMessage("Entrando...");
 
     try {
-      const response = await fetch("../../../api/users/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Accept": "application/json"
-        },
-        body: JSON.stringify({
-          email,
-          password
-        })
-      });
+      const result = await userService.login(email, password);
 
-      const result = await response.json();
+      if (
+        result?.type === "error" ||
+        result?.code >= 400 ||
+        result?.status !== "success"
+      ) {
+        throw new Error(result?.message || "Credenciais inválidas.");
+      }
 
-      if (!response.ok || result.status !== "success") {
-        toastPrincipal.error({
-          message: result.message || "Credenciais inválidas."
-        });
-
-        throw new Error(result.message || "Credenciais inválidas.");
+      if (!result.data?.token) {
+        throw new Error("A resposta de login não contém um token válido.");
       }
 
       saveSession(result.data);
@@ -98,14 +92,12 @@ import { loginFormController } from "../../_common/classes/FormController.js";
 
       window.location.href = "../app/dashboard.html";
     } catch (error) {
+      const message = error.message || "Não foi possível entrar no sistema.";
       toastPrincipal.error({
-        message: error.message || "Não foi possível entrar no sistema."
+        message
       });
 
-      setMessage(
-        error.message || "Não foi possível entrar no sistema.",
-        true
-      );
+      setMessage(message, true);
     }
   });
 })();

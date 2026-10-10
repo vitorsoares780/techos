@@ -133,6 +133,52 @@ class User extends Model
         return $field;
     }
 
+    public function update(int $id): bool
+    {
+        if ($id < 1) {
+            $this->errorMessage = "ID de usuário inválido.";
+            return false;
+        }
+
+        if ($this->email !== null) {
+            try {
+                $query = "SELECT id FROM {$this->table} WHERE email = :email AND id <> :id LIMIT 1";
+                $stmt = Connect::getInstance()->prepare($query);
+                $stmt->bindValue(":email", $this->email, PDO::PARAM_STR);
+                $stmt->bindValue(":id", $id, PDO::PARAM_INT);
+                $stmt->execute();
+
+                if ($stmt->fetchColumn() !== false) {
+                    $this->errorMessage = "E-mail já cadastrado por outro usuário.";
+                    return false;
+                }
+            } catch (\PDOException $exception) {
+                $this->errorMessage = "Não foi possível validar o e-mail do usuário.";
+                return false;
+            }
+        }
+
+        if (parent::update($id)) {
+            return true;
+        }
+
+        if ($this->errorMessage !== "Registro não encontrado ou sem alterações.") {
+            return false;
+        }
+
+        $query = "SELECT 1 FROM {$this->table} WHERE {$this->primaryKey} = :id LIMIT 1";
+        $stmt = Connect::getInstance()->prepare($query);
+        $stmt->bindValue(":id", $id, PDO::PARAM_INT);
+        $stmt->execute();
+
+        if ($stmt->fetchColumn() !== false) {
+            $this->errorMessage = null;
+            return true;
+        }
+
+        return false;
+    }
+
     // public function listAll(): array
     // {
     //     $query = "SELECT id, cpf, name, email
@@ -156,12 +202,11 @@ class User extends Model
         return false;
     }
 
-    public function login (string $email, string $password, int $typeId = 3): bool
+    public function login (string $email, string $password): bool
     {
-        $query = "SELECT * FROM {$this->table} WHERE email = :email AND typeId = :typeId";
+        $query = "SELECT * FROM {$this->table} WHERE email = :email";
         $stmt = Connect::getInstance()->prepare($query);
         $stmt->bindParam(":email", $email);
-        $stmt->bindParam(":typeId", $typeId);
         $stmt->execute();
         if($stmt->rowCount() == 0){
             $this->errorMessage = "Email não cadastrado";

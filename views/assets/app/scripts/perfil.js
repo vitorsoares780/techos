@@ -8,9 +8,22 @@ import { loginFormController } from "../../_common/classes/FormController.js";
 
   const perfilForm = document.querySelector("[data-perfil-form]");
   const senhaForm = document.querySelector("[data-senha-form]");
+  const photoInput = document.querySelector("[data-profile-photo]");
+  const photoPreview = document.querySelector("[data-profile-photo-preview]");
+  const photoInitial = document.querySelector("[data-profile-photo-initial]");
 
-  const userData = JSON.parse(localStorage.getItem("user") || "null");
+  let userData = {};
+  try {
+    const storedUser = JSON.parse(localStorage.getItem("user") || "{}");
+    if (storedUser && typeof storedUser === "object" && !Array.isArray(storedUser)) {
+      userData = storedUser;
+    }
+  } catch (error) {
+    console.warn("Erro ao carregar os dados da sessão:", error);
+  }
+
   const token = localStorage.getItem("token");
+  let profilePhoto = typeof userData.photo === "string" ? userData.photo : "";
 
   const userService = new User();
 
@@ -19,7 +32,7 @@ import { loginFormController } from "../../_common/classes/FormController.js";
   }
 
   function fillProfile() {
-    if (!perfilForm || !userData) {
+    if (!perfilForm) {
       return;
     }
 
@@ -32,6 +45,48 @@ import { loginFormController } from "../../_common/classes/FormController.js";
 
     if (emailField) {
       emailField.value = userData.email || "";
+    }
+
+    renderProfilePhoto(profilePhoto);
+  }
+
+  function renderProfilePhoto(photo) {
+    const name = String(userData.name || "Usuário").trim();
+    const initial = Array.from(name)[0]?.toLocaleUpperCase("pt-BR") || "U";
+
+    if (photo && photoPreview) {
+      photoPreview.src = photo;
+      photoPreview.hidden = false;
+      if (photoInitial) photoInitial.hidden = true;
+      return;
+    }
+
+    if (photoPreview) {
+      photoPreview.removeAttribute("src");
+      photoPreview.hidden = true;
+    }
+    if (photoInitial) {
+      photoInitial.textContent = initial;
+      photoInitial.hidden = false;
+    }
+  }
+
+  function readPhoto(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.addEventListener("load", () => resolve(reader.result));
+      reader.addEventListener("error", () => reject(new Error("Não foi possível ler a imagem.")));
+      reader.readAsDataURL(file);
+    });
+  }
+
+  function assertUpdateSuccess(result, fallbackMessage) {
+    if (
+      result?.type === "error" ||
+      result?.code >= 400 ||
+      (result?.status && result.status !== "success")
+    ) {
+      throw new Error(result.message || fallbackMessage);
     }
   }
 
@@ -63,23 +118,21 @@ import { loginFormController } from "../../_common/classes/FormController.js";
         const result = await userService.update({
           id: userData?.id,
           name,
-          email
+          email,
+          photo: profilePhoto
         });
+        assertUpdateSuccess(result, "Não foi possível atualizar o perfil.");
 
-        if (result?.status && result.status !== "success") {
-          throw new Error(
-            result.message || "Não foi possível atualizar o perfil."
-          );
-        }
-
-        const updatedUser = {
+        userData = {
           ...userData,
           id: result?.data?.id ?? userData?.id,
           name: result?.data?.name ?? name,
-          email: result?.data?.email ?? email
+          email: result?.data?.email ?? email,
+          photo: result?.data?.photo ?? profilePhoto
         };
 
-        localStorage.setItem("user", JSON.stringify(updatedUser));
+        localStorage.setItem("user", JSON.stringify(userData));
+        window.dispatchEvent(new CustomEvent("user:updated", { detail: userData }));
 
         toastPrincipal.success({
           message: result?.message || "Dados atualizados com sucesso!"
@@ -88,6 +141,32 @@ import { loginFormController } from "../../_common/classes/FormController.js";
         toastPrincipal.error({
           message: error.message || "Não foi possível atualizar o perfil."
         });
+      }
+    });
+  }
+
+  if (photoInput) {
+    photoInput.addEventListener("change", async () => {
+      const [file] = photoInput.files || [];
+      if (!file) return;
+
+      if (!file.type.startsWith("image/")) {
+        photoInput.value = "";
+        toastPrincipal.warning({ message: "Selecione um arquivo de imagem." });
+        return;
+      }
+
+      if (file.size > 1024 * 1024) {
+        photoInput.value = "";
+        toastPrincipal.warning({ message: "A imagem deve ter no máximo 1 MB." });
+        return;
+      }
+
+      try {
+        profilePhoto = await readPhoto(file);
+        renderProfilePhoto(profilePhoto);
+      } catch (error) {
+        toastPrincipal.error({ message: error.message });
       }
     });
   }
@@ -110,9 +189,9 @@ import { loginFormController } from "../../_common/classes/FormController.js";
         return;
       }
 
-      if (nova.value.length < 6) {
+      if (nova.value.length < 8) {
         toastPrincipal.warning({
-          message: "A nova senha deve possuir pelo menos 6 caracteres."
+          message: "A nova senha deve possuir pelo menos 8 caracteres."
         });
         return;
       }
@@ -122,12 +201,7 @@ import { loginFormController } from "../../_common/classes/FormController.js";
           id: userData?.id,
           password: nova.value
         });
-
-        if (result?.status && result.status !== "success") {
-          throw new Error(
-            result.message || "Não foi possível atualizar a senha."
-          );
-        }
+        assertUpdateSuccess(result, "Não foi possível atualizar a senha.");
 
         toastPrincipal.success({
           message: result?.message || "Senha atualizada com sucesso!"

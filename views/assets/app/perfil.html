@@ -27,14 +27,11 @@
         TechOS
       </a>
     </section>
-    <label class="app-search" aria-label="Buscar">
-      <input type="search" placeholder="Buscar minhas ordens…" data-global-search>
-    </label>
+
     <section class="app-topbar-actions">
-      <button class="icon-btn" type="button" aria-label="Notificações" data-badge="2">🔔</button>
-      <a class="user-chip" href="perfil.html" aria-label="Conta">
-        <span class="avatar" aria-hidden="true">CA</span>
-        <span>Carlos</span>
+      <a class="user-chip" href="perfil.html" aria-label="Conta" data-user-chip>
+       <span class="avatar" aria-hidden="true" data-user-avatar>U</span>
+       <span data-user-name>Usuário</span>
       </a>
     </section>
   </header>
@@ -75,12 +72,16 @@
             <h2>Dados pessoais</h2>
           </header>
           <section class="form-grid">
-            <section class="form-field"><label for="p-nome">Nome completo</label><input id="p-nome" name="nome"
-                value="Carlos Andrade" required></section>
-            <section class="form-field"><label for="p-email">E-mail</label><input id="p-email" name="email" type="email"
-                value="carlos@email.com" required></section>
-            <section class="form-field"><label for="p-tel">Telefone</label><input id="p-tel" name="telefone"
-                value="(11) 98765-4321"></section>
+            <section class="form-field"><label for="p-nome">Nome completo</label><input id="p-nome" name="nome" required></section>
+            <section class="form-field"><label for="p-email">E-mail</label><input id="p-email" name="email" type="email" required></section>
+            <section class="form-field full">
+              <label for="p-foto">Foto do perfil</label>
+              <section class="profile-photo-control">
+                <span class="avatar profile-photo-initial" data-profile-photo-initial aria-hidden="true">U</span>
+                <img class="profile-photo-preview" data-profile-photo-preview alt="Prévia da foto do perfil" hidden>
+                <input id="p-foto" name="photo" type="file" accept="image/*" data-profile-photo>
+              </section>
+            </section>
           </section>
           <section class="form-actions"><button class="btn btn-primary" type="submit">Salvar alterações</button>
           </section>
@@ -91,12 +92,10 @@
             <h2>Alterar senha</h2>
           </header>
           <section style="display:flex;flex-direction:column;gap:1rem">
-            <section class="form-field"><label for="p-atual">Senha atual</label><input id="p-atual" name="atual"
-                type="password" required></section>
             <section class="form-field"><label for="p-nova">Nova senha</label><input id="p-nova" name="nova"
-                type="password" minlength="8" data-senha-nova required></section>
+              type="password" minlength="8" autocomplete="new-password" data-senha-nova required></section>
             <section class="form-field"><label for="p-conf">Confirmar nova senha</label><input id="p-conf"
-                name="confirmar" type="password" minlength="8" data-senha-confirma required></section>
+              name="confirmar" type="password" minlength="8" autocomplete="new-password" data-senha-confirma required></section>
           </section>
           <section class="form-actions"><button class="btn btn-primary" type="submit">Atualizar senha</button></section>
         </form>
@@ -105,9 +104,9 @@
     </main>
   </section>
   <script src="scripts/app.js"></script>
+  <script src="scripts/user-chip.js"></script>
   <script type="module" src="scripts/perfil.js"></script>
   <script src="scripts/logout.js"></script>
-  <script src="scripts/notification-badge.js"></script>
 </body>
 
 </html>

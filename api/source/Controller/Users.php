@@ -264,7 +264,7 @@ class Users extends Api
 
     public function update(array $data): void
     {
-        if (!$this->authToken(1)) {
+        if (!$this->authToken(1) && !$this->authToken(2) && !$this->authToken(3)) {
             $this->call(
                 401,
                 "unauthorized",
@@ -273,9 +273,71 @@ class Users extends Api
             )->back();
             return;
         }
-        // fazer o update do usuário agora autenticado
-        var_dump($this->userAuthId);
-        $this->call(200, "success", "Usuário atualizado com sucesso", "success")->back();
+
+        $data = $this->getRequestBody($data);
+        $user = new User();
+        $response = ["id" => $this->userAuthId];
+        $hasUpdates = false;
+
+        if (array_key_exists("name", $data)) {
+            $name = trim((string) $data["name"]);
+            if ($name === "") {
+                $this->call(400, "bad_request", "O nome não pode ficar vazio.", "error")->back();
+                return;
+            }
+            $user->setName($name);
+            $response["name"] = $name;
+            $hasUpdates = true;
+        }
+
+        if (array_key_exists("email", $data)) {
+            $email = trim((string) $data["email"]);
+            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                $this->call(400, "bad_request", "Informe um e-mail válido.", "error")->back();
+                return;
+            }
+            $user->setEmail($email);
+            $response["email"] = $email;
+            $hasUpdates = true;
+        }
+
+        if (array_key_exists("photo", $data)) {
+            if ($data["photo"] !== null && !is_string($data["photo"])) {
+                $this->call(400, "bad_request", "O campo foto deve ser um texto ou nulo.", "error")->back();
+                return;
+            }
+            $photo = $data["photo"] === null ? null : trim($data["photo"]);
+            $user->setPhoto($photo);
+            $response["photo"] = $photo;
+            $hasUpdates = true;
+        }
+
+        if (array_key_exists("password", $data)) {
+            $password = (string) $data["password"];
+            if (strlen($password) < 6) {
+                $this->call(400, "bad_request", "A senha deve possuir pelo menos 6 caracteres.", "error")->back();
+                return;
+            }
+            $user->setPassword(password_hash($password, PASSWORD_DEFAULT));
+            $hasUpdates = true;
+        }
+
+        if (!$hasUpdates) {
+            $this->call(400, "bad_request", "Informe ao menos um campo para atualizar.", "error")->back();
+            return;
+        }
+
+        if (!$user->update($this->userAuthId)) {
+            $this->call(
+                404,
+                "not_found",
+                "Usuário não encontrado ou nenhum dado foi alterado.",
+                "error"
+            )->back();
+            return;
+        }
+
+        $this->call(200, "success", "Usuário atualizado com sucesso.", "success")->back($response);
     }
 
     public function updateAdmin(array $data): void

@@ -26,14 +26,11 @@
         TechOS
       </a>
     </section>
-    <label class="app-search" aria-label="Buscar">
-      <input type="search" placeholder="Buscar minhas ordens…" data-global-search>
-    </label>
+
     <section class="app-topbar-actions">
-      <button class="icon-btn" type="button" aria-label="Notificações" data-badge="2">🔔</button>
-      <a class="user-chip" href="perfil.html" aria-label="Conta">
-        <span class="avatar" aria-hidden="true">CA</span>
-        <span>Carlos</span>
+      <a class="user-chip" href="perfil.html" aria-label="Conta" data-user-chip>
+       <span class="avatar" aria-hidden="true" data-user-avatar>U</span>
+       <span data-user-name>Usuário</span>
       </a>
     </section>
   </header>
@@ -108,9 +105,9 @@
     </main>
   </section>
   <script src="scripts/app.js"></script>
+  <script src="scripts/user-chip.js"></script>
   <script type="module" src="scripts/ordem-detalhe.js"></script>
   <script src="scripts/logout.js"></script>
-  <script src="scripts/notification-badge.js"></script>
 </body>
 
 </html>

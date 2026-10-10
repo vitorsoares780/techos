@@ -173,6 +173,7 @@ class ServiceOrders extends Api
             "device_id" => $data['device_id'],
             "company_id" => $data['company_id'],
             "defect" => $data['defect'],
+            "diagnosis" => $data['diagnosis'],
             "status" => $data['status'],
             "price" => $data['price'],
             "photo" => $data['photo']
