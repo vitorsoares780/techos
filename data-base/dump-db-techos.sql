@@ -113,6 +113,7 @@ CREATE TABLE IF NOT EXISTS `db-techos`.`service_orders` (
   `device_id` INT NOT NULL,
   `company_id` INT NOT NULL,
   `defect` VARCHAR(150) BINARY NOT NULL,
+  `diagnosis` VARCHAR(150) DEFAULT NULL,
   `status` ENUM('aberta', 'aguardando_peca', 'em_andamento', 'cancelada', 'concluida') NOT NULL DEFAULT 'aberta',
   `price` DOUBLE NOT NULL,
   `photo` VARCHAR(255) NULL DEFAULT NULL,
@@ -146,17 +147,18 @@ CREATE TABLE IF NOT EXISTS `db-techos`.`user_types` (
   `name` VARCHAR(255) NOT NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB
-AUTO_INCREMENT = 3
+AUTO_INCREMENT = 1
 DEFAULT CHARACTER SET = utf8mb3;
+insert into `user_types` (name) values ('administrador');
+insert into `user_types` (name) values ('funcionário');
 insert into `user_types` (name) values ('cliente');
-
 
 -- -----------------------------------------------------
 -- Table `db-techos`.`users`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `db-techos`.`users` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `type_id` INT NOT NULL,
+  `typeId` INT NOT NULL,
   `name` VARCHAR(255) NOT NULL,
   `email` VARCHAR(255) NOT NULL,
   `password` VARCHAR(255) NOT NULL,
@@ -214,8 +216,8 @@ CREATE TABLE IF NOT EXISTS `db-techos`.`devices` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
-insert into `devices` (user_id, category_id, serial_number, name, model, brand) values (4, 1, '123456789', 'Galaxy S21', 'S21', 'Samsung');
-
+-- insert into `devices` (user_id, category_id, serial_number, name, model, brand) values (4, 1, '123456789', 'Galaxy S21', 'S21', 'Samsung');
+drop table devices;
 
 
 SET SQL_MODE=@OLD_SQL_MODE;
