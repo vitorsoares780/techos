@@ -27,14 +27,10 @@
         TechOS <span style="font-size:0.7rem;font-weight:500;color:var(--color-text-muted);margin-left:0.25rem">Admin</span>
       </a>
     </section>
-    <label class="admin-search" aria-label="Buscar">
-      <input type="search" placeholder="Buscar OS, usuário ou cliente…" data-global-search>
-    </label>
     <section class="admin-topbar-actions">
-      <button class="icon-btn" type="button" aria-label="Notificações" data-badge="5">🔔</button>
-      <a class="user-chip" href="configuracoes.html" aria-label="Conta">
-        <span class="avatar" style="width:1.75rem;height:1.75rem;font-size:0.78rem" aria-hidden="true">VS</span>
-        <span>Admin</span>
+      <a class="user-chip" href="usuarios.html" aria-label="Usuários" data-user-chip>
+        <span class="avatar" aria-hidden="true" data-user-avatar>A</span>
+        <span data-user-name>Administrador</span>
       </a>
     </section>
   </header>
@@ -47,15 +43,17 @@
         <ul>
           <li><a class="sidebar-link" href="painel.html"><span class="ico" aria-hidden="true">📊</span>Painel</a></li>
           <li><a class="sidebar-link" aria-current="page" href="ordens.html"><span class="ico" aria-hidden="true">🧾</span>Ordens de serviço</a></li>
-          <li><a class="sidebar-link" href="ordem-nova.html"><span class="ico" aria-hidden="true">➕</span>Nova OS</a></li>
           <li><a class="sidebar-link" href="clientes.html"><span class="ico" aria-hidden="true">👥</span>Clientes</a></li>
+          <li><a class="sidebar-link" href="equipamentos.html"><span class="ico" aria-hidden="true">💻</span>Equipamentos</a></li>
         </ul>
       </section>
       <section class="sidebar-section">
         <h4>Administração</h4>
         <ul>
+          <li><a class="sidebar-link" href="empresas.html"><span class="ico" aria-hidden="true">🏢</span>Empresas</a></li>
+          <li><a class="sidebar-link" href="faqs.html"><span class="ico" aria-hidden="true">❓</span>FAQs</a></li>
+          <li><a class="sidebar-link" href="planos.html"><span class="ico" aria-hidden="true">📦</span>Planos</a></li>
           <li><a class="sidebar-link" href="usuarios.html"><span class="ico" aria-hidden="true">👤</span>Usuários</a></li>
-          <li><a class="sidebar-link" href="configuracoes.html"><span class="ico" aria-hidden="true">⚙️</span>Configurações</a></li>
         </ul>
       </section>
       <section class="sidebar-section">
@@ -286,7 +284,6 @@
 
   <script src="scripts/admin.js"></script>
   <script src="scripts/ordem-detalhe.js"></script>
-  <script src="scripts/notification-badge.js"></script>
 </body>
 
 </html>

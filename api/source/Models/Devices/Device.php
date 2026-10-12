@@ -34,7 +34,7 @@ class Device
         $this->name = $name;
         $this->model = $model;
         $this->brand = $brand;
-        $this->creationTime = date('d/m/Y H:i:s', $creationTime);
+        $this->creationTime = $creationTime;
         $this->active = $active;
     }
     public function getId(): int
@@ -112,7 +112,8 @@ class Device
 
     public function listAll(): array
     {
-        $query = "SELECT d.id, d.serial_number, d.name, c.name as 'category_name', u.name as 'user_name'
+        $query = "SELECT d.id, d.user_id, d.category_id, d.serial_number, d.name, d.model, d.brand, d.creation_time, d.active,
+                 c.name as 'category_name', u.name as 'user_name'
                   FROM devices as d
                   JOIN users as u ON d.user_id = u.id
                   JOIN devices_categories as c ON d.category_id = c.id

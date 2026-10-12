@@ -55,21 +55,22 @@ class Faq
 
     public function listAll(): array
     {
-        $query = "SELECT f.id, f.question, f.answer 
-                  -- c.name as 'category_name'
-                  FROM faqs as f
-                  -- JOIN faqs_categories as c ON f.faqs_category_id = c.id
-                  -- GROUP BY c.name
-                  ORDER BY f.faqs_category_id";
+        $query = "SELECT f.id, f.faqs_category_id, c.name AS category_name, f.question, f.answer, f.active
+                  FROM faqs AS f
+                  JOIN faqs_categories AS c ON f.faqs_category_id = c.id
+                  WHERE f.active = 1
+                  ORDER BY c.name, f.id DESC";
         $stmt = Connect::getInstance()->query($query);
         return $stmt->fetchAll();
     }
 
     public function listById(int $id): object|bool
     {
-        $query = "SELECT * FROM faqs as f
-                  JOIN faqs_categories as c ON f.faqs_category_id = c.id
-                  WHERE f.id = :id";
+        $query = "SELECT f.id, f.faqs_category_id, f.question, f.answer, f.active, c.name AS category_name
+              FROM faqs AS f
+              JOIN faqs_categories AS c ON f.faqs_category_id = c.id
+              WHERE f.active = 1
+              AND f.id = :id";
         $stmt = Connect::getInstance()->prepare($query);
         $stmt->bindValue(':id', $id);
         $stmt->execute();
@@ -81,12 +82,18 @@ class Faq
 
     public function insert(): array|bool
     {
-        $query = "INSERT INTO faqs (faqs_category_id, question, answer) VALUES ($this->categoryId, $this->question, $this->answer)";
-        $stmt = Connect::getInstance()->query($query);
+        $query = "INSERT INTO faqs (faqs_category_id, question, answer) VALUES (:category_id, :question, :answer)";
+        $stmt = Connect::getInstance()->prepare($query);
+        $stmt->execute([
+            ":category_id" => $this->categoryId,
+            ":question" => $this->question,
+            ":answer" => $this->answer
+        ]);
         if ($stmt->rowCount() > 0) {
             $this->id = Connect::getInstance()->lastInsertId();
-            $query = "SELECT * FROM faqs as f
-                      JOIN faqs_categories as c ON f.faqs_category_id = c.id
+            $query = "SELECT f.id, f.faqs_category_id, f.question, f.answer, f.active, c.name AS category_name
+                      FROM faqs AS f
+                      JOIN faqs_categories AS c ON f.faqs_category_id = c.id
                       WHERE f.id = :id";
             $stmt = Connect::getInstance()->prepare($query);
             $stmt->bindParam(':id', $this->id);
@@ -109,7 +116,7 @@ class Faq
         }
         $stmt->fetch();
 
-        $query = "UPDATE faqs SET faqs_category_id = :faq_cat_id, question = :question, answer = :answer WHERE id = :id";
+        $query = "UPDATE faqs SET faqs_category_id = :faq_cat_id, question = :question, answer = :answer WHERE id = :id AND active = 1";
         $stmt = Connect::getInstance()->prepare($query);
         $stmt->execute([
             ":faq_cat_id" => $data['faqs_category_id'],
@@ -118,15 +125,14 @@ class Faq
             ":id" => $data['faqId']
         ]);
         if ($stmt->rowCount() > 0) {
-            $query = "SELECT * FROM faqs as f
-                      JOIN faqs_categories as c ON f.faqs_category_id = c.id
+            $query = "SELECT f.id, f.faqs_category_id, f.question, f.answer, f.active, c.name AS category_name
+                      FROM faqs AS f
+                      JOIN faqs_categories AS c ON f.faqs_category_id = c.id
                       WHERE f.id = :id";
             $stmt = Connect::getInstance()->prepare($query);
             $stmt->bindParam(':id', $data['faqId']);
             $stmt->execute();
-            if ($stmt->rowCount() > 0) {
-                return $stmt->fetchAll();
-            }
+            if ($stmt->rowCount() > 0) return $stmt->fetchAll();
         }
         return false;
     }

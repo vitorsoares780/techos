@@ -1,4 +1,4 @@
-import HttpClientBase from "./HttpClientBase";
+import HttpClientBase from "./HttpClientBase.js";
 
 export default class Faq extends HttpClientBase {
     #id;
@@ -8,11 +8,12 @@ export default class Faq extends HttpClientBase {
     #active;
 
     constructor({ id = null, category_id = null, question = "", answer = "", active = 0 } = {}) {
-        this.id = id;
-        this.category_id = category_id;
-        this.question = question;
-        this.answer = answer;
-        this.active = active;
+        super();
+        this.#id = id === null ? null : Number(id);
+        this.#category_id = category_id === null ? null : Number(category_id);
+        this.#question = question;
+        this.#answer = answer;
+        this.#active = Number(active);
     }
 
     get id() {
@@ -68,7 +69,7 @@ export default class Faq extends HttpClientBase {
     toJSON() {
         return {
             id: this.#id,
-            category_id: this.#category_id,
+            faqs_category_id: this.#category_id,
             question: this.#question,
             answer: this.#answer,
             active: this.#active
@@ -102,6 +103,6 @@ export default class Faq extends HttpClientBase {
     }
 
     async delete() {
-        return this.delete(`/faqs/${this.#id}`);
+        return super.delete(`/faqs/${this.#id}`);
     }
 }

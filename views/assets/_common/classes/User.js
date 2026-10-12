@@ -169,6 +169,12 @@ export default class User extends HttpClientBase {
         return this.get("/users/list");
     }
 
+    async listByEmail(email) {
+        return this.get("/users/list/:email", {
+            email: email
+        });
+    }
+
     async update(data) {
         return this.put("/users/update", data);
     }
@@ -178,7 +184,7 @@ export default class User extends HttpClientBase {
     }
 
     async remove(id) {
-        return this.delete("/users/:userId", {
+        return super.delete("/users/delete/:userId", {
             userId: id
         });
     }

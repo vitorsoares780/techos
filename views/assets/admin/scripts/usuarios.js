@@ -1,251 +1,133 @@
 import User from "../../_common/classes/User.js";
 import { toastPrincipal } from "../../_common/classes/Toast.js";
 
-(function () {
-  "use strict";
+const userService = new User();
+const token = localStorage.getItem("token");
+const filterForm = document.querySelector("[data-filter-form]");
+const tableBody = document.querySelector(".data tbody");
+let currentUserId = null;
+let users = [];
 
-  const modal = document.querySelector("[data-modal-usuario]");
-  const btnNew = document.querySelector("[data-novo-usuario]");
-  const closeButtons = document.querySelectorAll("[data-fechar-modal]");
-  const saveButton = document.querySelector("[data-salvar-usuario]");
-  const tableBody = document.querySelector(".data tbody");
-  const filterForm = document.querySelector("[data-filter-form]");
+try {
+  currentUserId = Number(JSON.parse(localStorage.getItem("user") || "null")?.id) || null;
+} catch (error) {
+  console.warn("Não foi possível ler o usuário da sessão:", error);
+}
 
-  const userService = new User();
+if (token) userService.setAuthToken(token);
 
-  const token = localStorage.getItem("token");
-  if (token) {
-    userService.setAuthToken(token);
+function unwrapUsers(response) {
+  if (response?.type === "error" || response?.code >= 400 || response?.status === "error") {
+    throw new Error(response.message || "Não foi possível carregar os usuários.");
+  }
+  if (Array.isArray(response)) return response;
+  return Array.isArray(response?.data) ? response.data : [];
+}
+
+function getTypeId(user) {
+  return Number(user.typeId ?? user.type_id ?? user.typeid);
+}
+
+function getProfile(user) {
+  const profiles = {
+    1: { label: "Administrador", className: "admin" },
+    2: { label: "Técnico", className: "tecnico" },
+    3: { label: "Cliente", className: "cliente" }
+  };
+  return profiles[getTypeId(user)] || { label: "Usuário", className: "" };
+}
+
+function isActive(user) {
+  return Number(user.active) === 1;
+}
+
+function escapeHtml(value) {
+  return String(value ?? "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
+function renderKpis() {
+  document.querySelector("[data-users-total]").textContent = users.length;
+  document.querySelector("[data-users-admin]").textContent = users.filter(user => getTypeId(user) === 1).length;
+  document.querySelector("[data-users-staff]").textContent = users.filter(user => getTypeId(user) === 2).length;
+  document.querySelector("[data-users-clients]").textContent = users.filter(user => getTypeId(user) === 3).length;
+}
+
+function renderUsers(list) {
+  if (!tableBody) return;
+
+  if (list.length === 0) {
+    tableBody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:2rem">Nenhum usuário encontrado.</td></tr>';
+    return;
   }
 
-  function getUsers(result) {
-    if (Array.isArray(result)) {
-      return result;
-    }
+  tableBody.innerHTML = list.map(user => {
+    const profile = getProfile(user);
+    const status = isActive(user);
+    const firstLetter = Array.from(String(user.name || "?").trim())[0]?.toLocaleUpperCase("pt-BR") || "?";
 
-    if (Array.isArray(result?.data)) {
-      return result.data;
-    }
-
-    return [];
-  }
-
-  function escapeHtml(value) {
-    return String(value ?? "")
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;")
-      .replace(/'/g, "&#039;");
-  }
-
-  function getInitials(name) {
-    const parts = String(name || "").trim().split(/\s+/).filter(Boolean);
-
-    if (!parts.length) {
-      return "?";
-    }
-
-    if (parts.length === 1) {
-      return parts[0].slice(0, 2).toUpperCase();
-    }
-
-    return `${parts[0][0]}${parts[parts.length - 1][0]}`.toUpperCase();
-  }
-
-  function getProfileName(user) {
-    const profiles = {
-      1: "Administrador",
-      2: "Técnico",
-      3: "Gestor"
-    };
-
-    return profiles[user.type_id] || user.type || "Usuário";
-  }
-
-  function getProfileClass(user) {
-    const profile = getProfileName(user).toLowerCase();
-
-    if (profile.includes("admin")) {
-      return "admin";
-    }
-
-    if (profile.includes("técnico") || profile.includes("tecnico")) {
-      return "tecnico";
-    }
-
-    return "gestor";
-  }
-
-  function getStatus(user) {
-    return Number(user.active) === 1;
-  }
-
-  function renderUsers(users) {
-    if (!tableBody) {
-      return;
-    }
-
-    if (!users.length) {
-      tableBody.innerHTML = `
-        <tr>
-          <td colspan="7" style="text-align:center;padding:2rem;">
-            Nenhum usuário encontrado.
-          </td>
-        </tr>
-      `;
-      return;
-    }
-
-    tableBody.innerHTML = users.map(function (user) {
-      const active = getStatus(user);
-      const profileName = getProfileName(user);
-      const profileClass = getProfileClass(user);
-
-      return `
-        <tr data-user-id="${escapeHtml(user.id)}">
-          <td>
-            <section style="display:flex;align-items:center;gap:0.6rem">
-              <span class="avatar" style="width:2rem;height:2rem;font-size:0.8rem;flex-shrink:0">
-                ${escapeHtml(getInitials(user.name))}
-              </span>
-              ${escapeHtml(user.name)}
-            </section>
-          </td>
-          <td>${escapeHtml(user.email)}</td>
-          <td>
-            <span class="pill ${escapeHtml(profileClass)}">
-              ${escapeHtml(profileName)}
-            </span>
-          </td>
-          <td>
-            <span class="pill ${active ? "ativo" : "inativo"}">
-              ${active ? "Ativo" : "Inativo"}
-            </span>
-          </td>
-          <td>—</td>
-          <td>—</td>
-          <td>
-            <span class="row-actions">
-              <button type="button" data-user-edit="${escapeHtml(user.id)}">
-                Editar
-              </button>
-              <button
-                type="button"
-                class="${active ? "danger" : ""}"
-                data-user-delete="${escapeHtml(user.id)}"
-              >
-                ${active ? "Excluir" : "Excluir"}
-              </button>
-            </span>
-          </td>
-        </tr>
-      `;
-    }).join("");
-  }
-
-  async function loadUsers() {
-    if (!tableBody) {
-      return;
-    }
-
-    tableBody.innerHTML = `
+    return `
       <tr>
-        <td colspan="7" style="text-align:center;padding:2rem;">
-          Carregando usuários...
-        </td>
+        <td><section style="display:flex;align-items:center;gap:0.6rem"><span class="avatar" style="width:2rem;height:2rem;font-size:0.8rem;flex-shrink:0">${escapeHtml(firstLetter)}</span>${escapeHtml(user.name || "—")}</section></td>
+        <td>${escapeHtml(user.email || "—")}</td>
+        <td><span class="pill ${escapeHtml(profile.className)}">${escapeHtml(profile.label)}</span></td>
+        <td><span class="pill ${status ? "ativo" : "inativo"}">${status ? "Ativo" : "Inativo"}</span></td>
+        <td>${status && Number(user.id) !== currentUserId ? `<span class="row-actions"><button type="button" class="danger" data-user-delete="${escapeHtml(user.id)}">Excluir</button></span>` : "—"}</td>
       </tr>
     `;
+  }).join("");
+}
 
-    try {
-      const result = await userService.listAll();
+function applyFilters() {
+  const query = String(filterForm?.elements.q?.value || "").trim().toLocaleLowerCase("pt-BR");
+  const profile = String(filterForm?.elements.perfil?.value || "");
+  const status = String(filterForm?.elements.status?.value || "");
 
-      if (result?.status && result.status !== "success") {
-        throw new Error(result.message || "Não foi possível carregar os usuários.");
-      }
-
-      const users = getUsers(result);
-      renderUsers(users);
-    } catch (error) {
-      tableBody.innerHTML = `
-        <tr>
-          <td colspan="7" style="text-align:center;padding:2rem;">
-            Não foi possível carregar os usuários.
-          </td>
-        </tr>
-      `;
-
-      toastPrincipal.error({
-        message: error.message || "Não foi possível carregar os usuários."
-      });
-    }
-  }
-
-  async function deleteUser(id) {
-    const confirmed = window.confirm(
-      "Deseja realmente excluir este usuário?"
-    );
-
-    if (!confirmed) {
-      return;
-    }
-
-    try {
-      const result = await userService.remove(id);
-
-      if (result?.status && result.status !== "success") {
-        throw new Error(result.message || "Não foi possível excluir o usuário.");
-      }
-
-      toastPrincipal.success({
-        message: result?.message || "Usuário excluído com sucesso!"
-      });
-
-      await loadUsers();
-    } catch (error) {
-      toastPrincipal.error({
-        message: error.message || "Não foi possível excluir o usuário."
-      });
-    }
-  }
-
-  if (btnNew && modal) {
-    btnNew.addEventListener("click", function () {
-      modal.classList.add("is-open");
-    });
-  }
-
-  closeButtons.forEach(function (button) {
-    button.addEventListener("click", function () {
-      if (modal) {
-        modal.classList.remove("is-open");
-      }
-    });
+  const filtered = users.filter(user => {
+    const matchesQuery = !query || [user.name, user.email]
+      .some(value => String(value || "").toLocaleLowerCase("pt-BR").includes(query));
+    const matchesProfile = !profile || (profile === "admin" ? getTypeId(user) === 1 : profile === "tecnico" ? getTypeId(user) === 2 : getTypeId(user) === 3);
+    const matchesStatus = !status || (status === "ativo") === isActive(user);
+    return matchesQuery && matchesProfile && matchesStatus;
   });
 
-  if (saveButton) {
-    saveButton.addEventListener("click", function () {
-      toastPrincipal.warning({
-        message: "O cadastro administrativo ainda não foi integrado."
-      });
-    });
+  renderUsers(filtered);
+}
+
+async function loadUsers() {
+  if (!tableBody) return;
+
+  try {
+    users = unwrapUsers(await userService.listAll());
+    renderKpis();
+    applyFilters();
+  } catch (error) {
+    console.error("Erro ao carregar usuários:", error);
+    tableBody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:2rem">Não foi possível carregar os usuários.</td></tr>';
+    toastPrincipal.error({ message: error.message || "Não foi possível carregar os usuários." });
   }
+}
 
-  if (tableBody) {
-    tableBody.addEventListener("click", function (event) {
-      const deleteButton = event.target.closest("[data-user-delete]");
-
-      if (deleteButton) {
-        deleteUser(Number(deleteButton.dataset.userDelete));
-      }
-    });
+filterForm?.addEventListener("submit", event => event.preventDefault());
+filterForm?.addEventListener("input", applyFilters);
+filterForm?.addEventListener("change", applyFilters);
+tableBody?.addEventListener("click", async event => {
+  const button = event.target.closest("[data-user-delete]");
+  if (!button || !window.confirm("Deseja desativar este usuário?")) return;
+  try {
+    const result = await userService.remove(Number(button.dataset.userDelete));
+    if (result?.type === "error" || result?.code >= 400 || result?.status === "error") {
+      throw new Error(result.message || "Não foi possível excluir o usuário.");
+    }
+    toastPrincipal.success({ message: result.message || "Usuário desativado com sucesso." });
+    await loadUsers();
+  } catch (error) {
+    toastPrincipal.error({ message: error.message || "Erro ao excluir usuário." });
   }
+});
 
-  if (filterForm) {
-    filterForm.addEventListener("submit", function (event) {
-      event.preventDefault();
-    });
-  }
-
-  loadUsers();
-})();
+loadUsers();

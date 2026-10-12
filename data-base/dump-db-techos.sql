@@ -20,8 +20,14 @@ CREATE TABLE IF NOT EXISTS `db-techos`.`faqs_categories` (
   `active` TINYINT(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`))
 ENGINE = InnoDB
-AUTO_INCREMENT = 6
+AUTO_INCREMENT = 1
 DEFAULT CHARACTER SET = utf8mb3;
+INSERT INTO `db-techos`.`faqs_categories` (`id`, `name`, `active`) VALUES ('1', 'Conta e Cadastro', '1');
+INSERT INTO `db-techos`.`faqs_categories` (`id`, `name`, `active`) VALUES ('2', 'Ordens de Serviço', '1');
+INSERT INTO `db-techos`.`faqs_categories` (`name`) VALUES ('Orçamentos e Pagamentos');
+INSERT INTO `db-techos`.`faqs_categories` (`name`) VALUES ('Prazos e Atendimento');
+INSERT INTO `db-techos`.`faqs_categories` (`name`) VALUES ('Planos e Empresas');
+
 
 
 -- -----------------------------------------------------
@@ -39,7 +45,7 @@ CREATE TABLE IF NOT EXISTS `db-techos`.`faqs` (
     FOREIGN KEY (`faqs_category_id`)
     REFERENCES `db-techos`.`faqs_categories` (`id`))
 ENGINE = InnoDB
-AUTO_INCREMENT = 16
+AUTO_INCREMENT = 1
 DEFAULT CHARACTER SET = utf8mb3;
 
 
@@ -54,9 +60,11 @@ CREATE TABLE IF NOT EXISTS `db-techos`.`plans` (
   `active` TINYINT(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`))
 ENGINE = InnoDB
-AUTO_INCREMENT = 6
+AUTO_INCREMENT = 1
 DEFAULT CHARACTER SET = utf8mb3;
-insert into `plans` (name, price) values ('Plano standard', 19.90);
+insert into `plans` (name, price) values ('Plano Inicial', 0);
+insert into `plans` (name, price) values ('Plano Standard', 29.90);
+insert into `plans` (name, price) values ('Plano Profissional', 79.90);
 
 -- INSERT INTO devices (user_id, category_id, serial_number, model, brand) VALUES (1, 1, 123131421, "M54", "Samsung");
 -- -----------------------------------------------------
@@ -79,9 +87,8 @@ CREATE TABLE IF NOT EXISTS `db-techos`.`companies` (
     FOREIGN KEY (`plan_id`)
     REFERENCES `db-techos`.`plans` (`id`))
 ENGINE = InnoDB
-AUTO_INCREMENT = 9
+AUTO_INCREMENT = 1
 DEFAULT CHARACTER SET = utf8mb3;
-insert into `companies` (cnpj, name, email, owner_id, plan_id) values ('123456789', 'companhia', 'companhia@gmail.com', 4, 6);
 
 
 -- -----------------------------------------------------
@@ -187,7 +194,18 @@ CREATE TABLE IF NOT EXISTS `db-techos`.`devices_categories` (
   `active` TINYINT(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;
-insert into `devices_categories` (name) values ('smartphone');
+INSERT INTO `db-techos`.`devices_categories` (`name`) VALUES ('Smartphone');
+INSERT INTO `db-techos`.`devices_categories` (`name`) VALUES ('Tablet');
+INSERT INTO `db-techos`.`devices_categories` (`name`) VALUES ('Notebook');
+INSERT INTO `db-techos`.`devices_categories` (`name`) VALUES ('Desktop');
+INSERT INTO `db-techos`.`devices_categories` (`name`) VALUES ('Impressora');
+INSERT INTO `db-techos`.`devices_categories` (`name`) VALUES ('Monitor');
+INSERT INTO `db-techos`.`devices_categories` (`name`) VALUES ('Monitor');
+INSERT INTO `db-techos`.`devices_categories` (`name`) VALUES ('Console');
+INSERT INTO `db-techos`.`devices_categories` (`name`) VALUES ('Smart TV');
+INSERT INTO `db-techos`.`devices_categories` (`name`) VALUES ('Smartwatch');
+INSERT INTO `db-techos`.`devices_categories` (`name`) VALUES ('Outro');
+
 
 -- -----------------------------------------------------
 -- Table `db-techos`.`devices`

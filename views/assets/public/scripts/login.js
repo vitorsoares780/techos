@@ -68,6 +68,9 @@ import User from "../../_common/classes/User.js";
 
     setMessage("Entrando...");
 
+    const user = await userService.listByEmail(email);
+    const typeId = user.data.typeId;
+
     try {
       const result = await userService.login(email, password);
 
@@ -90,7 +93,11 @@ import User from "../../_common/classes/User.js";
         message: result.message || "Login realizado com sucesso!"
       });
 
-      window.location.href = "../app/dashboard.html";
+      if(typeId === 1){
+        window.location.href = "../admin/painel.html";
+      } else if (typeId == 2 || typeId == 3) {
+        window.location.href = "../app/dashboard.html";
+      }
     } catch (error) {
       const message = error.message || "Não foi possível entrar no sistema.";
       toastPrincipal.error({

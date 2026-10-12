@@ -133,6 +133,13 @@ class User extends Model
         return $field;
     }
 
+    public function listAll(array $filters = [], ?string $orderBy = 'name', string $direction = 'ASC'): array
+    {
+        $query = "SELECT id, typeId, cpf, name, email, photo, active FROM users ORDER BY name ASC";
+        $stmt = Connect::getInstance()->query($query);
+        return $stmt->fetchAll();
+    }
+
     public function update(int $id): bool
     {
         if ($id < 1) {
@@ -201,8 +208,21 @@ class User extends Model
         }
         return false;
     }
+    public function listByEmail(string $email): object|bool
+    {
+        $query = "SELECT *
+                  FROM users
+                  WHERE email = :email";
+        $stmt = Connect::getInstance()->prepare($query);
+        $stmt->bindValue(':email', $email);
+        $stmt->execute();
+        if ($stmt->rowCount() > 0) {
+            return $stmt->fetch();
+        }
+        return false;
+    }
 
-    public function login (string $email, string $password): bool
+    public function login (string $email, string $password, int $typeId): bool
     {
         $query = "SELECT * FROM {$this->table} WHERE email = :email";
         $stmt = Connect::getInstance()->prepare($query);

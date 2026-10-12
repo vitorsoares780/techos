@@ -67,7 +67,15 @@ class Devices extends Api
             return;
         }
 
-        $device = new Device(null, (int)$data['user_id'], (int)$data['category_id'], $data['serial_number'], $data['name']);
+        $device = new Device(
+            null,
+            (int)$data['user_id'],
+            (int)$data['category_id'],
+            $data['serial_number'],
+            $data['name'],
+            $data['model'] ?? null,
+            $data['brand'] ?? null
+        );
         $result = $device->insert();
 
         if (!$result) {
@@ -102,6 +110,8 @@ class Devices extends Api
             isset($data['category_id']) ? (int)$data['category_id'] : null,
             $data['serial_number'] ?? null,
             $data['name'] ?? null,
+            $data['model'] ?? null,
+            $data['brand'] ?? null,
         );
         $result = $device->update();
 

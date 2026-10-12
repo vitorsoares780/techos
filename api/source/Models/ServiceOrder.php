@@ -134,7 +134,9 @@ class ServiceOrder
 
     public function listAll(): array
     {
-        $query = "SELECT s.id, 
+        $query = "SELECT s.id,
+                 s.company_id,
+                 c.name as 'company_name',
                          u.name as 'user_name', 
                          d.name as 'device_model', 
                          s.defect, 
@@ -145,6 +147,7 @@ class ServiceOrder
                   FROM service_orders as s
                   JOIN users as u ON s.user_id = u.id
                   JOIN devices as d ON s.device_id = d.id
+                  LEFT JOIN companies as c ON s.company_id = c.id
                   WHERE s.active = 1
                   ORDER BY s.creation_time DESC";
         $stmt = Connect::getInstance()->query($query);

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Empresas — TechOS Admin</title>
+  <link rel="icon" href="../_common/images/logo.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@600;700;800&display=swap">
+  <link rel="stylesheet" href="../_common/styles/base.css">
+  <link rel="stylesheet" href="../_common/styles/toast.css">
+  <link rel="stylesheet" href="styles/admin.css">
+</head>
+<body class="admin">
+  <header class="admin-topbar">
+    <section style="display:flex;align-items:center;gap:0.75rem">
+      <button class="sidebar-toggle" type="button" aria-label="Abrir menu lateral" data-sidebar-toggle><span></span><span></span><span></span></button>
+      <a class="brand" href="painel.html"><img src="../_common/images/logo.png" class="logo" alt="">TechOS <span style="font-size:0.7rem;font-weight:500;color:var(--color-text-muted);margin-left:0.25rem">Admin</span></a>
+    </section>
+    <section class="admin-topbar-actions"><a class="user-chip" href="configuracoes.html" aria-label="Conta" data-user-chip><span class="avatar" aria-hidden="true" data-user-avatar>A</span><span data-user-name>Administrador</span></a></section>
+  </header>
+  <section class="admin-shell">
+    <aside class="admin-sidebar" data-sidebar>
+      <section class="sidebar-section"><h4>Operação</h4><ul>
+        <li><a class="sidebar-link" href="painel.html"><span class="ico" aria-hidden="true">📊</span>Painel</a></li><li><a class="sidebar-link" href="ordens.html"><span class="ico" aria-hidden="true">🧾</span>Ordens de serviço</a></li><li><a class="sidebar-link" href="clientes.html"><span class="ico" aria-hidden="true">👥</span>Clientes</a></li><li><a class="sidebar-link" href="equipamentos.html"><span class="ico" aria-hidden="true">💻</span>Equipamentos</a></li>
+      </ul></section>
+      <section class="sidebar-section"><h4>Cadastros</h4><ul>
+        <li><a class="sidebar-link" aria-current="page" href="empresas.html"><span class="ico" aria-hidden="true">🏢</span>Empresas</a></li><li><a class="sidebar-link" href="faqs.html"><span class="ico" aria-hidden="true">❓</span>FAQs</a></li><li><a class="sidebar-link" href="planos.html"><span class="ico" aria-hidden="true">📦</span>Planos</a></li><li><a class="sidebar-link" href="usuarios.html"><span class="ico" aria-hidden="true">👤</span>Usuários</a></li><li><a class="sidebar-link" href="configuracoes.html"><span class="ico" aria-hidden="true">⚙️</span>Configurações</a></li>
+      </ul></section>
+      <section class="sidebar-section"><h4>Conta</h4><ul><li><a class="sidebar-link" href="../public/login.html" data-logout>Sair</a></li></ul></section>
+    </aside>
+    <main class="admin-main">
+      <section class="page-head"><section><h1>Empresas</h1><p>Empresas cadastradas para atendimento.</p></section><section class="page-actions"><a class="btn btn-primary" href="empresa-nova.html">Nova empresa</a></section></section>
+      <article class="panel">
+        <form class="toolbar" data-company-filter><input class="grow" type="search" name="q" placeholder="Buscar por empresa, CNPJ ou e-mail…"></form>
+        <section class="table-wrap"><table class="data"><thead><tr><th>Empresa</th><th>CNPJ</th><th>E-mail</th><th>Responsável</th><th>Plano</th><th></th></tr></thead><tbody data-company-table><tr><td colspan="6">Carregando empresas...</td></tr></tbody></table></section>
+        <p data-company-summary style="font-size:0.85rem;color:var(--color-text-muted);margin-top:1rem">Carregando empresas...</p>
+      </article>
+    </main>
+  </section>
+  <script src="scripts/admin.js"></script><script type="module" src="scripts/empresas.js"></script><script src="scripts/logout.js"></script>
+</body>
+</html>

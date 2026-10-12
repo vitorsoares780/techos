@@ -1,4 +1,4 @@
-import HttpClientBase from "./HttpClientBase";
+import HttpClientBase from "./HttpClientBase.js";
 
 export default class Device extends HttpClientBase {
     #id;
@@ -154,7 +154,7 @@ export default class Device extends HttpClientBase {
     // }
 
     async insert(data) {
-        return this.post("/devices/", data);
+        return this.post("/devices", data);
     }
 
     async update(id, data) {

@@ -1,4 +1,4 @@
-import HttpClientBase from "./HttpClientBase";
+import HttpClientBase from "./HttpClientBase.js";
 
 export default class DeviceCategory extends HttpClientBase {
     #id;
@@ -6,9 +6,10 @@ export default class DeviceCategory extends HttpClientBase {
     #active;
 
     constructor({ id = null, name = "", active = 0 } = {}) {
-        this.id = id;
-        this.name = name;
-        this.active = active;
+        super();
+        this.#id = id === null ? null : Number(id);
+        this.#name = name;
+        this.#active = Number(active);
     }
 
     get id() {
@@ -75,6 +76,6 @@ export default class DeviceCategory extends HttpClientBase {
     }
 
     async delete() {
-        return this.delete(`/devices-categories/${this.#id}`);
+        return super.delete(`/devices-categories/${this.#id}`);
     }
 }

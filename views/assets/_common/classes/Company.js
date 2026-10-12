@@ -1,4 +1,4 @@
-import HttpClientBase from "./HttpClientBase";
+import HttpClientBase from "./HttpClientBase.js";
 
 export default class Device extends HttpClientBase {
     #id;
@@ -20,14 +20,15 @@ export default class Device extends HttpClientBase {
         creation_time = null,
         active = 0
     } = {}) {
-        this.id = id;
-        this.cnpj = cnpj;
-        this.name = name;
-        this.email = email;
-        this.owner_id = owner_id;
-        this.plan_id = plan_id;
+        super();
+        this.#id = id === null ? null : Number(id);
+        this.#cnpj = cnpj;
+        this.#name = name;
+        this.#email = email;
+        this.#owner_id = owner_id === null ? null : Number(owner_id);
+        this.#plan_id = plan_id === null ? null : Number(plan_id);
         this.creation_time = creation_time;
-        this.active = active;
+        this.#active = Number(active);
     }
 
     get id() {
@@ -88,11 +89,15 @@ export default class Device extends HttpClientBase {
     }
 
     set creation_time(value) {
+        if (value === null || value === undefined || value === "") {
+            this.#creation_time = null;
+            return;
+        }
         const date = new Date(value);
         if (!(date instanceof Date) || isNaN(date.getTime())) {
             throw new RangeError("Data inválida");
         }
-        this.#creation_time = number;
+        this.#creation_time = date;
     }
     get active() {
         return this.#active;
@@ -137,7 +142,7 @@ export default class Device extends HttpClientBase {
     // }
 
     async insert(data) {
-        return this.post("/companies/", data);
+        return this.post("/companies", data);
     }
 
     async update(id, data) {

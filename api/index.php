@@ -37,6 +37,8 @@ $route->group("/users");
 
 $route->get("/list", "Users:usersListAll");
 $route->get("/list/{userId}", "Users:usersListById");
+$route->get("/list/{email}", "Users:usersListByEmail");
+$route->delete("/delete/{userId}", "Users:delete");
 
 $route->post("/register","Users:register"); // Registrar usuário comum
 $route->post("/login","Users:auth"); // login de usuário comum

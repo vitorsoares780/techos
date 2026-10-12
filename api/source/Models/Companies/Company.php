@@ -101,7 +101,7 @@ class Company
 
     public function listAll(): array
     {
-        $query = "SELECT c.id, c.cnpj, c.name, c.email, u.name as 'owner_name', p.name as 'plan_name'
+        $query = "SELECT c.id, c.cnpj, c.name, c.email, c.owner_id, c.plan_id, c.creation_time, u.name as 'owner_name', p.name as 'plan_name'
                   FROM companies as c
                   JOIN users as u ON c.owner_id = u.id
                   JOIN plans as p ON c.plan_id = p.id
@@ -113,7 +113,7 @@ class Company
 
     public function listById(int $id): object|bool
     {
-        $query = "SELECT c.id, c.cnpj, c.name, c.email, u.name as 'owner_name', p.name as 'plan_name'
+        $query = "SELECT c.id, c.cnpj, c.name, c.email, c.owner_id, c.plan_id, c.creation_time, u.name as 'owner_name', p.name as 'plan_name'
                   FROM companies as c
                   JOIN users as u ON c.owner_id = u.id
                   JOIN plans as p ON c.plan_id = p.id

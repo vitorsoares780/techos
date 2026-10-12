@@ -131,7 +131,7 @@ class Users extends Api
         }
 
         $user = new User();
-        if (!$user->login($data['email'], $data['password'])) {
+        if (!$user->login($data['email'], $data['password'], 3) && !$user->login($data['email'], $data['password'], 2)) {
             $this->call(
                 401,
                 "unauthorized",
@@ -220,6 +220,36 @@ class Users extends Api
         )->back($user->listAll());
     }
 
+    public function delete(array $data): void
+    {
+        if (!$this->authToken(1)) {
+            $this->call(401, "unauthorized", "Usuário não está autenticado.", "error")->back();
+            return;
+        }
+
+        $userId = filter_var($data['userId'] ?? null, FILTER_VALIDATE_INT);
+        if (!$userId || $userId < 1) {
+            $this->call(400, "bad_request", "ID do usuário inválido.", "error")->back();
+            return;
+        }
+
+        if ($userId === $this->userAuthId) {
+            $this->call(400, "bad_request", "Não é possível excluir a própria conta.", "error")->back();
+            return;
+        }
+
+        $user = new User();
+        if (!$user->softDelete($userId)) {
+            $this->call(404, "not_found", "Usuário não encontrado ou já inativo.", "error")->back();
+            return;
+        }
+
+        $this->call(200, "success", "Usuário desativado com sucesso.", "success")->back([
+            "id" => $userId,
+            "active" => 0
+        ]);
+    }
+
     public function usersListById(array $data): void
     {
         if (!$this->authToken(1)) {
@@ -243,6 +273,38 @@ class Users extends Api
 
         $user = new user();
         $user = $user->listById($data['userId']);
+
+        if ($user == false) {
+            $this->call(
+                404,
+                "not_found",
+                "Usuário não encontrado",
+                "error"
+            )->back();
+            return;
+        }
+
+        $this->call(
+            200,
+            "success",
+            "Usuário encontrado",
+            "success"
+        )->back($user);
+    }
+    public function usersListByEmail(array $data): void
+    {
+        if (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
+            $this->call(
+                400,
+                "bad_request",
+                "Email do usuário é obrigatório e deve ser um Email válido",
+                "error"
+            )->back();
+            return;
+        }
+
+        $user = new user();
+        $user = $user->listByEmail($data['email']);
 
         if ($user == false) {
             $this->call(

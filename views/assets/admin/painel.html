@@ -1,210 +1,47 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Painel administrativo — TechOS</title>
-  <meta name="description" content="Painel administrativo da assistência técnica no TechOS.">
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Painel geral — TechOS Admin</title>
   <link rel="icon" href="../_common/images/logo.ico">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet"
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@600;700;800&display=swap">
-  <link rel="stylesheet" href="../_common/styles/base.css">
-  <link rel="stylesheet" href="styles/admin.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@600;700;800&display=swap">
+  <link rel="stylesheet" href="../_common/styles/base.css"><link rel="stylesheet" href="../_common/styles/toast.css"><link rel="stylesheet" href="styles/admin.css">
 </head>
-
 <body class="admin">
-
-  <header class="admin-topbar">
-    <section style="display:flex;align-items:center;gap:0.75rem">
-      <button class="sidebar-toggle" type="button" aria-label="Abrir menu lateral" data-sidebar-toggle>
-        <span></span><span></span><span></span>
-      </button>
-      <a class="brand" href="painel.html">
-        <img src="../_common/images/logo.png" class="logo">
-        TechOS <span
-          style="font-size:0.7rem;font-weight:500;color:var(--color-text-muted);margin-left:0.25rem">Admin</span>
-      </a>
+  <header class="admin-topbar"><section style="display:flex;align-items:center;gap:0.75rem"><button class="sidebar-toggle" type="button" aria-label="Abrir menu lateral" data-sidebar-toggle><span></span><span></span><span></span></button><a class="brand" href="painel.html"><img src="../_common/images/logo.png" class="logo" alt="">TechOS <span style="font-size:0.7rem;font-weight:500;color:var(--color-text-muted);margin-left:0.25rem">Admin</span></a></section><section class="admin-topbar-actions"><a class="user-chip" href="usuarios.html" aria-label="Usuários" data-user-chip><span class="avatar" aria-hidden="true" data-user-avatar>A</span><span data-user-name>Administrador</span></a></section></header>
+  <section class="admin-shell"><aside class="admin-sidebar" data-sidebar>
+    <section class="sidebar-section"><h4>Operação</h4><ul>
+      <li><a class="sidebar-link" aria-current="page" href="painel.html"><span class="ico" aria-hidden="true">📊</span>Painel geral</a></li>
+      <li><a class="sidebar-link" href="ordens.html"><span class="ico" aria-hidden="true">🧾</span>Ordens de serviço</a></li>
+      <li><a class="sidebar-link" href="clientes.html"><span class="ico" aria-hidden="true">👥</span>Clientes</a></li>
+      <li><a class="sidebar-link" href="equipamentos.html"><span class="ico" aria-hidden="true">💻</span>Equipamentos</a></li>
+    </ul></section>
+    <section class="sidebar-section"><h4>Cadastros</h4><ul>
+      <li><a class="sidebar-link" href="empresas.html"><span class="ico" aria-hidden="true">🏢</span>Empresas</a></li>
+      <li><a class="sidebar-link" href="faqs.html"><span class="ico" aria-hidden="true">❓</span>FAQs</a></li>
+      <li><a class="sidebar-link" href="planos.html"><span class="ico" aria-hidden="true">📦</span>Planos</a></li>
+      <li><a class="sidebar-link" href="usuarios.html"><span class="ico" aria-hidden="true">👤</span>Usuários</a></li>
+    </ul></section>
+    <section class="sidebar-section"><h4>Conta</h4><ul><li><a class="sidebar-link" href="../public/login.html" data-logout><span class="ico" aria-hidden="true">🚪</span>Sair</a></li></ul></section>
+  </aside>
+  <main class="admin-main">
+    <section class="page-head"><section><h1>Painel geral</h1><p>Visão consolidada de empresas, clientes e ordens — <time data-current-date></time>.</p></section><section class="page-actions"><a class="btn btn-ghost" href="empresas.html">Ver empresas</a><a class="btn btn-primary" href="clientes.html">Ver clientes</a></section></section>
+    <section class="kpi-grid">
+      <article class="kpi"><p class="label">Empresas ativas</p><p class="value" data-kpi-companies>0</p><p class="trend">Empresas cadastradas</p></article>
+      <article class="kpi"><p class="label">Clientes ativos</p><p class="value" data-kpi-clients>0</p><p class="trend">Contas do tipo cliente</p></article>
+      <article class="kpi"><p class="label">OS abertas</p><p class="value" data-kpi-open>0</p><p class="trend">Aguardando atendimento</p></article>
+      <article class="kpi"><p class="label">Total de OS ativas</p><p class="value" data-kpi-orders>0</p><p class="trend">Todas as empresas</p></article>
     </section>
-    <label class="admin-search" aria-label="Buscar">
-      <input type="search" placeholder="Buscar OS, usuário ou cliente…" data-global-search>
-    </label>
-    <section class="admin-topbar-actions">
-      <button class="icon-btn" type="button" aria-label="Notificações" data-badge="5">🔔</button>
-      <a class="user-chip" href="configuracoes.html" aria-label="Conta">
-        <span class="avatar" style="width:1.75rem;height:1.75rem;font-size:0.78rem" aria-hidden="true">VS</span>
-        <span>Admin</span>
-      </a>
+    <section class="detail-grid">
+      <article class="panel"><header class="panel-head"><h2>Ordens recentes</h2><a class="btn-link" href="ordens.html">Ver ordens</a></header>
+        <section class="table-wrap"><table class="data"><thead><tr><th>Nº</th><th>Empresa</th><th>Cliente</th><th>Equipamento</th><th>Status</th><th>Abertura</th></tr></thead><tbody data-dashboard-orders><tr><td colspan="6">Carregando ordens...</td></tr></tbody></table></section>
+      </article>
+      <article class="panel"><header class="panel-head"><h2>Empresas recentes</h2><a class="btn-link" href="empresas.html">Ver empresas</a></header>
+        <section class="table-wrap"><table class="data"><thead><tr><th>Empresa</th><th>Responsável</th><th>Plano</th></tr></thead><tbody data-dashboard-companies><tr><td colspan="3">Carregando empresas...</td></tr></tbody></table></section>
+      </article>
     </section>
-  </header>
-
-  <section class="admin-shell">
-
-    <aside class="admin-sidebar" data-sidebar>
-      <section class="sidebar-section">
-        <h4>Operação</h4>
-        <ul>
-          <li><a class="sidebar-link" aria-current="page" href="painel.html"><span class="ico"
-                aria-hidden="true">📊</span>Painel</a></li>
-          <li><a class="sidebar-link" href="ordens.html"><span class="ico" aria-hidden="true">🧾</span>Ordens de serviço
-              <span class="admin-badge">27</span></a></li>
-          <li><a class="sidebar-link" href="ordem-nova.html"><span class="ico" aria-hidden="true">➕</span>Nova OS</a>
-          </li>
-          <li><a class="sidebar-link" href="clientes.html"><span class="ico" aria-hidden="true">👥</span>Clientes</a>
-          </li>
-        </ul>
-      </section>
-      <section class="sidebar-section">
-        <h4>Administração</h4>
-        <ul>
-          <li><a class="sidebar-link" href="usuarios.html"><span class="ico" aria-hidden="true">👤</span>Usuários</a>
-          </li>
-          <li><a class="sidebar-link" href="configuracoes.html"><span class="ico"
-                aria-hidden="true">⚙️</span>Configurações</a></li>
-        </ul>
-      </section>
-      <section class="sidebar-section">
-        <h4>Conta</h4>
-        <ul>
-          <li><a class="sidebar-link" href="../public/login.html"><span class="ico" aria-hidden="true">🚪</span>Sair</a>
-          </li>
-        </ul>
-      </section>
-    </aside>
-
-    <main class="admin-main">
-
-      <section class="page-head">
-        <section>
-          <h1>Boa tarde, VS Tech 👋</h1>
-          <p>Resumo geral da assistência técnica — hoje, 17 de maio de 2026.</p>
-        </section>
-        <section class="page-actions">
-          <a class="btn btn-primary" href="ordem-nova.html">+ Nova OS</a>
-        </section>
-      </section>
-
-      <!-- TODO: substituir por dados reais da API GET /api/admin/dashboard -->
-      <section class="kpi-grid">
-        <article class="kpi">
-          <p class="label">OS abertas</p>
-          <p class="value">27</p>
-          <p class="trend up">▲ 4 nos últimos 7 dias</p>
-        </article>
-        <article class="kpi">
-          <p class="label">Em andamento</p>
-          <p class="value">14</p>
-          <p class="trend">SLA médio 2,1 dias</p>
-        </article>
-        <article class="kpi">
-          <p class="label">Concluídas no mês</p>
-          <p class="value">182</p>
-          <p class="trend up">▲ 12% vs mês anterior</p>
-        </article>
-                <article class="kpi">
-          <p class="label">Clientes cadastrados</p>
-          <p class="value">248</p>
-          <p class="trend up">▲ 7 este mês</p>
-        </article>
-      </section>
-
-      <section class="detail-grid">
-
-        <article class="panel" style="grid-column:1/-1">
-          <header class="panel-head">
-            <h2>Atividades recentes</h2>
-            <a class="btn-link" href="ordens.html">Ver todas as OS →</a>
-          </header>
-          <!-- TODO: substituir por dados reais da API GET /api/admin/atividades?limit=8 -->
-          <section class="table-wrap" style="margin-block-end:1rem">
-            <table class="data">
-              <thead>
-                <tr>
-                  <th>Nº</th>
-                  <th>Cliente</th>
-                  <th>Equipamento</th>
-                  <th>Status</th>
-                  <th>Atualizado</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>#1042</td>
-                  <td>Carla Andrade</td>
-                  <td>iPhone 14 Pro</td>
-                  <td><span class="pill andamento">Em andamento</span></td>
-                  <td>há 12 min</td>
-                </tr>
-                <tr>
-                  <td>#1041</td>
-                  <td>João Vieira</td>
-                  <td>Samsung Galaxy S23</td>
-                  <td><span class="pill aguardando">Aguardando peça</span></td>
-                  <td>há 1 h</td>
-                </tr>
-                <tr>
-                  <td>#1040</td>
-                  <td>Pedro Lemos</td>
-                  <td>Motorola Edge 30</td>
-                  <td><span class="pill aberta">Aberta</span></td>
-                  <td>há 3 h</td>
-                </tr>
-                <tr>
-                  <td>#1039</td>
-                  <td>Ana Beatriz</td>
-                  <td>iPhone 13</td>
-                  <td><span class="pill concluida">Concluída</span></td>
-                  <td>ontem</td>
-                </tr>
-                <tr>
-                  <td>#1038</td>
-                  <td>Lucas Martins</td>
-                  <td>Xiaomi Redmi Note 12</td>
-                  <td><span class="pill cancelada">Cancelada</span></td>
-                  <td>ontem</td>
-                </tr>
-              </tbody>
-            </table>
-          </section>
-          <ol class="timeline">
-            <li class="timeline-item">
-              <time>09:42</time>
-              <h4>OS #1042 movida para em andamento</h4>
-              <p>Por VS Tech</p>
-            </li>
-            <li class="timeline-item">
-              <time>08:55</time>
-              <h4>Peça recebida — tela iPhone 14 Pro</h4>
-              <p>OS #1042</p>
-            </li>
-            <li class="timeline-item">
-              <time>08:10</time>
-              <h4>Nova OS aberta para Pedro Lemos</h4>
-              <p>Motorola Edge 30</p>
-            </li>
-            <li class="timeline-item">
-              <time>ontem</time>
-              <h4>OS #1039 concluída e entregue</h4>
-              <p>Pagamento: Pix R$ 320,00</p>
-            </li>
-            <li class="timeline-item">
-              <time>ontem</time>
-              <h4>Novo cliente cadastrado</h4>
-              <p>Lucas Martins</p>
-            </li>
-          </ol>
-        </article>
-
-      </section>
-
-      </main>
-  </section>
-
-  <script src="scripts/admin.js"></script>
-  <script src="scripts/painel.js"></script>
-  <script src="scripts/notification-badge.js"></script>
+  </main></section>
+  <script src="scripts/admin.js"></script><script type="module" src="scripts/painel.js"></script><script src="scripts/logout.js"></script>
 </body>
-
 </html>

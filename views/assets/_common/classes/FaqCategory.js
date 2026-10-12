@@ -1,12 +1,13 @@
-import HttpClientBase from "./HttpClientBase";
+import HttpClientBase from "./HttpClientBase.js";
 
 export default class FaqCategory extends HttpClientBase {
     #id;
     #name;
 
     constructor({ id = null, name = "" } = {}) {
-        this.id = id;
-        this.name = name;
+        super();
+        this.#id = id === null ? null : Number(id);
+        this.#name = name;
     }
 
     get id() {
@@ -59,6 +60,6 @@ export default class FaqCategory extends HttpClientBase {
     }
 
     async delete() {
-        return this.delete(`/faqs-categories/${this.#id}`);
+        return super.delete(`/faqs-categories/${this.#id}`);
     }
 }
