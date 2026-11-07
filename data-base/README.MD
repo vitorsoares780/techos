@@ -16,7 +16,9 @@ facilmente.
 
 ```
 data-base/
-└── dump.sql    ← Script SQL com a estrutura e dados do banco
+├── dump-db-techos.sql       ← Estrutura e dados iniciais do banco
+└── migrations/
+    └── 2026-11-06-service-order-images.sql
 ```
 
 ---
@@ -68,14 +70,23 @@ INSERT INTO users (name, email, password) VALUES
 ### 🚀 Como usar?
 
 1. Abra o **phpMyAdmin** ou outro cliente MySQL
-2. Copie o conteúdo do arquivo `dump.sql`
+2. Copie o conteúdo do arquivo `dump-db-techos.sql`
 3. Cole na aba **SQL** e clique em **Executar**
 4. Pronto! O banco de dados está criado e populado
 
 Ou pelo terminal:
 ```bash
-mysql -u root -p < dump.sql
+mysql -u root -p < dump-db-techos.sql
 ```
+
+### Galeria de imagens das ordens de serviço
+
+A tabela `service_order_images` armazena uma linha por imagem, com chave
+estrangeira para `service_orders.id`. O caminho/nome gerado é persistido; o
+conteúdo fica em `uploads/service-orders/`. O dump inclui a estrutura para
+novas instalações e `migrations/2026-11-06-service-order-images.sql` aplica a
+alteração em um banco existente. A chave estrangeira remove metadados em uma
+exclusão física; a API também remove os arquivos ao excluir logicamente uma OS.
 
 ---
 
@@ -90,4 +101,3 @@ mysql -u root -p < dump.sql
 
 > 💡 **Dica:** Sempre que adicionar uma nova tabela ao projeto, atualize o `dump.sql`
 > para que todos da equipe tenham a mesma estrutura.
-

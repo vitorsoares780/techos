@@ -12,6 +12,7 @@
   <link rel="stylesheet"
     href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@600;700;800&display=swap">
   <link rel="stylesheet" href="../_common/styles/base.css">
+  <link rel="stylesheet" href="../_common/styles/toast.css">
   <link rel="stylesheet" href="styles/app.css">
 </head>
 
@@ -26,14 +27,11 @@
         TechOS
       </a>
     </section>
-    <label class="app-search" aria-label="Buscar">
-      <input type="search" placeholder="Buscar minhas ordens…" data-global-search>
-    </label>
+
     <section class="app-topbar-actions">
-      <button class="icon-btn" type="button" aria-label="Notificações" data-badge="2">🔔</button>
-      <a class="user-chip" href="perfil.html" aria-label="Conta">
-        <span class="avatar" aria-hidden="true">CA</span>
-        <span>Carlos</span>
+      <a class="user-chip" href="perfil.html" aria-label="Conta" data-user-chip>
+       <span class="avatar" aria-hidden="true" data-user-avatar>U</span>
+       <span data-user-name>Usuário</span>
       </a>
     </section>
   </header>
@@ -54,8 +52,10 @@
       <section class="sidebar-section">
         <h4>Conta</h4>
         <ul>
-          <li><a class="sidebar-link" href="perfil.html"><span class="ico" aria-hidden="true">👤</span>Perfil e Configurações</a></li>
-          <li><a class="sidebar-link" href="../../public/login.html" data-logout><span class="ico" aria-hidden="true">🚪</span>Sair</a>
+          <li><a class="sidebar-link" href="perfil.html"><span class="ico" aria-hidden="true">👤</span>Perfil e
+              Configurações</a></li>
+          <li><a class="sidebar-link" href="../../public/login.html" data-logout><span class="ico"
+                aria-hidden="true">🚪</span>Sair</a>
           </li>
         </ul>
       </section>
@@ -71,7 +71,7 @@
         </section>
       </section>
 
-      <form class="panel" data-os-form novalidate>
+      <form class="panel" data-device-form novalidate>
 
         <fieldset style="border:0;padding:0;margin:0 0 1.5rem">
           <legend style="font-weight:600;margin-bottom:0.75rem">Equipamento</legend>
@@ -79,14 +79,9 @@
           <section class="form-grid">
 
             <section class="form-field">
-              <label for="os-tipo">Tipo</label>
-              <select id="os-tipo" name="tipo">
-                <option>Notebook</option>
-                <option>Celular</option>
-                <option>Desktop</option>
-                <option>Impressora</option>
-                <option>Console</option>
-                <option>Outro</option>
+              <label for="os-categoria">Categoria</label>
+              <select id="os-categoria" name="category_id" data-device-categories required>
+                <option value="">Carregando categorias...</option>
               </select>
             </section>
 
@@ -95,30 +90,54 @@
             <section class="form-field"><label for="os-modelo">Modelo</label><input id="os-modelo" name="modelo">
             </section>
 
-            <section class="form-field"><label for="os-serial">Nº de série</label><input id="os-serial" name="serial">
+            <section class="form-field"><label for="os-serial">Nº de série</label><input id="os-serial" name="serial" type="number" min="1" step="1" required>
             </section>
 
-            </section>
+          </section>
         </fieldset>
 
+        <section class="form-actions">
+          <button type="submit" class="btn btn-ghost">Cadastrar aparelho</button>
+          <p data-device-feedback aria-live="polite"></p>
+        </section>
+
+      </form>
+
+      <form class="panel" data-os-form novalidate>
+
         <fieldset style="border:0;padding:0;margin:0 0 1.5rem">
-          <legend style="font-weight:600;margin-bottom:0.75rem">Defeito</legend>
+          <legend style="font-weight:600;margin-bottom:0.75rem">Serviço</legend>
           <section class="form-grid">
             <section class="form-field full">
+
+              <label for="os-device">Aparelho</label>
+              <select id="os-device" name="device_id" data-order-device required>
+                <option value="">Carregando aparelhos...</option>
+              </select>
+
               <label for="os-defeito">Defeito relatado</label>
-              <textarea id="os-defeito" name="defeito" rows="4" required placeholder="Descreva detalhadamente o problema do seu equipamento…"></textarea>
+              <textarea id="os-defeito" name="defeito" rows="3" required
+                placeholder="Descreva detalhadamente o problema do seu equipamento…"></textarea>
+
+              <label for="os-diagnostico">Diagnóstico</label>
+              <textarea id="os-diagnostico" name="diagnostico" rows="3" maxlength="150" required
+                placeholder="Descreva o diagnóstico inicial para o equipamento…"></textarea>
+
+              <label for="os-preco">Preço</label>
+              <input type="number" id="os-preco" name="preco" min="0.01" step="0.01" required
+                placeholder="Valor estimado do serviço..">
             </section>
           </section>
         </fieldset>
 
         <fieldset style="border:0;padding:0;margin:0 0 1.5rem">
-          <legend style="font-weight:600;margin-bottom:0.75rem">Fotos do aparelho</legend>
+          <legend style="font-weight:600;margin-bottom:0.75rem">Foto do aparelho</legend>
           <section class="form-grid">
             <section class="form-field full">
-              <label for="os-fotos">Envie fotos para ajudar no diagnóstico</label>
-              <input id="os-fotos" name="fotos" type="file" accept="image/*" multiple>
+              <label for="os-foto">Envie uma foto para ajudar no diagnóstico</label>
+              <input id="os-foto" name="photo" type="file" accept="image/jpeg,image/png,image/webp">
               <p style="font-size:0.82rem;color:var(--color-text-muted);margin-top:0.35rem">
-                PNG, JPG ou WEBP. Máximo de 5 fotos.
+                JPEG, PNG ou WebP. Máximo de 5 MB.
               </p>
             </section>
           </section>
@@ -131,9 +150,10 @@
     </main>
   </section>
   <script src="scripts/app.js"></script>
-  <script src="scripts/ordem-nova.js"></script>
+  <script src="scripts/user-chip.js"></script>
+  <script type="module" src="scripts/device-nova.js"></script>
+  <script type="module" src="scripts/ordem-nova.js"></script>
   <script src="scripts/logout.js"></script>
-  <script src="scripts/notification-badge.js"></script>
 </body>
 
 </html>

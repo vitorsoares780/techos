@@ -11,6 +11,8 @@ class Device
     private ?int $categoryId;
     private ?string $serialNumber;
     private ?string $name;
+    private ?string $model;
+    private ?string $brand;
     private ?string $creationTime;
     private ?int $active;
 
@@ -20,6 +22,8 @@ class Device
         ?int $categoryId = null,
         ?string $serialNumber = null,
         ?string $name = null,
+        ?string $model = null,
+        ?string $brand = null,
         ?string $creationTime = null,
         ?int $active = null
     ) {
@@ -28,7 +32,9 @@ class Device
         $this->categoryId = $categoryId;
         $this->serialNumber = $serialNumber;
         $this->name = $name;
-        $this->creationTime = date('d/m/Y H:i:s', $creationTime);
+        $this->model = $model;
+        $this->brand = $brand;
+        $this->creationTime = $creationTime;
         $this->active = $active;
     }
     public function getId(): int
@@ -50,6 +56,14 @@ class Device
     public function getname(): string
     {
         return $this->name;
+    }
+    public function getModel(): string
+    {
+        return $this->model;
+    }
+    public function getBrand(): string
+    {
+        return $this->brand;
     }
     public function getCreationTime(): string
     {
@@ -79,6 +93,14 @@ class Device
     {
         $this->name = $name;
     }
+    public function setModel(string $model)
+    {
+        $this->model = $model;
+    }
+    public function setBrand(string $brand)
+    {
+        $this->brand = $brand;
+    }
     public function setCreationTime(string $creationTime)
     {
         $this->creationTime = $creationTime;
@@ -88,15 +110,21 @@ class Device
         $this->active = $active;
     }
 
-    public function listAll(): array
+    public function listAll(?int $userId = null): array
     {
-        $query = "SELECT d.id, d.serial_number, d.name, c.name as 'category_name', u.name as 'user_name'
+        $query = "SELECT d.id, d.user_id, d.category_id, d.serial_number, d.name, d.model, d.brand, d.creation_time, d.active,
+                 c.name as 'category_name', u.name as 'user_name'
                   FROM devices as d
                   JOIN users as u ON d.user_id = u.id
                   JOIN devices_categories as c ON d.category_id = c.id
                   WHERE d.active = 1
+                  " . ($userId !== null ? "AND d.user_id = :user_id" : "") . "
                   ORDER BY d.creation_time DESC";
-        $stmt = Connect::getInstance()->query($query);
+        $stmt = Connect::getInstance()->prepare($query);
+        if ($userId !== null) {
+            $stmt->bindValue(":user_id", $userId, \PDO::PARAM_INT);
+        }
+        $stmt->execute();
         return $stmt->fetchAll();
     }
 
@@ -118,13 +146,16 @@ class Device
 
     public function insert(): array|bool
     {
-        $query = "INSERT INTO devices (user_id, category_id, serial_number, name) VALUES (:user_id, :cat_id, :serial_number, :name)";
+        $query = "INSERT INTO devices (user_id, category_id, serial_number, name, model, brand)
+                  VALUES (:user_id, :cat_id, :serial_number, :name, :model, :brand)";
         $stmt = Connect::getInstance()->prepare($query);
         $stmt->execute([
             ":user_id" => $this->userId,
             ":cat_id" => $this->categoryId,
             ":serial_number" => $this->serialNumber,
-            ":name" => $this->name
+            ":name" => $this->name,
+            ":model" => $this->model,
+            ":brand" => $this->brand
         ]);
         if ($stmt->rowCount() > 0) {
             $this->id = Connect::getInstance()->lastInsertId();
@@ -158,14 +189,18 @@ class Device
         $catId = $this->categoryId ?? $current->category_id;
         $serial = $this->serialNumber ?? $current->serial_number;
         $name = $this->name ?? $current->name;
+        $model = $this->model ?? $current->model;
+        $brand = $this->brand ?? $current->brand;
 
-        $query = "UPDATE devices SET user_id = :user_id, category_id = :cat_id, serial_number = :serial_number, name = :name WHERE id = :id";
+        $query = "UPDATE devices SET user_id = :user_id, category_id = :cat_id, serial_number = :serial_number, name = :name, model = :model, brand = :brand WHERE id = :id";
         $stmt = Connect::getInstance()->prepare($query);
         $stmt->execute([
             ":user_id" => $userId,
             ":cat_id" => $catId,
             ":serial_number" => $serial,
             ":name" => $name,
+            ":model" => $model,
+            ":brand" => $brand,
             ":id" => $this->id
         ]);
         if ($stmt->rowCount() > 0) {

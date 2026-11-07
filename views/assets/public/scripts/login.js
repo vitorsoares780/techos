@@ -1,3 +1,7 @@
+import { toastPrincipal } from "../../_common/classes/Toast.js";
+import { loginFormController } from "../../_common/classes/FormController.js";
+import User from "../../_common/classes/User.js";
+
 /* ============================================================
    TechOS — Tela de Login
    ============================================================ */
@@ -6,6 +10,7 @@
 
   const form = document.querySelector("[data-login-form]");
   const errorMessage = document.querySelector("[data-form-message]");
+  const userService = new User();
 
   function setMessage(message, isError = false) {
     if (!errorMessage) {
@@ -33,44 +38,73 @@
     return;
   }
 
+  // Inicializa o FormController com o formulário de Login
+  loginFormController.init(form);
+
   form.addEventListener("submit", async function (event) {
     event.preventDefault();
 
-    const formData = new FormData(form);
-    const email = String(formData.get("email") || "").trim();
-    const password = String(formData.get("password") || "").trim();
+    // Validação utilizando o FormController
+    const validation = loginFormController.validateRequired([
+      "email",
+      "password"
+    ]);
 
-    if (!email || !password) {
+    if (!validation.valid) {
       setMessage("Informe e-mail e senha para continuar.", true);
+
+      toastPrincipal.warning({
+        message: "Informe e-mail e senha para continuar."
+      });
+
       return;
     }
 
+    // Obtém os dados utilizando o FormController
+    const formData = loginFormController.getData();
+
+    const email = String(formData.email || "").trim();
+    const password = String(formData.password || "").trim();
+
     setMessage("Entrando...");
 
+    const user = await userService.listByEmail(email);
+    const type_id = user.data.type_id;
+
     try {
-      const response = await fetch("../../../api/users/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Accept": "application/json"
-        },
-        body: JSON.stringify({
-          email,
-          password
-        })
-      });
+      const result = await userService.login(email, password);
 
-      const result = await response.json();
+      if (
+        result?.type === "error" ||
+        result?.code >= 400 ||
+        result?.status !== "success"
+      ) {
+        throw new Error(result?.message || "Credenciais inválidas.");
+      }
 
-      if (!response.ok || result.status !== "success") {
-        throw new Error(result.message || "Credenciais inválidas.");
+      if (!result.data?.token) {
+        throw new Error("A resposta de login não contém um token válido.");
       }
 
       saveSession(result.data);
       setMessage("");
-      window.location.href = "../app/dashboard.html";
+
+      toastPrincipal.success({
+        message: result.message || "Login realizado com sucesso!"
+      });
+
+      if(type_id === 1){
+        window.location.href = "../admin/painel.html";
+      } else if (type_id == 2 || type_id == 3) {
+        window.location.href = "../app/dashboard.html";
+      }
     } catch (error) {
-      setMessage(error.message || "Não foi possível entrar no sistema.", true);
+      const message = error.message || "Não foi possível entrar no sistema.";
+      toastPrincipal.error({
+        message
+      });
+
+      setMessage(message, true);
     }
   });
 })();

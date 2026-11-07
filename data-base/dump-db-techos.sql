@@ -10,7 +10,7 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,N
 CREATE SCHEMA IF NOT EXISTS `db-techos` DEFAULT CHARACTER SET utf8mb3 ;
 USE `db-techos` ;
 
- -- drop database `db-techos`;
+--  drop database `db-techos`;
 -- -----------------------------------------------------
 -- Table `db-techos`.`faqs_categories`
 -- -----------------------------------------------------
@@ -20,8 +20,14 @@ CREATE TABLE IF NOT EXISTS `db-techos`.`faqs_categories` (
   `active` TINYINT(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`))
 ENGINE = InnoDB
-AUTO_INCREMENT = 6
+AUTO_INCREMENT = 1
 DEFAULT CHARACTER SET = utf8mb3;
+INSERT INTO `db-techos`.`faqs_categories` (`id`, `name`, `active`) VALUES ('1', 'Conta e Cadastro', '1');
+INSERT INTO `db-techos`.`faqs_categories` (`id`, `name`, `active`) VALUES ('2', 'Ordens de Serviço', '1');
+INSERT INTO `db-techos`.`faqs_categories` (`name`) VALUES ('Orçamentos e Pagamentos');
+INSERT INTO `db-techos`.`faqs_categories` (`name`) VALUES ('Prazos e Atendimento');
+INSERT INTO `db-techos`.`faqs_categories` (`name`) VALUES ('Planos e Empresas');
+
 
 
 -- -----------------------------------------------------
@@ -39,7 +45,7 @@ CREATE TABLE IF NOT EXISTS `db-techos`.`faqs` (
     FOREIGN KEY (`faqs_category_id`)
     REFERENCES `db-techos`.`faqs_categories` (`id`))
 ENGINE = InnoDB
-AUTO_INCREMENT = 16
+AUTO_INCREMENT = 1
 DEFAULT CHARACTER SET = utf8mb3;
 
 
@@ -54,9 +60,11 @@ CREATE TABLE IF NOT EXISTS `db-techos`.`plans` (
   `active` TINYINT(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`))
 ENGINE = InnoDB
-AUTO_INCREMENT = 6
+AUTO_INCREMENT = 1
 DEFAULT CHARACTER SET = utf8mb3;
-insert into `plans` (name, price) values ('Plano standard', 19.90);
+insert into `plans` (name, price) values ('Plano Inicial', 0);
+insert into `plans` (name, price) values ('Plano Standard', 29.90);
+insert into `plans` (name, price) values ('Plano Profissional', 79.90);
 
 -- INSERT INTO devices (user_id, category_id, serial_number, model, brand) VALUES (1, 1, 123131421, "M54", "Samsung");
 -- -----------------------------------------------------
@@ -79,9 +87,8 @@ CREATE TABLE IF NOT EXISTS `db-techos`.`companies` (
     FOREIGN KEY (`plan_id`)
     REFERENCES `db-techos`.`plans` (`id`))
 ENGINE = InnoDB
-AUTO_INCREMENT = 9
+AUTO_INCREMENT = 1
 DEFAULT CHARACTER SET = utf8mb3;
-insert into `companies` (cnpj, name, email, owner_id, plan_id) values ('123456789', 'companhia', 'companhia@gmail.com', 4, 6);
 
 
 -- -----------------------------------------------------
@@ -113,6 +120,7 @@ CREATE TABLE IF NOT EXISTS `db-techos`.`service_orders` (
   `device_id` INT NOT NULL,
   `company_id` INT NOT NULL,
   `defect` VARCHAR(150) BINARY NOT NULL,
+  `diagnosis` VARCHAR(150) DEFAULT NULL,
   `status` ENUM('aberta', 'aguardando_peca', 'em_andamento', 'cancelada', 'concluida') NOT NULL DEFAULT 'aberta',
   `price` DOUBLE NOT NULL,
   `photo` VARCHAR(255) NULL DEFAULT NULL,
@@ -136,6 +144,28 @@ ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_unicode_ci;
 
+-- -----------------------------------------------------
+-- Table `db-techos`.`service_order_images`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `db-techos`.`service_order_images` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `service_order_id` INT NOT NULL,
+  `image_path` VARCHAR(255) NOT NULL,
+  `alt_text` VARCHAR(255) DEFAULT NULL,
+  `position` SMALLINT UNSIGNED NOT NULL DEFAULT 0,
+  `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  INDEX `idx_service_order_images_service_order_id` (`service_order_id` ASC),
+  CONSTRAINT `fk_service_order_images_service_order`
+    FOREIGN KEY (`service_order_id`)
+    REFERENCES `db-techos`.`service_orders` (`id`)
+    ON UPDATE CASCADE
+    ON DELETE CASCADE
+)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_unicode_ci;
+
 
 
 -- -----------------------------------------------------
@@ -146,10 +176,11 @@ CREATE TABLE IF NOT EXISTS `db-techos`.`user_types` (
   `name` VARCHAR(255) NOT NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB
-AUTO_INCREMENT = 3
+AUTO_INCREMENT = 1
 DEFAULT CHARACTER SET = utf8mb3;
+insert into `user_types` (name) values ('administrador');
+insert into `user_types` (name) values ('funcionário');
 insert into `user_types` (name) values ('cliente');
-
 
 -- -----------------------------------------------------
 -- Table `db-techos`.`users`
@@ -172,7 +203,7 @@ AUTO_INCREMENT = 3
 DEFAULT CHARACTER SET = utf8mb3;
 
 ALTER TABLE `db-techos`.`users` 
-ADD COLUMN `cpf` VARCHAR(20) NOT NULL AFTER `typeId`;
+ADD COLUMN `cpf` VARCHAR(20) NOT NULL AFTER `type_id`;
 -- insert into `users` (type_id, name, email, password) values (3,'mateus', 'mateus@gmail.com', '123456');
 
 
@@ -185,7 +216,18 @@ CREATE TABLE IF NOT EXISTS `db-techos`.`devices_categories` (
   `active` TINYINT(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;
-insert into `devices_categories` (name) values ('smartphone');
+INSERT INTO `db-techos`.`devices_categories` (`name`) VALUES ('Smartphone');
+INSERT INTO `db-techos`.`devices_categories` (`name`) VALUES ('Tablet');
+INSERT INTO `db-techos`.`devices_categories` (`name`) VALUES ('Notebook');
+INSERT INTO `db-techos`.`devices_categories` (`name`) VALUES ('Desktop');
+INSERT INTO `db-techos`.`devices_categories` (`name`) VALUES ('Impressora');
+INSERT INTO `db-techos`.`devices_categories` (`name`) VALUES ('Monitor');
+INSERT INTO `db-techos`.`devices_categories` (`name`) VALUES ('Monitor');
+INSERT INTO `db-techos`.`devices_categories` (`name`) VALUES ('Console');
+INSERT INTO `db-techos`.`devices_categories` (`name`) VALUES ('Smart TV');
+INSERT INTO `db-techos`.`devices_categories` (`name`) VALUES ('Smartwatch');
+INSERT INTO `db-techos`.`devices_categories` (`name`) VALUES ('Outro');
+
 
 -- -----------------------------------------------------
 -- Table `db-techos`.`devices`
@@ -214,9 +256,24 @@ CREATE TABLE IF NOT EXISTS `db-techos`.`devices` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
-insert into `devices` (user_id, category_id, serial_number, name, model, brand) values (4, 1, '123456789', 'Galaxy S21', 'S21', 'Samsung');
+-- insert into `devices` (user_id, category_id, serial_number, name, model, brand) values (4, 1, '123456789', 'Galaxy S21', 'S21', 'Samsung');
 
-
+CREATE TABLE IF NOT EXISTS `db-techos`.`service_order_images` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `service_order_id` INT NOT NULL,
+  `image_path` VARCHAR(255) NOT NULL,
+  `alt_text` VARCHAR(255) DEFAULT NULL,
+  `position` SMALLINT UNSIGNED NOT NULL DEFAULT 0,
+  `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  INDEX `idx_service_order_images_service_order_id` (`service_order_id` ASC),
+  CONSTRAINT `fk_service_order_images_service_order`
+    FOREIGN KEY (`service_order_id`)
+    REFERENCES `db-techos`.`service_orders` (`id`)
+    ON UPDATE CASCADE
+    ON DELETE CASCADE
+)
+ENGINE = InnoDB;
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;

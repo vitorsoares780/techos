@@ -34,9 +34,17 @@ $route->namespace("source\Controller");
 
 // ----------- USERS ------------------
 $route->group("/users");
+
+$route->get("/list", "Users:usersListAll");
+$route->get("/list/{userId}", "Users:usersListById");
+$route->get("/list/{email}", "Users:usersListByEmail");
+$route->delete("/delete/{userId}", "Users:delete");
+
 $route->post("/register","Users:register"); // Registrar usuário comum
 $route->post("/login","Users:auth"); // login de usuário comum
+$route->post("/photo","Users:uploadPhoto");
 $route->put("/update","Users:update"); // update de usuário comum
+
 $route->post("/register-admin","Users:registerAdmin"); // Registrar usuário admin NÃO IMPLEMENTADO
 $route->post("/login-admin","Users:authAdmin"); // login de usuário admin
 $route->put("/update-admin","Users:updateAdmin"); // update de usuário admin
@@ -61,8 +69,8 @@ $route->get("/faqs-categories/list/{categoryId}", "Faqs\FaqsCategories:faqsCateg
 $route->get("/faqs/list", "Faqs\Faqs:faqsListAll");
 $route->get("/faqs/list/{faqId}", "Faqs\Faqs:faqsListById");
 
-$route->post("/faqs-categories", "FaqsCategories:faqsCategoriesCreate");
-$route->post("/faqs/insert", "Faqs:faqInsert");
+$route->post("/faqs-categories", "Faqs\FaqsCategories:faqsCategoriesCreate");
+$route->post("/faqs/insert", "Faqs\Faqs:faqInsert");
 
 $route->put("/faqs/update/{faqId}", "Faqs:faqUpdate");
 $route->put("/faqs-categories/update/{categoryId}", "FaqsCategories:faqCategoryUpdate");
@@ -112,13 +120,16 @@ $route->get("/serviceOrders/list/{serviceOrderId}", "ServiceOrders:serviceOrders
 $route->post("/serviceOrders", "ServiceOrders:serviceOrderInsert");
 $route->put("/serviceOrders/{serviceOrderId}", "ServiceOrders:serviceOrderUpdate");
 $route->delete("/serviceOrders/{serviceOrderId}", "ServiceOrders:serviceOrderDelete");
+$route->get("/serviceOrders/{serviceOrderId}/images", "ServiceOrderImages:list");
+$route->post("/serviceOrders/{serviceOrderId}/images", "ServiceOrderImages:upload");
+$route->delete("/serviceOrders/{serviceOrderId}/images/{imageId}", "ServiceOrderImages:delete");
 
 // --------------- Fim - Exercícios - Desafios ---------------
 
 
 // localhost/acme-3am/api/hello
 $route->get("/hello", "Api:hello");
-$route->get("/users/list", "Users:usersList");
+//$route->get("/users/list", "Users:usersList");
 
 $route->dispatch();
 

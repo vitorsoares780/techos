@@ -9,7 +9,7 @@
 // const impede REATRIBUIR a variável, mas NÃO impede alterar as propriedades do objeto
 console.group("const vs. mutabilidade");
 const config = {
-    appName: "ACME 3AM",
+    appName: "ACME 3AT",
     version: "1.0.0",
     maxUploadSize: 5,
     features: ["dark-mode", "notifications"]

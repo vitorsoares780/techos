@@ -20,7 +20,7 @@ class Plan extends Model
 
         $this->table = 'plans';
         $this->primaryKey = 'id';
-        $this->fillable = ['id', 'name', 'price', 'active'];
+        $this->fillable = ['name', 'price', 'active'];
     }
     public function getId(): int
     {
@@ -34,7 +34,7 @@ class Plan extends Model
     {
         return $this->price;
     }
-    public function getActive(): string
+    public function getActive(): ?int
     {
         return $this->active;
     }

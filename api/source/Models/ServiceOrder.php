@@ -11,6 +11,7 @@ class ServiceOrder
     private ?int $deviceId;
     private ?int $companyId;
     private ?string $defect;
+    private ?string $diagnosis;
     private ?string $status;
     private ?float $price;
     private ?string $photo;
@@ -23,6 +24,7 @@ class ServiceOrder
         ?int $deviceId = null,
         ?int $companyId = null,
         ?string $defect = null,
+        ?string $diagnosis = null,
         ?string $status = null,
         ?float $price = null,
         ?string $photo = null,
@@ -34,6 +36,7 @@ class ServiceOrder
         $this->deviceId = $deviceId;
         $this->companyId = $companyId;
         $this->defect = $defect;
+        $this->diagnosis = $diagnosis;
         $this->status = $status;
         $this->price = $price;
         $this->photo = $photo;
@@ -59,6 +62,10 @@ class ServiceOrder
     public function getDefect(): string
     {
         return $this->defect;
+    }
+    public function getDiagnosis(): string
+    {
+        return $this->diagnosis;
     }
     public function getStatus(): string
     {
@@ -100,6 +107,10 @@ class ServiceOrder
     {
         $this->defect = $defect;
     }
+    public function setDiagnosis(string $diagnosis)
+    {
+        $this->diagnosis = $diagnosis;
+    }
     public function setStatus(string $status)
     {
         $this->status = $status;
@@ -121,48 +132,110 @@ class ServiceOrder
         $this->active = $active;
     }
 
-    public function listAll(): array
+    public function listAll(?int $userId = null, ?int $userType = null): array
     {
-        $query = "SELECT s.id, 
+        $visibility = "";
+        $parameters = [];
+        if ($userType === 3 && $userId !== null) {
+            $visibility = " AND s.user_id = :user_id";
+            $parameters[":user_id"] = $userId;
+        } elseif ($userType === 2 && $userId !== null) {
+            $visibility = " AND (
+                EXISTS (
+                    SELECT 1 FROM employees AS e
+                    WHERE e.user_id = :employee_user_id
+                      AND e.company_id = s.company_id
+                      AND e.active = 1
+                )
+                OR EXISTS (
+                    SELECT 1 FROM companies AS owned_company
+                    WHERE owned_company.id = s.company_id
+                      AND owned_company.owner_id = :owner_user_id
+                      AND owned_company.active = 1
+                )
+            )";
+            $parameters[":employee_user_id"] = $userId;
+            $parameters[":owner_user_id"] = $userId;
+        }
+
+        $query = "SELECT s.id,
+                 s.company_id,
+                 c.name as 'company_name',
                          u.name as 'user_name', 
                          d.name as 'device_model', 
-                         c.name as 'company_name', 
                          s.defect, 
                          s.status, 
                          s.price,
-                         s.photo
+                         s.photo,
+                         s.creation_time
+                  FROM service_orders as s
+                  JOIN users as u ON s.user_id = u.id
+                  JOIN devices as d ON s.device_id = d.id
+                  LEFT JOIN companies as c ON s.company_id = c.id
+                  WHERE s.active = 1
+                  {$visibility}
+                  ORDER BY s.creation_time DESC";
+        $stmt = Connect::getInstance()->prepare($query);
+        $stmt->execute($parameters);
+        return $stmt->fetchAll();
+    }
+
+    public function listById(int $id, ?int $userId = null, ?int $userType = null)
+    {
+        $visibility = "";
+        $parameters = [":id" => $id];
+        if ($userType === 3 && $userId !== null) {
+            $visibility = " AND s.user_id = :user_id";
+            $parameters[":user_id"] = $userId;
+        } elseif ($userType === 2 && $userId !== null) {
+            $visibility = " AND (
+                EXISTS (
+                    SELECT 1 FROM employees AS e
+                    WHERE e.user_id = :employee_user_id
+                      AND e.company_id = s.company_id
+                      AND e.active = 1
+                )
+                OR EXISTS (
+                    SELECT 1 FROM companies AS owned_company
+                    WHERE owned_company.id = s.company_id
+                      AND owned_company.owner_id = :owner_user_id
+                      AND owned_company.active = 1
+                )
+            )";
+            $parameters[":employee_user_id"] = $userId;
+            $parameters[":owner_user_id"] = $userId;
+        }
+
+        $query = "SELECT s.*, u.name AS user_name, d.name AS device_model, c.name AS company_name
                   FROM service_orders as s
                   JOIN users as u ON s.user_id = u.id
                   JOIN devices as d ON s.device_id = d.id
                   JOIN companies as c ON s.company_id = c.id
                   WHERE s.active = 1
-                  ORDER BY s.creation_time DESC";
-        $stmt = Connect::getInstance()->query($query);
-        return $stmt->fetchAll();
-    }
-
-    public function listById(int $id): object|bool
-    {
-        $query = "SELECT s.* FROM service_orders as s
-                  JOIN users as u ON s.user_id = u.id
-                  JOIN devices as d ON s.device_id = d.id
-                  JOIN companies as c ON s.company_id = c.id
-                  WHERE s.active = 1
-                  AND s.id = :id";
+                  AND s.id = :id
+                  {$visibility}";
         $stmt = Connect::getInstance()->prepare($query);
-        $stmt->bindValue(':id', $id);
-        $stmt->execute();
+        $stmt->execute($parameters);
         if ($stmt->rowCount() > 0) {
             return $stmt->fetch();
         }
         return false;
     }
 
-    public function insert(): array|bool
+    public function insert()
     {
-        $query = "INSERT INTO service_orders (user_id, device_id, company_id, defect, status, price, photo) 
-                  VALUES ($this->userId, $this->deviceId, $this->companyId, $this->defect, $this->status, $this->price, $this->photo)";
-        $stmt = Connect::getInstance()->query($query);
+        $query = "INSERT INTO service_orders (user_id, device_id, company_id, defect, diagnosis, status, price, photo)
+                  VALUES (:userId, :deviceId, :companyId, :defect, :diagnosis, :status, :price, :photo)";
+        $stmt = Connect::getInstance()->prepare($query);
+        $stmt->bindValue(':userId', $this->userId);
+        $stmt->bindValue(':deviceId', $this->deviceId);
+        $stmt->bindValue(':companyId', $this->companyId);
+        $stmt->bindValue(':defect', $this->defect);
+        $stmt->bindValue(':diagnosis', $this->diagnosis);
+        $stmt->bindValue(':status', $this->status);
+        $stmt->bindValue(':price', $this->price);
+        $stmt->bindValue(':photo', $this->photo);
+        $stmt->execute();
         if ($stmt->rowCount() > 0) {
             $this->id = Connect::getInstance()->lastInsertId();
             $query = "SELECT s.* FROM service_orders as s
@@ -175,57 +248,46 @@ class ServiceOrder
             $stmt->bindParam(':id', $this->id);
             $stmt->execute();
             if ($stmt->rowCount() > 0) {
-                return $stmt->fetchAll();
+                return $stmt->fetch();
             }
         }
         return false;
     }
 
-    public function update(array $data): array|bool
+    public function update(array $data)
     {
-        $query = "SELECT * FROM service_orders WHERE id = :id";
-        $stmt = Connect::getInstance()->prepare($query);
-        $stmt->bindValue(':id', $data['serviceOrderId']);
-        $stmt->execute();
-        if ($stmt->rowCount() <= 0) {
+        $id = (int) ($data['serviceOrderId'] ?? 0);
+        if ($id < 1 || !$this->listById($id)) {
             return false;
         }
-        $stmt->fetch();
 
-        $query = "UPDATE service_orders SET user_id = :user_id, 
-                                            device_id = :device_id,
-                                            company_id = :company_id,
-                                            defect = :defect, 
-                                            status = :status, 
-                                            price = :price,
-                                            photo = :photo
-                  WHERE id = :id";
-        $stmt = Connect::getInstance()->prepare($query);
-        $stmt->execute([
-            ":user_id" => $data['user_id'],
-            ":device_id" => $data['device_id'],
-            ":company_id" => $data['company_id'],
-            ":defect" => $data['defect'],
-            ":status" => $data['status'],
-            ":price" => $data['price'],
-            ":photo" => $data['photo'],
-            ":id" => $data['serviceOrderId']
-        ]);
-        if ($stmt->rowCount() > 0) {
-            $query = "SELECT s.* FROM service_orders as s
-                  JOIN users as u ON s.user_id = u.id
-                  JOIN devices as d ON s.device_id = d.id
-                  JOIN companies as c ON s.company_id = c.id
-                  WHERE s.active = 1
-                  AND s.id = :id";
-            $stmt = Connect::getInstance()->prepare($query);
-            $stmt->bindParam(':id', $data['serviceOrderId']);
-            $stmt->execute();
-            if ($stmt->rowCount() > 0) {
-                return $stmt->fetchAll();
+        $fields = [
+            "user_id",
+            "device_id",
+            "company_id",
+            "defect",
+            "diagnosis",
+            "status",
+            "price",
+        ];
+        $updates = [];
+        $values = [":id" => $id];
+        foreach ($fields as $field) {
+            if (array_key_exists($field, $data)) {
+                $updates[] = "{$field} = :{$field}";
+                $values[":{$field}"] = $data[$field];
             }
         }
-        return false;
+
+        if ($updates === []) {
+            return false;
+        }
+
+        $query = "UPDATE service_orders SET " . implode(", ", $updates) . " WHERE id = :id AND active = 1";
+        $stmt = Connect::getInstance()->prepare($query);
+        $stmt->execute($values);
+
+        return $this->listById($id);
     }
 
     public function delete(int $id): bool

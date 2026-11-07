@@ -9,7 +9,15 @@ class Devices extends Api
 {
     public function devicesListAll(): void
     {
-        if (!$this->authToken(1)) {
+        $userType = null;
+        foreach ([1, 2, 3] as $typeId) {
+            if ($this->authToken($typeId)) {
+                $userType = $typeId;
+                break;
+            }
+        }
+
+        if ($userType === null) {
             $this->call(
                 401,
                 "unauthorized",
@@ -19,7 +27,8 @@ class Devices extends Api
             return;
         }
         $device = new Device();
-        $this->call(200, "success", "Lista de dispositivos", "success")->back($device->listAll());
+        $devices = $device->listAll($userType === 3 ? $this->userAuthId : null);
+        $this->call(200, "success", "Lista de dispositivos", "success")->back($devices);
     }
 
     public function devicesListById(array $data): void
@@ -67,7 +76,15 @@ class Devices extends Api
             return;
         }
 
-        $device = new Device(null, (int)$data['user_id'], (int)$data['category_id'], $data['serial_number'], $data['name']);
+        $device = new Device(
+            null,
+            (int)$data['user_id'],
+            (int)$data['category_id'],
+            $data['serial_number'],
+            $data['name'],
+            $data['model'] ?? null,
+            $data['brand'] ?? null
+        );
         $result = $device->insert();
 
         if (!$result) {
@@ -102,6 +119,8 @@ class Devices extends Api
             isset($data['category_id']) ? (int)$data['category_id'] : null,
             $data['serial_number'] ?? null,
             $data['name'] ?? null,
+            $data['model'] ?? null,
+            $data['brand'] ?? null,
         );
         $result = $device->update();
 

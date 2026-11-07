@@ -62,14 +62,16 @@ class Faqs extends Api
             )->back();
             return;
         }
-        $faqs_cat_id = $data['faqs_category_id'];
-        $question = $data['question'];
-        $answer = $data['answer'];
+
+        $data = $this->getRequestBody($data);
+        $faqs_cat_id = $data['faqs_category_id'] ?? null;
+        $question = trim((string) ($data['question'] ?? ''));
+        $answer = trim((string) ($data['answer'] ?? ''));
 
         if (
-            empty($faqs_cat_id) || $faqs_cat_id == null ||
-            empty($question) || $question == null ||
-            empty($answer) || $answer == null
+            empty($faqs_cat_id) ||
+            $question === '' ||
+            $answer === ''
         ) {
             $this->call(
                 400,
@@ -82,7 +84,8 @@ class Faqs extends Api
 
         $faq = new Faq(null, $faqs_cat_id, $question, $answer);
 
-        if ($faq->insert() == false) {
+        $response = $faq->insert();
+        if ($response == false) {
             $this->call(
                 500,
                 "internal_server_error",
@@ -91,8 +94,6 @@ class Faqs extends Api
             )->back();
             return;
         }
-
-        $response = $faq->insert();
 
         $this->call(
             201,
@@ -113,6 +114,8 @@ class Faqs extends Api
             )->back();
             return;
         }
+        $data = $this->getRequestBody($data);
+
         if (!filter_var($data['faqId'], FILTER_VALIDATE_INT)) {
             $this->call(
                 400,

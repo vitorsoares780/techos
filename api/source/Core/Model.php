@@ -19,7 +19,7 @@ abstract class Model
         return $this->errorMessage;
     }
 
-    public function listById(int $id): bool | object
+    public function listById(int $id)
     {
         $query = "SELECT * 
                   FROM {$this->table} 
