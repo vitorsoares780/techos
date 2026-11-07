@@ -69,8 +69,8 @@ $route->get("/faqs-categories/list/{categoryId}", "Faqs\FaqsCategories:faqsCateg
 $route->get("/faqs/list", "Faqs\Faqs:faqsListAll");
 $route->get("/faqs/list/{faqId}", "Faqs\Faqs:faqsListById");
 
-$route->post("/faqs-categories", "FaqsCategories:faqsCategoriesCreate");
-$route->post("/faqs/insert", "Faqs:faqInsert");
+$route->post("/faqs-categories", "Faqs\FaqsCategories:faqsCategoriesCreate");
+$route->post("/faqs/insert", "Faqs\Faqs:faqInsert");
 
 $route->put("/faqs/update/{faqId}", "Faqs:faqUpdate");
 $route->put("/faqs-categories/update/{categoryId}", "FaqsCategories:faqCategoryUpdate");
