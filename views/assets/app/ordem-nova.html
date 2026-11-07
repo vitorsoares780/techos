@@ -12,6 +12,7 @@
   <link rel="stylesheet"
     href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@600;700;800&display=swap">
   <link rel="stylesheet" href="../_common/styles/base.css">
+  <link rel="stylesheet" href="../_common/styles/toast.css">
   <link rel="stylesheet" href="styles/app.css">
 </head>
 
@@ -119,7 +120,7 @@
                 placeholder="Descreva detalhadamente o problema do seu equipamento…"></textarea>
 
               <label for="os-diagnostico">Diagnóstico</label>
-              <textarea id="os-diagnostico" name="diagnostico" rows="3" required
+              <textarea id="os-diagnostico" name="diagnostico" rows="3" maxlength="150" required
                 placeholder="Descreva o diagnóstico inicial para o equipamento…"></textarea>
 
               <label for="os-preco">Preço</label>
@@ -130,13 +131,13 @@
         </fieldset>
 
         <fieldset style="border:0;padding:0;margin:0 0 1.5rem">
-          <legend style="font-weight:600;margin-bottom:0.75rem">Fotos do aparelho</legend>
+          <legend style="font-weight:600;margin-bottom:0.75rem">Foto do aparelho</legend>
           <section class="form-grid">
             <section class="form-field full">
-              <label for="os-fotos">Envie fotos para ajudar no diagnóstico</label>
-              <input id="os-fotos" name="fotos" type="file" accept="image/*" multiple>
+              <label for="os-foto">Envie uma foto para ajudar no diagnóstico</label>
+              <input id="os-foto" name="photo" type="file" accept="image/jpeg,image/png,image/webp">
               <p style="font-size:0.82rem;color:var(--color-text-muted);margin-top:0.35rem">
-                PNG, JPG ou WEBP. Máximo de 5 fotos.
+                JPEG, PNG ou WebP. Máximo de 5 MB.
               </p>
             </section>
           </section>

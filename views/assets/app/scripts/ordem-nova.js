@@ -14,7 +14,7 @@ const submitButtonOs = formOs?.querySelector("button[type='submit']");
 const deviceSelect = formOs?.elements.device_id;
 
 function assertSuccess(response) {
-    if (response?.type === "error" || response?.code >= 400) {
+    if (response?.type === "error" || response?.status === "error" || response?.code >= 400) {
         throw new Error(response.message || "Não foi possível criar a ordem de serviço.");
     }
 }
@@ -50,6 +50,12 @@ async function handleSubmit(event) {
     }
 
     const data = loginFormController.getData();
+    const [photo] = formOs.elements.photo.files || [];
+    if (photo && (!["image/jpeg", "image/png", "image/webp"].includes(photo.type) || photo.size > 5 * 1024 * 1024)) {
+        toastPrincipal.warning({ message: "Selecione uma imagem JPEG, PNG ou WebP de até 5 MB." });
+        formOs.elements.photo.focus();
+        return;
+    }
 
     const payload = {
         user_id: Number(userId),
@@ -58,8 +64,7 @@ async function handleSubmit(event) {
         defect: String(data.defeito).trim(),
         diagnosis: String(data.diagnostico).trim(),
         status: "aberta",
-        price: Number(data.preco),
-        photo: formOs.elements.fotos.files[0]?.name || "sem-foto"
+        price: Number(data.preco)
     };
 
     if (!Number.isFinite(payload.price) || payload.price <= 0) {
@@ -72,20 +77,41 @@ async function handleSubmit(event) {
     submitButtonOs.textContent = "Enviando...";
 
     try {
-        console.log(payload)
         const response = await serviceOrder.insert(payload);
         assertSuccess(response);
 
-        toastPrincipal.success({
-            message: response?.message || "Ordem de serviço criada com sucesso!"
-        });
+        const createdOrder = Array.isArray(response?.data) ? response.data[0] : response?.data;
+        const orderId = createdOrder?.id;
+        if (!orderId) {
+            throw new Error("A ordem foi enviada, mas a API não retornou seu identificador.");
+        }
+
+        let photoUploadError = null;
+        if (photo) {
+            try {
+                const imageResponse = await serviceOrder.uploadImage(orderId, photo);
+                assertSuccess(imageResponse);
+            } catch (error) {
+                photoUploadError = error;
+            }
+        }
+
+        if (photoUploadError) {
+            toastPrincipal.warning({
+                message: `A OS foi criada, mas a foto não foi salva: ${photoUploadError.message}`
+            });
+        } else {
+            toastPrincipal.success({
+                message: response?.message || "Ordem de serviço criada com sucesso!"
+            });
+        }
 
         formOs.reset();
         if (deviceSelect) deviceSelect.value = "";
 
-        setTimeout(() => {
-            window.location.href = "ordens.html";
-        }, 1200);
+        window.setTimeout(() => {
+            window.location.href = `ordem-detalhe.html?id=${encodeURIComponent(orderId)}`;
+        }, photoUploadError ? 1800 : 1200);
     } catch (error) {
         console.error("Erro ao criar ordem:", error);
         toastPrincipal.error({

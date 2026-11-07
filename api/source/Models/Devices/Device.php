@@ -110,7 +110,7 @@ class Device
         $this->active = $active;
     }
 
-    public function listAll(): array
+    public function listAll(?int $userId = null): array
     {
         $query = "SELECT d.id, d.user_id, d.category_id, d.serial_number, d.name, d.model, d.brand, d.creation_time, d.active,
                  c.name as 'category_name', u.name as 'user_name'
@@ -118,8 +118,13 @@ class Device
                   JOIN users as u ON d.user_id = u.id
                   JOIN devices_categories as c ON d.category_id = c.id
                   WHERE d.active = 1
+                  " . ($userId !== null ? "AND d.user_id = :user_id" : "") . "
                   ORDER BY d.creation_time DESC";
-        $stmt = Connect::getInstance()->query($query);
+        $stmt = Connect::getInstance()->prepare($query);
+        if ($userId !== null) {
+            $stmt->bindValue(":user_id", $userId, \PDO::PARAM_INT);
+        }
+        $stmt->execute();
         return $stmt->fetchAll();
     }
 

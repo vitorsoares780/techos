@@ -30,6 +30,59 @@ class ServiceOrderImage
         }
     }
 
+    public function canAccessServiceOrder(int $serviceOrderId, int $userId, int $userType): bool
+    {
+        try {
+            if ($userType === 1) {
+                return $this->serviceOrderExists($serviceOrderId);
+            }
+
+            if ($userType === 3) {
+                $query = "SELECT id FROM service_orders
+                          WHERE id = :id AND user_id = :user_id AND active = 1
+                          LIMIT 1";
+                $stmt = Connect::getInstance()->prepare($query);
+                $stmt->bindValue(":id", $serviceOrderId, PDO::PARAM_INT);
+                $stmt->bindValue(":user_id", $userId, PDO::PARAM_INT);
+                $stmt->execute();
+                return $stmt->fetch() !== false;
+            }
+
+            if ($userType === 2) {
+                $query = "SELECT s.id
+                          FROM service_orders AS s
+                          WHERE s.id = :id
+                            AND s.active = 1
+                            AND (
+                                EXISTS (
+                                    SELECT 1 FROM employees AS e
+                                        WHERE e.user_id = :employee_user_id
+                                      AND e.company_id = s.company_id
+                                      AND e.active = 1
+                                )
+                                OR EXISTS (
+                                    SELECT 1 FROM companies AS c
+                                    WHERE c.id = s.company_id
+                                          AND c.owner_id = :owner_user_id
+                                      AND c.active = 1
+                                )
+                            )
+                          LIMIT 1";
+                $stmt = Connect::getInstance()->prepare($query);
+                $stmt->bindValue(":id", $serviceOrderId, PDO::PARAM_INT);
+                $stmt->bindValue(":employee_user_id", $userId, PDO::PARAM_INT);
+                $stmt->bindValue(":owner_user_id", $userId, PDO::PARAM_INT);
+                $stmt->execute();
+                return $stmt->fetch() !== false;
+            }
+
+            return false;
+        } catch (PDOException $exception) {
+            $this->errorMessage = "Não foi possível validar o acesso à ordem de serviço.";
+            return false;
+        }
+    }
+
     public function insert(int $serviceOrderId, string $imagePath)
     {
         try {

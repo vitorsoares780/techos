@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nova ordem de serviço — TechOS Admin</title>
+  <meta name="description" content="Cadastre uma ordem de serviço no painel administrativo do TechOS.">
+  <link rel="icon" href="../_common/images/logo.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@600;700;800&display=swap">
+  <link rel="stylesheet" href="../_common/styles/base.css">
+  <link rel="stylesheet" href="../_common/styles/toast.css">
+  <link rel="stylesheet" href="styles/admin.css">
+</head>
+
+<body class="admin">
+  <header class="admin-topbar">
+    <section style="display:flex;align-items:center;gap:0.75rem">
+      <button class="sidebar-toggle" type="button" aria-label="Abrir menu lateral" data-sidebar-toggle>
+        <span></span><span></span><span></span>
+      </button>
+      <a class="brand" href="painel.html">
+        <img src="../_common/images/logo.png" class="logo" alt="">
+        TechOS <span style="font-size:0.7rem;font-weight:500;color:var(--color-text-muted);margin-left:0.25rem">Admin</span>
+      </a>
+    </section>
+    <section class="admin-topbar-actions">
+      <a class="user-chip" href="perfil.html" aria-label="Perfil e configurações" data-user-chip>
+        <span class="avatar" aria-hidden="true" data-user-avatar>A</span>
+        <span data-user-name>Administrador</span>
+      </a>
+    </section>
+  </header>
+
+  <section class="admin-shell">
+    <aside class="admin-sidebar" data-sidebar>
+      <section class="sidebar-section">
+        <h4>Operação</h4>
+        <ul>
+          <li><a class="sidebar-link" href="painel.html"><span class="ico" aria-hidden="true">📊</span>Painel geral</a></li>
+          <li><a class="sidebar-link" aria-current="page" href="ordens.html"><span class="ico" aria-hidden="true">🧾</span>Ordens de serviço</a></li>
+          <li><a class="sidebar-link" href="clientes.html"><span class="ico" aria-hidden="true">👥</span>Clientes</a></li>
+          <li><a class="sidebar-link" href="equipamentos.html"><span class="ico" aria-hidden="true">💻</span>Equipamentos</a></li>
+        </ul>
+      </section>
+      <section class="sidebar-section">
+        <h4>Cadastros</h4>
+        <ul>
+          <li><a class="sidebar-link" href="empresas.html"><span class="ico" aria-hidden="true">🏢</span>Empresas</a></li>
+          <li><a class="sidebar-link" href="faqs.html"><span class="ico" aria-hidden="true">❓</span>FAQs</a></li>
+          <li><a class="sidebar-link" href="planos.html"><span class="ico" aria-hidden="true">📦</span>Planos</a></li>
+          <li><a class="sidebar-link" href="usuarios.html"><span class="ico" aria-hidden="true">👤</span>Usuários</a></li>
+        </ul>
+      </section>
+      <section class="sidebar-section">
+        <h4>Conta</h4>
+        <ul>
+          <li><a class="sidebar-link" href="perfil.html"><span class="ico" aria-hidden="true">👤</span>Perfil e Configurações</a></li>
+          <li><a class="sidebar-link" href="../public/login.html" data-logout><span class="ico" aria-hidden="true">🚪</span>Sair</a></li>
+        </ul>
+      </section>
+    </aside>
+
+    <main class="admin-main">
+      <section class="page-head">
+        <section>
+          <p style="font-size:0.85rem;color:var(--color-text-muted)"><a href="ordens.html">← Ordens</a></p>
+          <h1>Nova ordem de serviço</h1>
+          <p>Cadastre o cliente, o aparelho e os dados iniciais do atendimento.</p>
+        </section>
+      </section>
+
+      <form class="panel admin-record-form" data-admin-order-form novalidate>
+        <section class="form-grid">
+          <section class="form-field">
+            <label for="order-client">Cliente</label>
+            <select id="order-client" name="user_id" required data-order-client>
+              <option value="">Carregando clientes...</option>
+            </select>
+          </section>
+          <section class="form-field">
+            <label for="order-company">Empresa</label>
+            <select id="order-company" name="company_id" required data-order-company>
+              <option value="">Carregando empresas...</option>
+            </select>
+          </section>
+          <section class="form-field full">
+            <label for="order-device">Aparelho</label>
+            <select id="order-device" name="device_id" required data-order-device>
+              <option value="">Selecione primeiro um cliente</option>
+            </select>
+          </section>
+          <section class="form-field full">
+            <label for="order-defect">Defeito relatado</label>
+            <textarea id="order-defect" name="defect" rows="3" maxlength="150" required></textarea>
+          </section>
+          <section class="form-field full">
+            <label for="order-diagnosis">Diagnóstico inicial</label>
+            <textarea id="order-diagnosis" name="diagnosis" rows="3" maxlength="150" required></textarea>
+          </section>
+          <section class="form-field">
+            <label for="order-price">Valor estimado</label>
+            <input id="order-price" name="price" type="number" min="0.01" step="0.01" required>
+          </section>
+          <section class="form-field full">
+            <label for="order-photo">Foto do aparelho (opcional)</label>
+            <input id="order-photo" name="photo" type="file" accept="image/jpeg,image/png,image/webp" data-order-photo>
+            <p>JPEG, PNG ou WebP; até 5 MB. Outras fotos podem ser adicionadas nos detalhes da OS.</p>
+          </section>
+        </section>
+        <section class="form-actions">
+          <a class="btn btn-ghost" href="ordens.html">Cancelar</a>
+          <button class="btn btn-primary" type="submit">Cadastrar ordem</button>
+        </section>
+      </form>
+    </main>
+  </section>
+
+  <script src="scripts/admin.js"></script>
+  <script type="module" src="scripts/ordem-form.js"></script>
+  <script src="../app/scripts/logout.js"></script>
+</body>
+
+</html>

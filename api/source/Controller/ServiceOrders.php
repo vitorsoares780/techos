@@ -11,7 +11,8 @@ class ServiceOrders extends Api
 
     public function serviceOrdersListAll()
     {
-        if (!$this->authToken(3) && !$this->authToken(2) && !$this->authToken(1)) {
+        $userType = $this->authenticatedUserType();
+        if ($userType === null) {
             $this->call(
                 401,
                 "unauthorized",
@@ -21,17 +22,19 @@ class ServiceOrders extends Api
             return;
         }
         $serviceOrder = new ServiceOrder();
+        $orders = $serviceOrder->listAll($this->userAuthId, $userType);
         $this->call(
             200,
             "success",
             "Lista de Ordens de Serviço",
             "success",
-        )->back($serviceOrder->listAll());
+        )->back($orders);
     }
 
     public function serviceOrdersListById(array $data): void
     {
-        if (!$this->authToken(3) && !$this->authToken(2) && !$this->authToken(1)) {
+        $userType = $this->authenticatedUserType();
+        if ($userType === null) {
             $this->call(
                 401,
                 "unauthorized",
@@ -40,7 +43,8 @@ class ServiceOrders extends Api
             )->back();
             return;
         }
-        if (!filter_var($data['serviceOrderId'], FILTER_VALIDATE_INT)) {
+        $serviceOrderId = filter_var($data["serviceOrderId"] ?? null, FILTER_VALIDATE_INT);
+        if ($serviceOrderId === false || $serviceOrderId < 1) {
             $this->call(
                 400,
                 "bad_request",
@@ -51,7 +55,7 @@ class ServiceOrders extends Api
         }
 
         $serviceOrder = new ServiceOrder();
-        $serviceOrder = $serviceOrder->listById($data['serviceOrderId']);
+        $serviceOrder = $serviceOrder->listById($serviceOrderId, $this->userAuthId, $userType);
 
         if ($serviceOrder == false) {
             $this->call(
@@ -73,7 +77,15 @@ class ServiceOrders extends Api
 
     public function serviceOrderInsert(array $data): void
     {
-        if (!$this->authToken(2) && !$this->authToken(1)) {
+        $userType = null;
+        foreach ([1, 2, 3] as $typeId) {
+            if ($this->authToken($typeId)) {
+                $userType = $typeId;
+                break;
+            }
+        }
+
+        if ($userType === null) {
             $this->call(
                 401,
                 "unauthorized",
@@ -84,36 +96,42 @@ class ServiceOrders extends Api
         }
 
         $data = $this->getRequestBody($data);
-
-        $user_id = $data['user_id'];
-        $device_id = $data['device_id'];
-        $company_id = $data['company_id'];
-        $defect = $data['defect'];
-        $diagnosis = $data['diagnosis'];
-        $status = $data['status'];
-        $price = $data['price'];
-        $photo = $data['photo'];
+        $userId = $userType === 3
+            ? $this->userAuthId
+            : filter_var($data["user_id"] ?? null, FILTER_VALIDATE_INT);
+        $deviceId = filter_var($data["device_id"] ?? null, FILTER_VALIDATE_INT);
+        $companyId = filter_var($data["company_id"] ?? null, FILTER_VALIDATE_INT);
+        $defect = trim((string) ($data["defect"] ?? ""));
+        $diagnosis = trim((string) ($data["diagnosis"] ?? ""));
+        $price = filter_var($data["price"] ?? null, FILTER_VALIDATE_FLOAT);
 
         if (
-            empty($user_id) || $user_id == null ||
-            empty($device_id) || $device_id == null ||
-            empty($company_id) || $company_id == null ||
-            empty($defect) || $defect == null ||
-            empty($diagnosis) || $diagnosis == null ||
-            empty($status) || $status == null ||
-            empty($price) || $price == null ||
-            empty($photo) || $photo == null
+            $userId === false || $userId < 1 ||
+            $deviceId === false || $deviceId < 1 ||
+            $companyId === false || $companyId < 1 ||
+            $defect === "" || mb_strlen($defect) > 150 ||
+            $diagnosis === "" || mb_strlen($diagnosis) > 150 ||
+            $price === false || $price <= 0
         ) {
             $this->call(
                 400,
                 "bad_request",
-                "Todos os campos são obrigatórios",
+                "Informe cliente, aparelho, empresa, defeito, diagnóstico e um preço válido.",
                 "error"
             )->back();
             return;
         }
 
-        $serviceOrder = new ServiceOrder(null, $user_id, $device_id, $company_id, $defect, $diagnosis, $status, $price, $photo);
+        $serviceOrder = new ServiceOrder(
+            null,
+            $userId,
+            $deviceId,
+            $companyId,
+            $defect,
+            $diagnosis,
+            "aberta",
+            (float) $price
+        );
 
         $response = $serviceOrder->insert();
 
@@ -146,46 +164,84 @@ class ServiceOrders extends Api
             )->back();
             return;
         }
-        if (!filter_var($data['serviceOrderId'], FILTER_VALIDATE_INT)) {
+        $routeServiceOrderId = $data["serviceOrderId"] ?? null;
+        $data = $this->getRequestBody($data);
+        $serviceOrderId = filter_var($routeServiceOrderId, FILTER_VALIDATE_INT);
+        if ($serviceOrderId === false || $serviceOrderId < 1) {
             $this->call(
                 400,
                 "bad_request",
-                "ID inválido ou campos obrigatórios ausentes",
+                "Informe um ID válido para a ordem de serviço.",
                 "error"
             )->back();
+            return;
+        }
+
+        $updates = [];
+        if (array_key_exists("defect", $data)) {
+            if (!is_string($data["defect"])) {
+                $this->call(400, "bad_request", "O defeito informado é inválido.", "error")->back();
+                return;
+            }
+            $defect = trim($data["defect"]);
+            if ($defect === "" || mb_strlen($defect) > 150) {
+                $this->call(400, "bad_request", "O defeito deve conter até 150 caracteres.", "error")->back();
+                return;
+            }
+            $updates["defect"] = $defect;
+        }
+        if (array_key_exists("diagnosis", $data)) {
+            if (!is_string($data["diagnosis"])) {
+                $this->call(400, "bad_request", "O diagnóstico informado é inválido.", "error")->back();
+                return;
+            }
+            $diagnosis = trim($data["diagnosis"]);
+            if ($diagnosis === "" || mb_strlen($diagnosis) > 150) {
+                $this->call(400, "bad_request", "O diagnóstico deve conter até 150 caracteres.", "error")->back();
+                return;
+            }
+            $updates["diagnosis"] = $diagnosis;
+        }
+        if (array_key_exists("status", $data)) {
+            $allowedStatuses = ["aberta", "aguardando_peca", "em_andamento", "cancelada", "concluida"];
+            if (!in_array($data["status"], $allowedStatuses, true)) {
+                $this->call(400, "bad_request", "Informe um status válido para a ordem.", "error")->back();
+                return;
+            }
+            $updates["status"] = $data["status"];
+        }
+        if (array_key_exists("price", $data)) {
+            $price = filter_var($data["price"], FILTER_VALIDATE_FLOAT);
+            if ($price === false || $price <= 0) {
+                $this->call(400, "bad_request", "Informe um preço maior que zero.", "error")->back();
+                return;
+            }
+            $updates["price"] = (float) $price;
+        }
+        if ($updates === []) {
+            $this->call(400, "bad_request", "Informe ao menos um campo para atualizar.", "error")->back();
             return;
         }
 
         $serviceOrder = new ServiceOrder();
+        $updatedOrder = $serviceOrder->update($updates + ["serviceOrderId" => $serviceOrderId]);
 
-        if ($serviceOrder->update($data) === false) {
+        if ($updatedOrder === false) {
             $this->call(
                 404,
                 "not_found",
-                "Ordem de serviço não encontrada",
+                "Ordem de serviço não encontrada ou inativa.",
                 "error"
             )->back();
             return;
         }
-
-        $response = [
-            "id" => $data['serviceOrderId'],
-            "user_id" => $data['user_id'],
-            "device_id" => $data['device_id'],
-            "company_id" => $data['company_id'],
-            "defect" => $data['defect'],
-            "diagnosis" => $data['diagnosis'],
-            "status" => $data['status'],
-            "price" => $data['price'],
-            "photo" => $data['photo']
-        ];
 
         $this->call(
             200,
             "success",
             "Ordem de serviço atualizada com sucesso",
             "success"
-        )->back($response);
+        )->back($updatedOrder);
     }
 
     public function serviceOrderDelete(array $data): void
@@ -233,5 +289,16 @@ class ServiceOrders extends Api
             "Ordem de serviço removida com sucesso",
             "success"
         )->back();
+    }
+
+    private function authenticatedUserType(): ?int
+    {
+        foreach ([1, 2, 3] as $userType) {
+            if ($this->authToken($userType)) {
+                return $userType;
+            }
+        }
+
+        return null;
     }
 }

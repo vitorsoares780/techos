@@ -257,8 +257,23 @@ CREATE TABLE IF NOT EXISTS `db-techos`.`devices` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 -- insert into `devices` (user_id, category_id, serial_number, name, model, brand) values (4, 1, '123456789', 'Galaxy S21', 'S21', 'Samsung');
-drop table devices;
 
+CREATE TABLE IF NOT EXISTS `db-techos`.`service_order_images` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `service_order_id` INT NOT NULL,
+  `image_path` VARCHAR(255) NOT NULL,
+  `alt_text` VARCHAR(255) DEFAULT NULL,
+  `position` SMALLINT UNSIGNED NOT NULL DEFAULT 0,
+  `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  INDEX `idx_service_order_images_service_order_id` (`service_order_id` ASC),
+  CONSTRAINT `fk_service_order_images_service_order`
+    FOREIGN KEY (`service_order_id`)
+    REFERENCES `db-techos`.`service_orders` (`id`)
+    ON UPDATE CASCADE
+    ON DELETE CASCADE
+)
+ENGINE = InnoDB;
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;

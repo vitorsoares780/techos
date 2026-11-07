@@ -5,15 +5,40 @@
   const toggle = document.querySelector("[data-sidebar-toggle]");
   const sidebar = document.querySelector("[data-sidebar]");
 
-  document.querySelectorAll('a[href="ordem-nova.html"]').forEach(link => link.remove());
-  document.querySelectorAll('a[href="configuracoes.html"]').forEach(link => {
-    if (link.matches("[data-user-chip]")) {
-      link.href = "usuarios.html";
-      link.setAttribute("aria-label", "Usuários");
-      return;
+  const userChip = document.querySelector("[data-user-chip]");
+  if (userChip) {
+    userChip.href = "perfil.html";
+    userChip.setAttribute("aria-label", "Perfil e configurações");
+  }
+  document.querySelectorAll('a[href="configuracoes.html"]').forEach(link => link.remove());
+
+  const profilePage = window.location.pathname.endsWith("/perfil.html");
+  if (sidebar) {
+    const accountSection = Array.from(sidebar.querySelectorAll(".sidebar-section"))
+      .find(section => section.querySelector("h4")?.textContent.trim().toLocaleLowerCase("pt-BR") === "conta");
+    const accountList = accountSection?.querySelector("ul");
+
+    if (accountList && !accountList.querySelector('a[href="perfil.html"]')) {
+      const profileItem = document.createElement("li");
+      const profileLink = document.createElement("a");
+      const profileIcon = document.createElement("span");
+
+      profileLink.className = "sidebar-link";
+      profileLink.href = "perfil.html";
+      profileLink.textContent = "Perfil e Configurações";
+      profileIcon.className = "ico";
+      profileIcon.setAttribute("aria-hidden", "true");
+      profileIcon.textContent = "👤";
+      profileLink.prepend(profileIcon);
+
+      if (profilePage) {
+        profileLink.setAttribute("aria-current", "page");
+      }
+
+      profileItem.appendChild(profileLink);
+      accountList.prepend(profileItem);
     }
-    link.remove();
-  });
+  }
 
   if (toggle && sidebar) {
     toggle.addEventListener("click", function () {

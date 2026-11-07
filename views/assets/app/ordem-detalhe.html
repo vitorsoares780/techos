@@ -12,6 +12,7 @@
   <link rel="stylesheet"
     href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@600;700;800&display=swap">
   <link rel="stylesheet" href="../_common/styles/base.css">
+  <link rel="stylesheet" href="../_common/styles/toast.css">
   <link rel="stylesheet" href="styles/app.css">
 </head>
 
@@ -91,6 +92,20 @@
             </header>
             <p data-detail-price>—</p>
           </article>
+
+          <article class="panel">
+            <header class="panel-head">
+              <h2>Imagens da ordem</h2>
+            </header>
+            <p>Adicione fotos JPEG, PNG ou WebP de até 5 MB.</p>
+            <section class="form-actions" style="justify-content:flex-start">
+              <label for="order-images">Selecionar fotos</label>
+              <input id="order-images" type="file" accept="image/jpeg,image/png,image/webp" multiple data-order-image-input>
+              <button class="btn btn-primary" type="button" data-order-image-upload>Adicionar fotos</button>
+            </section>
+            <p role="status" aria-live="polite" data-order-image-status>Carregando imagens...</p>
+            <ul class="order-image-gallery" data-order-image-list aria-live="polite"></ul>
+          </article>
         </section>
 
         <section style="display:flex;flex-direction:column;gap:1.25rem">
@@ -100,7 +115,7 @@
             </header>
             <p><strong data-detail-device>—</strong></p>
           </article>
-                  </section>
+        </section>
       </section>
     </main>
   </section>

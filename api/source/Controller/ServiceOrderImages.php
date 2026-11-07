@@ -9,7 +9,8 @@ class ServiceOrderImages extends Api
 {
     public function list(array $data): void
     {
-        if (!$this->authToken(1)) {
+        $userType = $this->authenticatedUserType();
+        if ($userType === null) {
             $this->call(401, "unauthorized", "Usuário não está autenticado ou não tem permissão.", "error")->back();
             return;
         }
@@ -21,12 +22,12 @@ class ServiceOrderImages extends Api
         }
 
         $images = new ServiceOrderImage();
-        if (!$images->serviceOrderExists($serviceOrderId)) {
+        if (!$images->canAccessServiceOrder($serviceOrderId, $this->userAuthId, $userType)) {
             if ($images->getErrorMessage() !== null) {
                 $this->call(500, "internal_server_error", $images->getErrorMessage(), "error")->back();
                 return;
             }
-            $this->call(404, "not_found", "Ordem de serviço não encontrada.", "error")->back();
+            $this->call(404, "not_found", "Ordem de serviço não encontrada ou sem acesso.", "error")->back();
             return;
         }
 
@@ -52,7 +53,8 @@ class ServiceOrderImages extends Api
 
     public function upload(array $data): void
     {
-        if (!$this->authToken(1)) {
+        $userType = $this->authenticatedUserType();
+        if ($userType === null) {
             $this->call(401, "unauthorized", "Usuário não está autenticado ou não tem permissão.", "error")->back();
             return;
         }
@@ -69,12 +71,12 @@ class ServiceOrderImages extends Api
         }
 
         $images = new ServiceOrderImage();
-        if (!$images->serviceOrderExists($serviceOrderId)) {
+        if (!$images->canAccessServiceOrder($serviceOrderId, $this->userAuthId, $userType)) {
             if ($images->getErrorMessage() !== null) {
                 $this->call(500, "internal_server_error", $images->getErrorMessage(), "error")->back();
                 return;
             }
-            $this->call(404, "not_found", "Ordem de serviço não encontrada.", "error")->back();
+            $this->call(404, "not_found", "Ordem de serviço não encontrada ou sem acesso.", "error")->back();
             return;
         }
 
@@ -154,6 +156,17 @@ class ServiceOrderImages extends Api
     {
         $id = filter_var($data["serviceOrderId"] ?? null, FILTER_VALIDATE_INT);
         return $id !== false && $id !== null && $id > 0 ? $id : null;
+    }
+
+    private function authenticatedUserType(): ?int
+    {
+        foreach ([1, 2, 3] as $userType) {
+            if ($this->authToken($userType)) {
+                return $userType;
+            }
+        }
+
+        return null;
     }
 
     private function managedImagePath(string $imagePath): ?string

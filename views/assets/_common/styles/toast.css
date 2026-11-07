@@ -1,17 +1,18 @@
 .toast-container {
     position: fixed;
-    top: 20px;
+    bottom: 20px;
     right: 20px;
 
     display: flex;
-    flex-direction: column;
+    flex-direction: column-reverse;
     gap: 10px;
 
     z-index: 9999;
+    max-width: calc(100vw - 40px);
 }
 
 .toast {
-    min-width: 280px;
+    min-width: min(280px, calc(100vw - 40px));
     max-width: 400px;
 
     padding: 14px 18px;
@@ -63,12 +64,12 @@
 
     from {
         opacity: 0;
-        transform: translateX(20px);
+        transform: translateY(20px);
     }
 
     to {
         opacity: 1;
-        transform: translateX(0);
+        transform: translateY(0);
     }
 
 }

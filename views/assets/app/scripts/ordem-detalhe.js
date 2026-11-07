@@ -5,6 +5,10 @@ const serviceOrder = new ServiceOrder();
 const token = localStorage.getItem("token");
 const params = new URLSearchParams(window.location.search);
 const orderId = params.get("id");
+const imageInput = document.querySelector("[data-order-image-input]");
+const imageUploadButton = document.querySelector("[data-order-image-upload]");
+const imageStatus = document.querySelector("[data-order-image-status]");
+const imageList = document.querySelector("[data-order-image-list]");
 
 if (token) {
     serviceOrder.setAuthToken(token);
@@ -79,6 +83,108 @@ function renderOrder(order) {
     statusElement.textContent = statusLabel;
 }
 
+function assertSuccess(response, fallbackMessage) {
+    if (response?.type === "error" || response?.status === "error" || response?.code >= 400) {
+        throw new Error(response.message || fallbackMessage);
+    }
+}
+
+function renderImages(images) {
+    if (!imageList) return;
+    imageList.replaceChildren();
+
+    if (!images.length) {
+        const emptyState = document.createElement("li");
+        emptyState.textContent = "Esta ordem ainda não possui imagens.";
+        imageList.append(emptyState);
+        return;
+    }
+
+    images.forEach(image => {
+        try {
+            const imageUrl = new URL(image.image_url, window.location.href);
+            if (!["http:", "https:"].includes(imageUrl.protocol) || imageUrl.origin !== window.location.origin) {
+                throw new Error("Endereço de imagem fora da origem da aplicação.");
+            }
+
+            const item = document.createElement("li");
+            const preview = document.createElement("img");
+            preview.src = imageUrl.href;
+            preview.alt = image.alt_text || "Imagem da ordem de serviço";
+            preview.loading = "lazy";
+            preview.width = 120;
+            preview.height = 90;
+            item.append(preview);
+            imageList.append(item);
+        } catch (error) {
+            console.error("Endereço de imagem inválido recebido da API:", error);
+        }
+    });
+}
+
+async function loadImages() {
+    if (!orderId || !/^\d+$/.test(orderId) || !token) {
+        if (imageStatus) imageStatus.textContent = "Acesse uma ordem válida com uma sessão autenticada.";
+        return;
+    }
+
+    if (imageStatus) imageStatus.textContent = "Carregando imagens...";
+    try {
+        const response = await serviceOrder.listImages(orderId);
+        assertSuccess(response, "Não foi possível carregar as imagens.");
+        if (!Array.isArray(response.data)) {
+            throw new Error("A resposta da API não contém a lista de imagens.");
+        }
+        renderImages(response.data);
+        if (imageStatus) imageStatus.textContent = "Imagens da ordem atualizadas.";
+    } catch (error) {
+        console.error("Erro ao carregar imagens da ordem:", error);
+        if (imageStatus) imageStatus.textContent = "Não foi possível carregar as imagens.";
+        toastPrincipal.error({ message: error.message || "Erro ao carregar as imagens." });
+    }
+}
+
+imageUploadButton?.addEventListener("click", async () => {
+    if (!orderId || !/^\d+$/.test(orderId)) {
+        toastPrincipal.error({ message: "ID da ordem de serviço inválido." });
+        return;
+    }
+
+    const files = Array.from(imageInput?.files || []);
+    if (!files.length) {
+        toastPrincipal.warning({ message: "Selecione ao menos uma foto." });
+        return;
+    }
+
+    if (files.some(file => !["image/jpeg", "image/png", "image/webp"].includes(file.type) || file.size > 5 * 1024 * 1024)) {
+        toastPrincipal.warning({ message: "Use somente imagens JPEG, PNG ou WebP de até 5 MB." });
+        return;
+    }
+
+    imageUploadButton.disabled = true;
+    let uploaded = 0;
+    try {
+        for (const file of files) {
+            if (imageStatus) imageStatus.textContent = `Enviando ${uploaded + 1} de ${files.length}...`;
+            const response = await serviceOrder.uploadImage(orderId, file);
+            assertSuccess(response, "Não foi possível adicionar uma das fotos.");
+            uploaded += 1;
+        }
+        imageInput.value = "";
+        toastPrincipal.success({ message: `${uploaded} foto(s) adicionada(s) à ordem.` });
+    } catch (error) {
+        if (uploaded) imageInput.value = "";
+        toastPrincipal.error({
+            message: uploaded
+                ? `${error.message} ${uploaded} foto(s) foram adicionadas; a galeria foi atualizada.`
+                : error.message || "Erro ao adicionar fotos."
+        });
+    } finally {
+        imageUploadButton.disabled = false;
+        await loadImages();
+    }
+});
+
 async function loadOrder() {
     if (!orderId || !/^\d+$/.test(orderId)) {
         toastPrincipal.error({ message: "ID da ordem de serviço inválido." });
@@ -88,9 +194,7 @@ async function loadOrder() {
 
     try {
         const response = await serviceOrder.listById(orderId);
-        if (response?.type === "error" || response?.code >= 400) {
-            throw new Error(response.message || "Não foi possível carregar a ordem de serviço.");
-        }
+        assertSuccess(response, "Não foi possível carregar a ordem de serviço.");
 
         const order = Array.isArray(response?.data) ? response.data[0] : response?.data;
         if (!order) {
@@ -109,3 +213,4 @@ async function loadOrder() {
 }
 
 loadOrder();
+loadImages();
