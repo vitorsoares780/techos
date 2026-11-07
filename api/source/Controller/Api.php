@@ -77,7 +77,7 @@ class Api
     protected function back($data = null): Api
     {
         header('Content-Type: application/json');
-        if ($data) {
+        if ($data !== null) {
             $this->response["data"] = $data;
         }
         echo json_encode($this->response, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);

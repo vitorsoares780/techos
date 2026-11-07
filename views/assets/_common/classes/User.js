@@ -179,6 +179,12 @@ export default class User extends HttpClientBase {
         return this.put("/users/update", data);
     }
 
+    async uploadPhoto(file) {
+        const formData = new FormData();
+        formData.append("photo", file);
+        return this.post("/users/photo", formData);
+    }
+
     async updateAdmin(data) {
         return this.put("/users/update-admin", data);
     }

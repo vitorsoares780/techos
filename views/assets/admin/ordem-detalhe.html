@@ -240,14 +240,16 @@
 
           <article class="panel">
             <header class="panel-head">
-              <h2>Anexos</h2>
-              <button class="btn-link" type="button" data-upload>+ Enviar</button>
+              <h2>Galeria de imagens</h2>
             </header>
-            <!-- TODO: substituir por dados reais da API GET /api/admin/ordens/1042/anexos -->
-            <ul style="display:flex;flex-direction:column;gap:0.5rem;font-size:0.9rem">
-              <li>📎 foto-tela-quebrada.jpg</li>
-              <li>📎 orcamento-1042.pdf</li>
-            </ul>
+            <p>Adicione imagens JPEG, PNG ou WebP de até 5 MB.</p>
+            <section class="form-actions" style="justify-content:flex-start">
+              <label for="order-images">Selecionar imagens</label>
+              <input id="order-images" type="file" accept="image/jpeg,image/png,image/webp" multiple data-order-image-input>
+              <button class="btn btn-primary" type="button" data-order-image-upload>Enviar imagens</button>
+            </section>
+            <p role="status" aria-live="polite" data-order-image-status>Carregando galeria...</p>
+            <ul class="order-image-gallery" data-order-image-list aria-live="polite"></ul>
           </article>
 
           <article class="panel">
@@ -283,7 +285,7 @@
   </section>
 
   <script src="scripts/admin.js"></script>
-  <script src="scripts/ordem-detalhe.js"></script>
+  <script type="module" src="scripts/ordem-detalhe.js"></script>
 </body>
 
 </html>

@@ -206,4 +206,25 @@ export default class ServiceOrder extends HttpClientBase {
             serviceOrderId: id
         });
     }
+
+    async listImages(id) {
+        return this.get("/serviceOrders/:serviceOrderId/images", {
+            serviceOrderId: id
+        });
+    }
+
+    async uploadImage(id, file) {
+        const formData = new FormData();
+        formData.append("image", file);
+        return this.post("/serviceOrders/:serviceOrderId/images", formData, {
+            serviceOrderId: id
+        });
+    }
+
+    async removeImage(serviceOrderId, imageId) {
+        return this.delete("/serviceOrders/:serviceOrderId/images/:imageId", {
+            serviceOrderId,
+            imageId
+        });
+    }
 }

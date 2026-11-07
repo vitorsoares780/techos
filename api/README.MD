@@ -70,6 +70,16 @@ PUT /users/update
 { "name": "Joao Novo", "email": "joao.novo@email.com" }
 ```
 
+**Atualizar foto do próprio perfil** (exige token válido de usuário autenticado)
+```
+POST /users/photo
+Content-Type: multipart/form-data
+Campo: photo (uma imagem JPEG, PNG ou WebP; máximo de 5 MB)
+```
+O identificador do perfil vem do token. A resposta retorna `data.photo` com a URL
+pública da imagem. Configure o PHP com `upload_max_filesize=6M` e
+`post_max_size=8M` ou valores maiores.
+
 ---
 
 ### Empresas
@@ -174,6 +184,26 @@ DELETE /serviceOrders/{id}          → Deletar (soft delete, exige token, admin
 
 **Status possiveis:** `aberta`, `aguardando_peca`, `em_andamento`, `cancelada`, `concluida`
 
+#### Galeria de imagens da ordem (exige token de administrador)
+
+Cada imagem é armazenada como arquivo e seus metadados ficam em
+`service_order_images`, relacionada à ordem por `service_order_id`.
+
+```
+GET    /serviceOrders/{serviceOrderId}/images
+POST   /serviceOrders/{serviceOrderId}/images
+DELETE /serviceOrders/{serviceOrderId}/images/{imageId}
+```
+
+O POST recebe `multipart/form-data` com o campo `image` (uma imagem por
+requisição; JPEG, PNG ou WebP; máximo de 5 MB). A tela pode enviar vários
+arquivos em requisições sequenciais. Respostas seguem o envelope padrão; a
+listagem retorna `data` como uma lista (inclusive quando vazia), com `id`,
+`service_order_id`, `image_url`, `alt_text`, `position` e `created_at`.
+Upload e remoção são permitidos somente a administradores; a remoção confere a
+associação entre a imagem e a ordem. Excluir (soft delete) uma ordem também
+remove os registros e arquivos da galeria.
+
 ---
 
 ### Planos
@@ -228,4 +258,3 @@ DELETE /faqs-categories/{id}        → Deletar (exige token, admin)
 Se tiver FAQ vinculada a categoria, nao deixa deletar.
 
 ---
-

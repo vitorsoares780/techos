@@ -69,7 +69,7 @@ import User from "../../_common/classes/User.js";
     setMessage("Entrando...");
 
     const user = await userService.listByEmail(email);
-    const typeId = user.data.typeId;
+    const type_id = user.data.type_id;
 
     try {
       const result = await userService.login(email, password);
@@ -93,9 +93,9 @@ import User from "../../_common/classes/User.js";
         message: result.message || "Login realizado com sucesso!"
       });
 
-      if(typeId === 1){
+      if(type_id === 1){
         window.location.href = "../admin/painel.html";
-      } else if (typeId == 2 || typeId == 3) {
+      } else if (type_id == 2 || type_id == 3) {
         window.location.href = "../app/dashboard.html";
       }
     } catch (error) {

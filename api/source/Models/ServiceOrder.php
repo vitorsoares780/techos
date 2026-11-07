@@ -154,7 +154,7 @@ class ServiceOrder
         return $stmt->fetchAll();
     }
 
-    public function listById(int $id): object|bool
+    public function listById(int $id)
     {
         $query = "SELECT s.* FROM service_orders as s
                   JOIN users as u ON s.user_id = u.id
@@ -171,7 +171,7 @@ class ServiceOrder
         return false;
     }
 
-    public function insert(): array|bool
+    public function insert()
     {
         $query = "INSERT INTO service_orders (user_id, device_id, company_id, defect, diagnosis, status, price, photo)
                   VALUES (:userId, :deviceId, :companyId, :defect, :diagnosis, :status, :price, :photo)";
@@ -203,7 +203,7 @@ class ServiceOrder
         return false;
     }
 
-    public function update(array $data): array|bool
+    public function update(array $data)
     {
         $query = "SELECT * FROM service_orders WHERE id = :id";
         $stmt = Connect::getInstance()->prepare($query);

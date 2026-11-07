@@ -4,6 +4,7 @@ namespace source\Controller;
 
 use Source\Controller\Api;
 use Source\Models\User;
+use Source\Support\Upload;
 
 class Users extends Api
 {
@@ -144,7 +145,7 @@ class Users extends Api
         $response = [
             "id" => $user->getId(),
             "name" => $user->getName(),
-            "photo" => $user->getPhoto(),
+            "photo" => $this->photoUrl($user->getPhoto()),
             "token" => $user->getToken(),
         ];
 
@@ -188,7 +189,7 @@ class Users extends Api
         $response = [
             "id" => $user->getId(),
             "name" => $user->getName(),
-            "photo" => $user->getPhoto(),
+            "photo" => $this->photoUrl($user->getPhoto()),
             "token" => $user->getToken(),
         ];
 
@@ -341,6 +342,11 @@ class Users extends Api
         $response = ["id" => $this->userAuthId];
         $hasUpdates = false;
 
+        if (array_key_exists("photo", $data)) {
+            $this->call(400, "bad_request", "Atualize a foto pelo endpoint POST /users/photo.", "error")->back();
+            return;
+        }
+
         if (array_key_exists("name", $data)) {
             $name = trim((string) $data["name"]);
             if ($name === "") {
@@ -360,17 +366,6 @@ class Users extends Api
             }
             $user->setEmail($email);
             $response["email"] = $email;
-            $hasUpdates = true;
-        }
-
-        if (array_key_exists("photo", $data)) {
-            if ($data["photo"] !== null && !is_string($data["photo"])) {
-                $this->call(400, "bad_request", "O campo foto deve ser um texto ou nulo.", "error")->back();
-                return;
-            }
-            $photo = $data["photo"] === null ? null : trim($data["photo"]);
-            $user->setPhoto($photo);
-            $response["photo"] = $photo;
             $hasUpdates = true;
         }
 
@@ -422,6 +417,126 @@ class Users extends Api
             "success"
         )->back();
 
+    }
+
+    public function uploadPhoto (array $data): void
+    {
+        if (!$this->authToken(1) && !$this->authToken(2) && !$this->authToken(3)) {
+            $this->call(401, "unauthorized", "Usuário não está autenticado (sem token ou token inválido).", "error")->back();
+            return;
+        }
+
+        if (!isset($_FILES["photo"]) || !is_array($_FILES["photo"])) {
+            $this->call(400, "bad_request", "Selecione uma imagem para enviar.", "error")->back();
+            return;
+        }
+
+        $user = new User();
+        $profile = $user->findProfileById($this->userAuthId);
+        if ($profile === false && $user->getErrorMessage() !== null) {
+            $this->call(500, "internal_server_error", $user->getErrorMessage(), "error")->back();
+            return;
+        }
+        if ($profile === false || (int) $profile->active !== 1) {
+            $this->call(404, "not_found", "Perfil não encontrado.", "error")->back();
+            return;
+        }
+        $oldPhoto = is_string($profile->photo) ? $profile->photo : null;
+
+        $uploadDirectory = dirname(__DIR__, 3) . DIRECTORY_SEPARATOR . "uploads" . DIRECTORY_SEPARATOR . "users";
+        $uploader = new Upload($uploadDirectory);
+        try {
+            $filename = $uploader->image($_FILES["photo"]);
+        } catch (\RuntimeException $exception) {
+            $this->call(400, "bad_request", $exception->getMessage(), "error")->back();
+            return;
+        }
+
+        $photoPath = "uploads/users/" . $filename;
+        $photoUrl = $this->photoUrl($photoPath);
+        if (!$user->updatePhoto($this->userAuthId, $photoPath)) {
+            $savedPath = $uploadDirectory . DIRECTORY_SEPARATOR . $filename;
+            if (is_file($savedPath) && !unlink($savedPath)) {
+                error_log("Não foi possível remover a foto enviada após falha ao atualizar o perfil.");
+            }
+            $this->call(500, "internal_server_error", $user->getErrorMessage() ?? "Não foi possível atualizar a foto.", "error")->back();
+            return;
+        }
+
+        $this->deletePreviousPhoto($oldPhoto, $uploadDirectory);
+
+        $this->call(200, "success", "Foto atualizada com sucesso.", "success")->back([
+            "photo" => $photoUrl,
+        ]);
+    }
+
+    private function photoUrl(?string $photoPath): ?string
+    {
+        if ($photoPath === null || trim($photoPath) === "") {
+            return null;
+        }
+
+        $path = $photoPath;
+        if (filter_var($photoPath, FILTER_VALIDATE_URL)) {
+            $parsedUrl = parse_url($photoPath);
+            $applicationUrl = parse_url(url());
+            if (
+                !is_array($parsedUrl) ||
+                !is_array($applicationUrl) ||
+                ($parsedUrl["host"] ?? null) !== ($applicationUrl["host"] ?? null) ||
+                !isset($parsedUrl["path"])
+            ) {
+                return null;
+            }
+            $path = $parsedUrl["path"];
+        }
+
+        $path = ltrim($path, "/");
+        $applicationPath = trim((string) parse_url(url(), PHP_URL_PATH), "/");
+        if ($applicationPath !== "" && strpos($path, $applicationPath . "/") === 0) {
+            $path = substr($path, strlen($applicationPath) + 1);
+        }
+
+        if (!preg_match('/\Auploads\/users\/([a-f0-9]{32}\.(?:jpg|png|webp))\z/', $path, $matches)) {
+            return null;
+        }
+
+        return url("uploads/users/" . $matches[1]);
+    }
+
+    private function deletePreviousPhoto(?string $photoUrl, string $uploadDirectory): void
+    {
+        if ($photoUrl === null || $photoUrl === "") {
+            return;
+        }
+
+        $photoPath = parse_url($photoUrl, PHP_URL_PATH);
+        $uploadsUrlPath = parse_url(url("uploads/users/"), PHP_URL_PATH);
+        if (!is_string($photoPath) || !is_string($uploadsUrlPath)) {
+            return;
+        }
+
+        $normalizedPath = ltrim($photoPath, "/");
+        $managedPrefixes = ["uploads/users/", ltrim(rtrim($uploadsUrlPath, "/") . "/", "/")];
+        $filename = null;
+        foreach ($managedPrefixes as $managedPrefix) {
+            if ($managedPrefix !== "" && strpos($normalizedPath, $managedPrefix) === 0) {
+                $candidate = substr($normalizedPath, strlen($managedPrefix));
+                if (preg_match('/\A[a-f0-9]{32}\.(?:jpg|png|webp)\z/', $candidate)) {
+                    $filename = $candidate;
+                    break;
+                }
+            }
+        }
+
+        if ($filename === null) {
+            return;
+        }
+
+        $oldFilePath = $uploadDirectory . DIRECTORY_SEPARATOR . $filename;
+        if (is_file($oldFilePath) && !unlink($oldFilePath)) {
+            error_log("Não foi possível remover a foto antiga do perfil.");
+        }
     }
 
     // Valida somente Nome e Email, mas pode ser alterada para validar mais campos

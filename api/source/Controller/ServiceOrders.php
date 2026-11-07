@@ -4,6 +4,7 @@ namespace source\Controller;
 
 use Source\Controller\Api;
 use Source\Models\ServiceOrder;
+use Source\Models\ServiceOrderImage;
 
 class ServiceOrders extends Api
 {
@@ -217,6 +218,12 @@ class ServiceOrders extends Api
                 "Ordem de serviço não encontrada",
                 "error"
             )->back();
+            return;
+        }
+
+        $images = new ServiceOrderImage();
+        if (!$images->removeAllForServiceOrder((int) $data['serviceOrderId'])) {
+            $this->call(500, "internal_server_error", $images->getErrorMessage(), "error")->back();
             return;
         }
 

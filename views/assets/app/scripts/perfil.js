@@ -11,6 +11,8 @@ import { loginFormController } from "../../_common/classes/FormController.js";
   const photoInput = document.querySelector("[data-profile-photo]");
   const photoPreview = document.querySelector("[data-profile-photo-preview]");
   const photoInitial = document.querySelector("[data-profile-photo-initial]");
+  const photoUploadButton = document.querySelector("[data-profile-photo-upload]");
+  const photoStatus = document.querySelector("[data-profile-photo-status]");
 
   let userData = {};
   try {
@@ -24,6 +26,8 @@ import { loginFormController } from "../../_common/classes/FormController.js";
 
   const token = localStorage.getItem("token");
   let profilePhoto = typeof userData.photo === "string" ? userData.photo : "";
+  let selectedPhoto = null;
+  let previewUrl = null;
 
   const userService = new User();
 
@@ -71,15 +75,6 @@ import { loginFormController } from "../../_common/classes/FormController.js";
     }
   }
 
-  function readPhoto(file) {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.addEventListener("load", () => resolve(reader.result));
-      reader.addEventListener("error", () => reject(new Error("Não foi possível ler a imagem.")));
-      reader.readAsDataURL(file);
-    });
-  }
-
   function assertUpdateSuccess(result, fallbackMessage) {
     if (
       result?.type === "error" ||
@@ -116,11 +111,9 @@ import { loginFormController } from "../../_common/classes/FormController.js";
 
       try {
         const result = await userService.update({
-          id: userData?.id,
-          name,
-          email,
-          photo: profilePhoto
-        });
+            name,
+            email
+          });
         assertUpdateSuccess(result, "Não foi possível atualizar o perfil.");
 
         userData = {
@@ -128,7 +121,7 @@ import { loginFormController } from "../../_common/classes/FormController.js";
           id: result?.data?.id ?? userData?.id,
           name: result?.data?.name ?? name,
           email: result?.data?.email ?? email,
-          photo: result?.data?.photo ?? profilePhoto
+          photo: profilePhoto
         };
 
         localStorage.setItem("user", JSON.stringify(userData));
@@ -150,23 +143,65 @@ import { loginFormController } from "../../_common/classes/FormController.js";
       const [file] = photoInput.files || [];
       if (!file) return;
 
-      if (!file.type.startsWith("image/")) {
+      if (!["image/jpeg", "image/png", "image/webp"].includes(file.type)) {
         photoInput.value = "";
-        toastPrincipal.warning({ message: "Selecione um arquivo de imagem." });
+        toastPrincipal.warning({ message: "Use uma imagem JPEG, PNG ou WebP." });
         return;
       }
 
-      if (file.size > 1024 * 1024) {
+      if (file.size > 5 * 1024 * 1024) {
         photoInput.value = "";
-        toastPrincipal.warning({ message: "A imagem deve ter no máximo 1 MB." });
+        toastPrincipal.warning({ message: "A imagem deve ter no máximo 5 MB." });
         return;
       }
+
+      selectedPhoto = file;
+      if (previewUrl) {
+        URL.revokeObjectURL(previewUrl);
+      }
+      previewUrl = URL.createObjectURL(file);
+      renderProfilePhoto(previewUrl);
+      if (photoStatus) photoStatus.textContent = "Prévia pronta. Envie para salvar a nova foto.";
+    });
+  }
+
+  if (photoUploadButton) {
+    photoUploadButton.addEventListener("click", async () => {
+      if (!selectedPhoto) {
+        toastPrincipal.warning({ message: "Selecione uma imagem antes de enviar." });
+        return;
+      }
+
+      photoUploadButton.disabled = true;
+      if (photoStatus) photoStatus.textContent = "Enviando foto...";
 
       try {
-        profilePhoto = await readPhoto(file);
+        const result = await userService.uploadPhoto(selectedPhoto);
+        assertUpdateSuccess(result, "Não foi possível atualizar a foto.");
+        if (typeof result?.data?.photo !== "string" || !result.data.photo) {
+          throw new Error("A API não retornou o endereço da foto atualizada.");
+        }
+
+        profilePhoto = result.data.photo;
+        selectedPhoto = null;
+        photoInput.value = "";
+        if (previewUrl) {
+          URL.revokeObjectURL(previewUrl);
+          previewUrl = null;
+        }
+        userData = { ...userData, photo: profilePhoto };
+        localStorage.setItem("user", JSON.stringify(userData));
         renderProfilePhoto(profilePhoto);
+        window.dispatchEvent(new CustomEvent("user:updated", { detail: userData }));
+        if (photoStatus) photoStatus.textContent = "Foto atualizada.";
+        toastPrincipal.success({ message: result.message || "Foto atualizada com sucesso." });
       } catch (error) {
-        toastPrincipal.error({ message: error.message });
+        if (photoStatus) photoStatus.textContent = "Não foi possível atualizar a foto.";
+        toastPrincipal.error({
+          message: error.message || "Não foi possível atualizar a foto."
+        });
+      } finally {
+        photoUploadButton.disabled = false;
       }
     });
   }

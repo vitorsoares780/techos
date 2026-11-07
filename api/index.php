@@ -42,6 +42,7 @@ $route->delete("/delete/{userId}", "Users:delete");
 
 $route->post("/register","Users:register"); // Registrar usuário comum
 $route->post("/login","Users:auth"); // login de usuário comum
+$route->post("/photo","Users:uploadPhoto");
 $route->put("/update","Users:update"); // update de usuário comum
 
 $route->post("/register-admin","Users:registerAdmin"); // Registrar usuário admin NÃO IMPLEMENTADO
@@ -119,6 +120,9 @@ $route->get("/serviceOrders/list/{serviceOrderId}", "ServiceOrders:serviceOrders
 $route->post("/serviceOrders", "ServiceOrders:serviceOrderInsert");
 $route->put("/serviceOrders/{serviceOrderId}", "ServiceOrders:serviceOrderUpdate");
 $route->delete("/serviceOrders/{serviceOrderId}", "ServiceOrders:serviceOrderDelete");
+$route->get("/serviceOrders/{serviceOrderId}/images", "ServiceOrderImages:list");
+$route->post("/serviceOrders/{serviceOrderId}/images", "ServiceOrderImages:upload");
+$route->delete("/serviceOrders/{serviceOrderId}/images/{imageId}", "ServiceOrderImages:delete");
 
 // --------------- Fim - Exercícios - Desafios ---------------
 
