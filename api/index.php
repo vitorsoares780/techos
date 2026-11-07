@@ -51,17 +51,6 @@ $route->put("/update-admin","Users:updateAdmin"); // update de usuário admin
 $route->group(null);
 
 
-//----------- PRODUCTS ----------------------- RETIRAR FUTURAMENTE
-$route->get("/products/list", "Products:productsList");
-$route->get("/products/list/{productId}", "Products:productsListById");
-$route->post("/products", "Products:create");
-$route->put("/products/{productID}","Products:update");
-$route->delete("/products/{productID}","Products:delete");
-
-$route->get("/products-categories/list", "ProductsCategories:productsCategoryList");
-$route->get("/products-categories/list/{categoryId}", "ProductsCategories:productsCategoryListById");
-
-
 /* ------------------ FAQS ------------------*/
 $route->get("/faqs-categories/list", "Faqs\FaqsCategories:faqsCategoryList");
 $route->get("/faqs-categories/list/{categoryId}", "Faqs\FaqsCategories:faqsCategoryListById");
@@ -119,6 +108,7 @@ $route->get("/serviceOrders/list", "ServiceOrders:serviceOrdersListAll");
 $route->get("/serviceOrders/list/{serviceOrderId}", "ServiceOrders:serviceOrdersListById");
 $route->post("/serviceOrders", "ServiceOrders:serviceOrderInsert");
 $route->put("/serviceOrders/{serviceOrderId}", "ServiceOrders:serviceOrderUpdate");
+$route->put("/serviceOrders/{serviceOrderId}/employee-update", "ServiceOrders:serviceOrderUpdateEmployee");
 $route->delete("/serviceOrders/{serviceOrderId}", "ServiceOrders:serviceOrderDelete");
 $route->get("/serviceOrders/{serviceOrderId}/images", "ServiceOrderImages:list");
 $route->post("/serviceOrders/{serviceOrderId}/images", "ServiceOrderImages:upload");

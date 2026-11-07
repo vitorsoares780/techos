@@ -33,6 +33,7 @@ form?.addEventListener("submit", async event => {
     localStorage.setItem("token", user.token);
     localStorage.setItem("user", JSON.stringify({
       id: user.id,
+      type_id: 1,
       name: user.name,
       photo: user.photo || "",
       email: user.email || email

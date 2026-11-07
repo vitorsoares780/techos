@@ -22,9 +22,10 @@ import User from "../../_common/classes/User.js";
     errorMessage.classList.toggle("success", !isError);
   }
 
-  function saveSession(payload) {
+  function saveSession(payload, typeId) {
     const user = {
       id: payload.id,
+      type_id: Number(typeId),
       name: payload.name,
       photo: payload.photo || "",
       email: payload.email || ""
@@ -86,7 +87,7 @@ import User from "../../_common/classes/User.js";
         throw new Error("A resposta de login não contém um token válido.");
       }
 
-      saveSession(result.data);
+      saveSession(result.data, type_id);
       setMessage("");
 
       toastPrincipal.success({

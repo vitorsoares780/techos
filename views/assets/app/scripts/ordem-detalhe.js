@@ -9,9 +9,26 @@ const imageInput = document.querySelector("[data-order-image-input]");
 const imageUploadButton = document.querySelector("[data-order-image-upload]");
 const imageStatus = document.querySelector("[data-order-image-status]");
 const imageList = document.querySelector("[data-order-image-list]");
+const employeeOrderForm = document.querySelector("[data-employee-order-form]");
+const employeeOrderSaveButton = employeeOrderForm?.querySelector("button[type='submit']");
+let currentUser = {};
+
+try {
+    const storedUser = JSON.parse(localStorage.getItem("user") || "{}");
+    if (storedUser && typeof storedUser === "object" && !Array.isArray(storedUser)) {
+        currentUser = storedUser;
+    }
+} catch (error) {
+    console.warn("Não foi possível carregar o perfil da sessão:", error);
+}
 
 if (token) {
     serviceOrder.setAuthToken(token);
+}
+
+const currentUserType = Number(currentUser.type_id ?? currentUser.typeId);
+if ([1, 2].includes(currentUserType) && employeeOrderForm) {
+    employeeOrderForm.hidden = false;
 }
 
 function getStatusClass(status) {
@@ -79,6 +96,12 @@ function renderOrder(order) {
     document.querySelector("[data-detail-diagnosis]").textContent = order.diagnosis || "—";
     document.querySelector("[data-detail-price]").textContent = formatPrice(order.price);
     document.querySelector("[data-detail-device]").textContent = deviceName;
+    if (employeeOrderForm) {
+        employeeOrderForm.elements.status.value = order.status || "aberta";
+        employeeOrderForm.elements.price.value = order.price ?? "";
+        employeeOrderForm.elements.defect.value = order.defect || "";
+        employeeOrderForm.elements.diagnosis.value = order.diagnosis || "";
+    }
     statusElement.className = `pill ${getStatusClass(order.status)}`;
     statusElement.textContent = statusLabel;
 }
@@ -88,6 +111,38 @@ function assertSuccess(response, fallbackMessage) {
         throw new Error(response.message || fallbackMessage);
     }
 }
+
+employeeOrderForm?.addEventListener("submit", async event => {
+    event.preventDefault();
+    if (![1, 2].includes(currentUserType) ||
+        !orderId || !/^\d+$/.test(orderId) || !employeeOrderForm.reportValidity()) {
+        return;
+    }
+
+    const payload = {
+        status: employeeOrderForm.elements.status.value,
+        price: Number(employeeOrderForm.elements.price.value),
+        defect: String(employeeOrderForm.elements.defect.value).trim(),
+        diagnosis: String(employeeOrderForm.elements.diagnosis.value).trim()
+    };
+
+    employeeOrderSaveButton.disabled = true;
+    employeeOrderSaveButton.textContent = "Salvando...";
+    try {
+        const response = await serviceOrder.updateAsEmployee(orderId, payload);
+        assertSuccess(response, "Não foi possível atualizar a ordem.");
+        const order = Array.isArray(response?.data) ? response.data[0] : response?.data;
+        if (!order) throw new Error("A API não retornou os dados atualizados da ordem.");
+        renderOrder(order);
+        toastPrincipal.success({ message: response.message || "Ordem atualizada com sucesso." });
+    } catch (error) {
+        console.error("Erro ao atualizar ordem pelo aplicativo:", error);
+        toastPrincipal.error({ message: error.message || "Não foi possível atualizar a ordem." });
+    } finally {
+        employeeOrderSaveButton.disabled = false;
+        employeeOrderSaveButton.textContent = "Salvar alterações";
+    }
+});
 
 function renderImages(images) {
     if (!imageList) return;

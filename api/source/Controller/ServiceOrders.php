@@ -164,8 +164,33 @@ class ServiceOrders extends Api
             )->back();
             return;
         }
-        $routeServiceOrderId = $data["serviceOrderId"] ?? null;
-        $data = $this->getRequestBody($data);
+
+        $this->updateServiceOrder($data, null);
+    }
+
+    public function serviceOrderUpdateEmployee(array $data): void
+    {
+        $isAdmin = $this->authToken(1);
+        if (!$isAdmin && !$this->authToken(2)) {
+            $isAuthenticated = $this->authToken(3);
+            $this->call(
+                $isAuthenticated ? 403 : 401,
+                $isAuthenticated ? "forbidden" : "unauthorized",
+                $isAuthenticated
+                    ? "Somente administradores e funcionários podem editar ordens de serviço pelo aplicativo."
+                    : "Token de autenticação inválido ou expirado.",
+                "error"
+            )->back();
+            return;
+        }
+
+        $this->updateServiceOrder($data, $isAdmin ? null : $this->userAuthId);
+    }
+
+    private function updateServiceOrder(array $routeData, ?int $employeeId): void
+    {
+        $routeServiceOrderId = $routeData["serviceOrderId"] ?? null;
+        $data = $this->getRequestBody($routeData);
         $serviceOrderId = filter_var($routeServiceOrderId, FILTER_VALIDATE_INT);
         if ($serviceOrderId === false || $serviceOrderId < 1) {
             $this->call(
@@ -224,6 +249,16 @@ class ServiceOrders extends Api
         }
 
         $serviceOrder = new ServiceOrder();
+        if ($employeeId !== null && !$serviceOrder->employeeCanEdit($serviceOrderId, $employeeId)) {
+            $this->call(
+                404,
+                "not_found",
+                "Ordem de serviço não encontrada ou fora da empresa do funcionário.",
+                "error"
+            )->back();
+            return;
+        }
+
         $updatedOrder = $serviceOrder->update($updates + ["serviceOrderId" => $serviceOrderId]);
 
         if ($updatedOrder === false) {

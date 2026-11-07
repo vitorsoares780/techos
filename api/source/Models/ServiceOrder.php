@@ -290,6 +290,25 @@ class ServiceOrder
         return $this->listById($id);
     }
 
+    public function employeeCanEdit(int $serviceOrderId, int $employeeId): bool
+    {
+        $query = "SELECT 1
+                  FROM service_orders AS s
+                  INNER JOIN employees AS e
+                    ON e.company_id = s.company_id
+                   AND e.user_id = :employee_id
+                   AND e.active = 1
+                  WHERE s.id = :service_order_id
+                    AND s.active = 1
+                  LIMIT 1";
+        $stmt = Connect::getInstance()->prepare($query);
+        $stmt->bindValue(":employee_id", $employeeId);
+        $stmt->bindValue(":service_order_id", $serviceOrderId);
+        $stmt->execute();
+
+        return $stmt->fetchColumn() !== false;
+    }
+
     public function delete(int $id): bool
     {
         $query = "UPDATE service_orders SET active = 0 WHERE id = :id AND active = 1";

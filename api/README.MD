@@ -26,7 +26,9 @@ Algumas rotas exigem token JWT. Faz login no `/users/login`, pega o token que vo
 
 **Niveis:** Admin, Usuario comum e Cliente. Rotas com `-admin` no nome sao so pra admin.
 
-As rotas de OS que sao de listagem exigem nivel 2+, e as de CRUD exigem admin. Dispositivos e Funcionarios exigem admin.
+As permissões das rotas de ordens de serviço variam por operação e estão
+descritas abaixo. A edição de perfil e foto altera somente os dados do usuário
+autenticado, sem aceitar um identificador de outro perfil no payload.
 
 ---
 
@@ -62,7 +64,7 @@ POST /users/login-admin
 ```
 Mesma coisa, mas so aceita admin.
 
-**Atualizar dados** (exige token, nivel 2+)
+**Atualizar os próprios dados** (exige token válido de administrador, funcionário ou cliente)
 ```
 PUT /users/update
 ```
@@ -162,12 +164,20 @@ Se tentar deletar uma categoria que tem dispositivos vinculados, a API devolve 4
 ### Ordens de Servico (OS)
 
 ```
-GET    /serviceOrders/list          → Lista todas (exige token, nivel 2+)
-GET    /serviceOrders/list/{id}     → Uma especifica (exige token, nivel 2+)
-POST   /serviceOrders               → Criar (exige token, admin)
-PUT    /serviceOrders/{id}          → Atualizar (exige token, admin)
+GET    /serviceOrders/list          → Listar conforme o perfil (exige token)
+GET    /serviceOrders/list/{id}     → Consultar conforme o perfil (exige token)
+POST   /serviceOrders               → Criar (exige token; cliente cria para si, admin/funcionário informam o cliente)
+PUT    /serviceOrders/{id}          → Atualizar pelo painel (exige token de admin)
+PUT    /serviceOrders/{id}/employee-update → Atualizar pelo app (exige token de admin ou funcionário)
 DELETE /serviceOrders/{id}          → Deletar (soft delete, exige token, admin)
 ```
+
+Administradores (type_id 1) e funcionários (type_id 2) podem editar OS pelo
+app. Funcionários só podem editar ordens de empresas às quais estão vinculados
+por um registro ativo em `employees`; administradores podem editar qualquer
+OS. Clientes (type_id 3) não podem editar ordens. A listagem e consulta
+retornam todas as OS para administradores, OS das empresas vinculadas para
+funcionários e somente as OS próprias para clientes.
 
 **Criar:**
 ```json
@@ -184,7 +194,7 @@ DELETE /serviceOrders/{id}          → Deletar (soft delete, exige token, admin
 
 **Status possiveis:** `aberta`, `aguardando_peca`, `em_andamento`, `cancelada`, `concluida`
 
-#### Galeria de imagens da ordem (exige token de administrador)
+#### Galeria de imagens da ordem
 
 Cada imagem é armazenada como arquivo e seus metadados ficam em
 `service_order_images`, relacionada à ordem por `service_order_id`.
@@ -195,14 +205,18 @@ POST   /serviceOrders/{serviceOrderId}/images
 DELETE /serviceOrders/{serviceOrderId}/images/{imageId}
 ```
 
-O POST recebe `multipart/form-data` com o campo `image` (uma imagem por
-requisição; JPEG, PNG ou WebP; máximo de 5 MB). A tela pode enviar vários
-arquivos em requisições sequenciais. Respostas seguem o envelope padrão; a
-listagem retorna `data` como uma lista (inclusive quando vazia), com `id`,
-`service_order_id`, `image_url`, `alt_text`, `position` e `created_at`.
-Upload e remoção são permitidos somente a administradores; a remoção confere a
-associação entre a imagem e a ordem. Excluir (soft delete) uma ordem também
-remove os registros e arquivos da galeria.
+As rotas GET e POST exigem autenticação e acesso à OS. Administradores têm
+acesso a todas as ordens; funcionários acessam ordens de empresas às quais
+estão vinculados; clientes acessam somente as próprias ordens. O DELETE exige
+token de administrador. O POST recebe
+`multipart/form-data` com o campo `image` (uma imagem por requisição; JPEG,
+PNG ou WebP; máximo de 5 MB). A tela pode enviar vários arquivos em requisições
+sequenciais. Respostas seguem o envelope padrão; a listagem retorna `data`
+como uma lista (inclusive quando vazia), com `id`, `service_order_id`,
+`image_url`, `alt_text`, `position` e `created_at`. Somente administradores
+podem remover imagens; a remoção confere a associação entre a imagem e a OS.
+Excluir (soft delete) uma ordem pelo painel também remove os registros e
+arquivos da galeria.
 
 ---
 

@@ -201,6 +201,12 @@ export default class ServiceOrder extends HttpClientBase {
         });
     }
 
+    async updateAsEmployee(id, data) {
+        return this.put("/serviceOrders/:serviceOrderId/employee-update", data, {
+            serviceOrderId: id
+        });
+    }
+
     async remove(id) {
         return this.delete("/serviceOrders/:serviceOrderId", {
             serviceOrderId: id
